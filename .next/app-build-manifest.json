@@ -1,5 +1,10 @@
 {
   "pages": {
+    "/api/review/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/review/route.js"
+    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -11,60 +16,32 @@
       "static/chunks/main-app.js",
       "static/chunks/app/not-found.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/page.css",
-      "static/chunks/app/page.js"
-    ],
-    "/api/home-page/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/home-page/route.js"
-    ],
-    "/api/data/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/data/route.js"
-    ],
     "/editorial/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/editorial/page.css",
       "static/chunks/app/editorial/page.js"
     ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/page.css",
+      "static/chunks/app/page.js"
+    ],
+    "/api/data/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/data/route.js"
+    ],
     "/api/editorial/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/editorial/route.js"
     ],
-    "/editorial/[id]/page": [
+    "/api/home-page/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/editorial/[id]/page.css",
-      "static/chunks/app/editorial/[id]/page.js"
-    ],
-    "/review/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/review/page.css",
-      "static/chunks/app/review/page.js"
-    ],
-    "/api/review/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/review/route.js"
-    ],
-    "/review/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/review/[id]/page.css",
-      "static/chunks/app/review/[id]/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/api/home-page/route.js"
     ],
     "/portfolio/page": [
       "static/chunks/webpack.js",
@@ -77,28 +54,21 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/portfolio/route.js"
     ],
-    "/Faq/page": [
+    "/review/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/Faq/page.css",
-      "static/chunks/app/Faq/page.js"
+      "static/chunks/app/review/page.js"
     ],
-    "/api/faq/route": [
+    "/editorial/[id]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/faq/route.js"
+      "static/css/app/editorial/[id]/page.css",
+      "static/chunks/app/editorial/[id]/page.js"
     ],
-    "/products/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/products/page.css",
-      "static/chunks/app/products/page.js"
-    ],
-    "/Contact/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/Contact/page.css",
-      "static/chunks/app/Contact/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }

@@ -1,7 +1,8 @@
 {
   "/page": "app/page.js",
+  "/review/page": "app/review/page.js",
   "/portfolio/page": "app/portfolio/page.js",
   "/editorial/page": "app/editorial/page.js",
-  "/editorial/[id]/page": "app/editorial/[id]/page.js",
-  "/products/page": "app/products/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/editorial/[id]/page": "app/editorial/[id]/page.js"
 }
