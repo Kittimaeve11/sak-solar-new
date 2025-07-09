@@ -1,0 +1,259 @@
+.products-container {
+  display: flex;
+  gap: 24px;
+  padding: 7px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.products-sidebar {
+  width: 250px;
+  background: white;
+  border-radius: 6px;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #ececec;
+  height: 600px;
+  /* ล็อคความสูง ตามต้องการ */
+  overflow-y: auto;
+  /* เปิดให้เลื่อนในแนวตั้ง */
+}
+
+.sidebar-header {
+  background-color: #ff6b00;
+  color: white;
+  padding: 5px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+}
+
+.products-sidebar section {
+  padding: 16px;
+}
+
+.products-sidebar h3 {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #1e2b4d;
+}
+
+.filter-box .checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;              /* ระยะห่างระหว่าง checkbox กับข้อความ */
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #333;
+  cursor: pointer;
+}
+
+
+/* .brand-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.brand-block {
+  text-align: center;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.brand-block:hover,
+.brand-block.selected {
+  background-color: #fff3e6;
+} */
+
+/* .brand-image {
+  display: block;
+  margin: 0 auto 6px;
+  object-fit: contain;
+  width: auto;
+  height: 30px;
+  max-width: 70px;
+} */
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-item input[type="checkbox"] {
+  cursor: pointer;
+}
+
+
+/* .brand-name {
+  font-size: 12px;
+  color: #222;
+  font-weight: 500;
+} */
+
+.divider {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 0;
+}
+/* 
+.products-clear-button {
+  display: block;
+  width: 100%;
+  background-color: #ff6b00;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 0 0 10px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.products-clear-button:hover {
+  background-color: #e65a00;
+} */
+
+.products-list {
+  flex: 1;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 5px;
+}
+
+.product-card {
+  border-radius: 6px;
+  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+  overflow: hidden;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 100%; /* square */
+  background-color: #f5f5f5;
+}
+
+
+.product-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+
+.product-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: #111;
+}
+
+.product-price {
+  font-weight: 600;
+  font-size: 14px;
+  color: red;
+}
+
+.meta {
+  font-size: 13px;
+  color: #666;
+}
+
+.no-products {
+  text-align: center;
+  font-style: italic;
+  color: #555;
+}
+
+
+.products-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(1, 1fr);
+  /* เริ่มต้นมือถือ 1 คอลัมน์ */
+}
+
+@media (min-width: 600px) {
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* แท็บเล็ต 2 คอลัมน์ */
+  }
+}
+
+@media (min-width: 900px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    /* จอใหญ่ขนาดกลาง 3 คอลัมน์ */
+  }
+}
+
+@media (min-width: 1200px) {
+  .products-grid {
+    grid-template-columns: repeat(4, 1fr);
+    /* จอใหญ่ 4 คอลัมน์ */
+  }
+}
+
+/* ✅ Card Styling */
+.product-card {
+  border: 0.5px solid #e0e0e0;
+  border-radius: 6px;
+  overflow: hidden;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.01);
+
+}
+
+.product-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.product-info h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.product-info p {
+  margin: 0 0 4px 0;
+}
+
+.product-info .meta {
+  font-size: 0.85rem;
+  color: #777;
+}

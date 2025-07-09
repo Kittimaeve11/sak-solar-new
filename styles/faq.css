@@ -1,0 +1,92 @@
+/* Container ของแต่ละ FAQ */
+.faq-item {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  margin-bottom: 0rem;
+  padding-bottom: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+  cursor: default;
+}
+
+.faq-item.open {
+  box-shadow: 0 4px 12px rgba(255, 136, 0, 0.08);
+}
+
+/* ปุ่มคำถาม */
+.faq-button {
+  background: transparent;
+  color: #243865;
+  width: 100%;
+  padding: 1rem 2rem 0.6rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 0;
+  transition: color 0.3s ease, margin-bottom 0.3s ease;
+  user-select: none;
+}
+
+.faq-item.open .faq-button {
+  color: #F25C05;
+  margin-bottom: 0;
+}
+
+/* ไอคอนลูกศร */
+.faq-icon {
+  display: flex;
+  font-size: 1.2rem;
+  color: #F25C05;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-right: 1rem;
+  /* เพิ่มช่องว่างขวาให้ลูกศรไม่ชิดขอบ */
+}
+
+.faq-item.open .faq-icon {
+  transform: rotate(90deg);
+}
+
+/* เนื้อหาคำตอบ */
+.faq-answer {
+  color: #243865;
+  padding: 0 2rem;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.4s ease,
+    padding 0.3s ease;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.faq-answer.open {
+  padding-top: 0rem;
+  padding-bottom: 0.6rem;
+  max-height: 500px;
+  /* ให้มากพอสำหรับข้อความยาว */
+}
+
+.faq-answer p {
+  text-indent: 2rem;
+  margin: 0 1rem 1rem 1rem;
+  /* ขยับซ้ายขวาเข้า 1rem */
+  line-height: 1.8;
+  user-select: text;
+  overflow-wrap: break-word;
+}
+
+/* hover effect (ถ้าต้องการ) */
+.faq-button:hover {
+  color: #F25C05;
+
+}
+

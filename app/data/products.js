@@ -1,0 +1,201 @@
+export const products = [
+  {
+    id: 'solar1',
+    name: 'Solar Rooftop',
+    slug: 'solar-rooftop',
+    brands: [
+      {
+        id: 'brand1',
+        name: 'HUAWEI',
+        slug: 'huawei',
+        brandImage: '/brands/logo-Huawei.png',
+        types: ['Premium', 'Standard', 'Hybrid'],
+        packages: [
+          {
+            id: 'pkg1',
+            name: 'ชุดแพ็คเกจโซลาร์รูฟท็อป [HUAWEI]',
+            type: 'Standard',
+            items: [
+              {
+                id: 'item1',
+                inverter_model: 'SUN2000-3KTL-L1',
+                size: '1.8 kW',
+                power_system: '1 เฟส',
+                panel_count: 3,
+                panel_type: 'Longi Hi-Mo7 (625 Watt)',
+                price: 99000,
+                battery: '',
+                area: '9 ตารางเมตร',
+                mainImage: '/products/solar-rooftop-HUAWEI.jpg',
+                gallery: [
+                  '/images/solar1/item1-1.jpg',
+                  '/images/solar1/item1-2.jpg',
+                  '/images/solar1/item1-3.jpg',
+                ],
+              },
+              {
+                id: 'item2',
+                inverter_model: 'SUN2000-10KTL-LC0',
+                size: '10 kW',
+                power_system: '1 เฟส',
+                panel_count: 16,
+                panel_type: 'Longi Hi-Mo7 (625 Watt)',
+                price: 243000,
+                battery: '',
+                area: '45 ตารางเมตร',
+                mainImage: '/products/solar-rooftop-HUAWEI.jpg',
+                gallery: [
+                  '/images/solar1/item2-1.jpg',
+                  '/images/solar1/item2-2.jpg',
+                ],
+              },
+              // เพิ่มรายการอื่น ๆ ได้
+            ],
+          },
+          {
+            id: 'pkg2',
+            name: 'ชุดแพ็คเกจโซลาร์รูฟท็อป ไฮบริด[HUAWEI]',
+            type: 'Hybrid',
+            items: [
+              {
+                id: 'item3',
+                inverter_model: 'SUN-10K-SG05LP1-EU',
+                size: '10 kW',
+                power_system: '1 เฟส',
+                panel_count: 16,
+                panel_type: 'Longi Hi-Mo7 (625 Watt)',
+                price: 459000,
+                battery: 'แบตเตอรี 7 kWh',
+                area: '23 ตารางเมตร',
+                mainImage: '/products/solar-rooftop-HUAWEI.jpg',
+                gallery: [
+                  '/images/solar1/item3-1.jpg',
+                  '/images/solar1/item3-2.jpg',
+                ],
+              },
+              // เพิ่มอีก...
+            ],
+          },
+        ],
+      },
+      {
+        id: 'brand2',
+        name: 'GROWATT',
+        slug: 'growatt',
+        brandImage: '/brands/logo-Growatt.png',
+        types: ['Premium', 'Standard'],
+        packages: [
+          {
+            id: 'pkg3',
+            name: 'ชุดแพ็คเกจโซลาร์รูฟท็อป [Growatt]',
+            type: 'Standard',
+            items: [
+              {
+                id: 'item4',
+                inverter_model: 'Growatt Min 3000 TL-X',
+                size: '1.8 kW',
+                power_system: '1 เฟส',
+                panel_count: 3,
+                panel_type: 'Longi Hi-Mo7 (625 Watt)',
+                price: 97000,
+                battery: '',
+                area: '9 ตารางเมตร',
+                mainImage: '/products/solar-rooftop-Growatt.jpg',
+                gallery: [
+                  '/images/solar1/item4-1.jpg',
+                  '/images/solar1/item4-2.jpg',
+                ],
+              },
+              // เพิ่มอีก...
+            ],
+          },
+        ],
+      },
+      {
+        id: 'brand3',
+        name: 'Deye',
+        slug: 'deye',
+        brandImage: '/brands/logo-deye.png',
+        types: ['Hybrid'],
+        packages: [
+          {
+            id: 'pkg4',
+            name: 'ชุดแพ็คเกจโซลาร์รูฟท็อป ไฮบริด[DEYE]',
+            type: 'Hybrid',
+            items: [
+              {
+                id: 'item5',
+                inverter_model: 'SUN-5K-SG05LP1-EU',
+                size: '5 kW',
+                power_system: '1 เฟส',
+                panel_count: 8,
+                panel_type: '',
+                price: 209000,
+                battery: 'แบตเตอรี่ 5.2 kWh',
+                area: '9 ตารางเมตร',
+                mainImage: '/products/solar-rooftop-Growatt.jpg',
+                gallery: [
+                  '/images/solar1/item5-1.jpg',
+                  '/images/solar1/item5-2.jpg',
+                ],
+              },
+              // เพิ่มอีก...
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'solar2',
+    name: 'Solar Air',
+    slug: 'solar-air',
+    brands: [
+      {
+        id: 'brand4',
+        name: 'sincLair',
+        slug: 'sinclair',
+        brandImage: '/brands/logo-Sinclair.png',
+
+        items: [
+          {
+            id: 'item6',
+            model: 'SIHC09BIF/ SOHC - 09BIF',
+            size: '9200 BTU',
+            panel_type: 'Longi Hi-Mo 7 (625 Watt)',
+            panel_count: 2,
+            price: 38000,
+            area: '6 ตารางเมตร',
+            mainImage: '/products/solar-air.jpg',
+            gallery: [
+              '/images/solar2/item6-1.jpg',
+              '/images/solar2/item6-2.jpg',
+            ],
+          },
+          {
+            id: 'item7',
+            model: 'SIHC 24BIF/ SOHC - 24BIF',
+            size: '22,000 BTU',
+            panel_type: 'Longi Hi-Mo 7 (625 Watt)',
+            panel_count: 5,
+            price: 66000,
+            area: '15 ตารางเมตร',
+            mainImage: '/products/solar-air.jpg',
+            gallery: [
+              '/images/solar2/item7-1.jpg',
+              '/images/solar2/item7-2.jpg',
+            ],
+          },
+        ],
+      },
+      {
+        id: 'brand5',
+        name: 'LONGi',
+        slug: 'longi',
+        brandImage: '/brands/logo-longi.png',
+
+        items: [], // ยังไม่มีสินค้า air จากแบรนด์นี้
+      },
+    ],
+  },
+];

@@ -1,0 +1,542 @@
+/* รูปเกี่ยวกับเรา */
+.about-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 2rem;
+  min-height: auto;
+  /* background-color: rgba(255, 255, 255, 0.329); ✅ สีขาวโปร่งแสง */
+  background-image: url("/images/home-about.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-blend-mode: lighten;
+  /* ✅ ผสมสีให้ภาพจางลง */
+  box-sizing: border-box;
+}
+
+.highlight-section {
+  text-align: center;
+  max-width: 900px;
+  width: 100%;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.89);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.highlight-logo {
+  margin: 0 auto 0.25rem auto;
+  display: block;
+  width: 200px;
+  height: auto;
+}
+
+.highlight-section h2 {
+  margin: 0;
+  /* ลบ margin ทั้งหมด */
+  font-weight: 400;
+}
+
+.highlight-section h5 {
+  margin: 0 0 2rem 0;
+  font-weight: 400;
+  color: #19489D;
+}
+
+.highlight-text h4 {
+  margin-top: 0.5rem;
+  /* ✅ เพิ่มระยะห่างจาก h5 */
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.imageWrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.overlayLink {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  z-index: 9999;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.overlayLink:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.gridWrapper {
+  display: flex;
+  justify-content: center;
+  /* จัดกึ่งกลางแนวนอน */
+  align-items: center;
+  /* ถ้าอยากจัดกลางแนวตั้งด้วย */
+  width: 100%;
+  padding: 1rem 0rem
+}
+
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  /* ปรับขนาด responsive */
+  gap: 1rem;
+  /* ช่องว่างระหว่าง card */
+  justify-content: center;
+  /* สำคัญ: ทำให้ items อยู่กลาง */
+  max-width: 1200px;
+  /* ปรับได้ตามความกว้างสูงสุด */
+}
+
+
+/* การ์ด */
+.cardfree {
+  background-color: #FAFBFF !important;
+  padding: 1.30rem;
+  border-radius: 8px;
+  border: 1px solid #ebebeb;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 210px;
+  height: 230px;
+}
+
+.cardfree:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  /* เพิ่มเงาด้านล่างเล็กน้อย */
+}
+
+
+/* ไอคอน */
+.icon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1rem;
+  object-fit: contain;
+}
+
+/* ป้ายข้อความ */
+.textfree {
+  color: #264798;
+  font-weight: 400;
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+
+
+/* คำนวณโซลาร์ */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.containersolar {
+  background-color: #FAFBFF;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.formWrapper {
+  max-width: 670px;
+  margin: 0 auto;
+  padding: 0rem;
+  font-family: sans-serif;
+  border-radius: 8px;
+}
+
+.headersolar {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 400;
+  /* ใช้ Thin */
+  text-align: center;
+  color: #F2780C;
+}
+
+.instructions {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  gap: 0px;
+  color: #264798;
+
+}
+
+.instructions1 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  margin-left: 3.5rem;
+  color: #264798;
+}
+
+.instructions2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+
+  color: #F2780C;
+}
+
+.solar-form {
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.recommend {
+  color: #F2780C;
+  font-weight: bold;
+}
+
+.inputWrapper {
+  margin-bottom: 1rem;
+}
+
+.inputGroupRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.formControl {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #5a8fd9;
+  border-radius: 6px;
+  background-color: #FAFBFF;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #243865;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.formControl:focus {
+  border-color: #243865;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.rangeControl {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 9px;
+  border-radius: 5px;
+  background: #ffffff;
+  outline: none;
+  border: 1px solid #ccc;
+  /* เพิ่มขอบ 1px */
+}
+
+/* สำหรับ ตัวเลื่ออน*/
+.rangeControl::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #F2780C;
+  border-radius: 50%;
+  border: none;
+  margin-top: 0px;
+  /* (thumb-height - track-height) / 2 */
+  cursor: pointer;
+}
+
+/* สำหรับ Firefox */
+.rangeControl::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #F2780C;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.rangeControl::-moz-range-track {
+  height: 6px;
+  background: #f2f2f2;
+  border-radius: 3px;
+}
+
+.usageSplit {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  /* ชิดขวาทั้งหมด */
+  margin-top: 1.5rem;
+}
+
+.results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.card {
+  background-color: #f9f9f9;
+  /* สีพื้นหลังอ่อน ๆ สบายตา */
+  border-radius: 8px;
+  /* ขอบโค้งมน */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  /* เงานุ่ม ๆ */
+  padding: 16px 20px;
+  /* ระยะห่างด้านใน */
+  margin: 12px 0;
+  /* เว้นระยะห่างระหว่างบล็อก */
+  font-size: 1.1rem;
+  /* ขนาดตัวอักษรพอดี */
+  color: #333;
+  /* สีตัวอักษรเข้ม อ่านง่าย */
+  transition: background-color 0.3s ease;
+  /* เวลาเปลี่ยนสี */
+  cursor: default;
+  /* เคอร์เซอร์แบบปกติ */
+}
+
+/* เพิ่มเอฟเฟกต์เมื่อชี้เมาส์ */
+.card:hover {
+  background-color: #e6f0ff;
+  /* สีฟ้าอ่อนเวลาชี้ */
+  box-shadow: 0 4px 10px rgba(0, 90, 255, 0.2);
+}
+
+/* ถ้าอยากเน้นข้อความหัวข้อ */
+.card strong {
+  color: #0055cc;
+}
+
+.results {
+  animation: fadeInUp 0.6s ease-in-out;
+  width: 100%;
+  max-width: 1000px;
+  /* ขยายให้กว้างมากขึ้น */
+  margin: 0 auto;
+  padding: 0 20px;
+  /* เพิ่ม padding เพื่อไม่ให้ติดขอบจอเกินไป */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* 👈 เพิ่มขอบมน */
+}
+
+
+/* แถว highlight สีส้ม */
+.rowsolar.highlight {
+  background-color: #f58220;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-radius: 8px 8px 0 0;
+  font-weight: bold;
+}
+
+/* แถวทั่วไปพื้นหลังขาว */
+.rowsolar {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 15px 20px;
+  border-bottom: 1px solid #eee;
+}
+
+/* แถวกลางวัน/กลางคืน */
+.rowSimple {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 12px 30px;
+  border-bottom: 1px solid #eee;
+}
+
+/* ไอคอน */
+.iconsolar {
+  width: 70px;
+  /* ลดขนาดจาก 36px เป็น 24px */
+  height: 70px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.iconsolar img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.iconSmall {
+  width: 50px;
+  height: 50px;
+  margin-right: 35px;
+  flex-shrink: 0;
+}
+
+.iconSmall img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.iconSimple {
+  width: 36px;
+  height: 36px;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.iconSimple img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.textsolar {
+  font-size: 18px;
+  color: #ffffff;
+  font-weight: 600
+}
+
+.textelectricity {
+  font-size: 18px;
+  color: #243865;
+  font-weight: 600
+}
+
+
+.textFull {
+  font-size: 16px;
+  color: #444;
+}
+
+.valuesolar {
+  font-size: 18px;
+  margin-left: auto;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.value {
+  margin-left: auto;
+  font-weight: bold;
+  color: #525151;
+  font-size: 16px;
+
+}
+
+.valueHighlight {
+  color: #f58220;
+  font-weight: bold;
+  font-size: 18px;
+
+}
+
+/* กล่องข้อมูลด้านล่าง */
+.cardBox {
+  background-color: white;
+  padding: 20px;
+  border-radius: 0 0 8px 8px;
+  margin-top: 10px;
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05);
+}
+
+.cardBottom {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 16px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+.cardBottom:last-child {
+  border-bottom: none;
+}
+
+.labelsolarHead {
+  font-size: 18px;
+  color: #264798;
+  font-weight: 600;
+}
+
+.labelsolar {
+  font-size: 16px;
+
+  color: #264798;
+}
+
+/* ปุ่มคำนวณใหม่ */
+.buttonWrapper {
+  margin-top: 24px;
+  text-align: center;
+}
+
+/* .row {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+} */
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexGrow {
+  flex-grow: 1;
+}
+
+.alignRight {
+  margin-left: auto;
+  min-width: 100px;
+  /* หรือขนาดที่เหมาะสม */
+}
+
+.buttonWrapper {
+  width: 100%;
+  text-align: center;
+  margin-top: 0px;
+}

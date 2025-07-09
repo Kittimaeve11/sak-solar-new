@@ -1,0 +1,239 @@
+.about-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  gap: 2rem;
+  font-family: 'SukhumvitTadmai', sans-serif;
+}
+
+.about-sidebar {
+  width: 250px;
+  border-right: 1px solid #ddd;
+  padding-right: 1rem;
+}
+
+.sidebar-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #333;
+  margin-bottom: 4px;
+  transition: 0.2s;
+}
+
+.sidebar-menu li:hover,
+.sidebar-menu li.active {
+  background-color: #f97316;
+  color: white;
+}
+
+.about-content {
+  flex: 1;
+}
+
+.about-content h2 {
+  font-size: 1.5rem;
+  color: #f97316;
+}
+
+.about-content img {
+  max-width: 100%;
+  margin-top: 1rem;
+  border-radius: 8px;
+}
+
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 5px 5px;
+  padding: px 30px;
+  /* padding แค่ซ้าย-ขวา */
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.board-box {
+  position: relative;
+  cursor: pointer;
+}
+
+.board-photo-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* ตัวรูปภาพ */
+.board-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+/* overlay ขาวครอบเฉพาะรูป */
+.board-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.board-photo-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.829);
+  opacity: 0;
+  /* ปกติซ่อน */
+  transition: opacity 0.3s ease;
+  z-index: 0;
+}
+
+.board-box:hover .board-photo-wrapper::before {
+  opacity: 0.2;
+  /* จาก 1 → ลดเป็น 0.2 หรือ 0.3 จะดูขาวนวล */
+}
+
+/* zoom รูปตอน hover
+.board-box:hover .board-photo {
+  /* transform: scale(1.05); */
+*/ .board-box:hover .board-photo {
+  transition: filter 0.3s ease;
+}
+
+/* caption ซ่อนก่อน */
+/* รูปภาพและ container overlay สำหรับทุกคน */
+.board-photo-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.board-photo-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.83);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: 8px;
+  z-index: 0;
+}
+
+.board-box:hover .board-photo-wrapper::before,
+.board-big:hover .board-photo-wrapper::before {
+  opacity: 0.2;
+}
+
+/* รูปภาพ */
+.board-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+/* caption ซ่อนก่อน */
+.board-big,
+.board-box {
+  max-width: 230px;
+  /* กำหนดเท่ากัน */
+  cursor: pointer;
+  position: relative;
+  margin: 0 auto 10px auto;
+}
+
+.board-photo-wrapper {
+  border-radius: 13px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* รูปภาพเหมือนกัน */
+.board-photo {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+/* overlay และ caption เหมือนกัน */
+.board-photo-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.83);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  border-radius: 13px;
+  z-index: 0;
+}
+
+.board-box:hover .board-photo-wrapper::before,
+.board-big:hover .board-photo-wrapper::before {
+  opacity: 0.2;
+}
+
+.board-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #264798;
+  color: white;
+  padding: 16px 16px;
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease;
+  pointer-events: none;
+  z-index: 2;
+  text-align: center;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.board-box:hover .board-caption,
+.board-big:hover .board-caption {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ฟ้อนต์ชื่อและตำแหน่งขนาดเท่ากัน */
+.member-name,
+.member-name-big {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.member-position,
+.member-position-big {
+  font-size: 16px;
+  color: #ccc;
+  margin-top: 0;
+  display: block;
+}
