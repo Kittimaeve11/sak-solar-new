@@ -79,9 +79,10 @@ export default function ProductCarousel({ title, items, link }) {
                 <h3>{item.name}</h3>
                 <p>{item.model || item.inverter_model}</p>
                 <p className="price">
-                  {item.price ? `฿${item.price.toLocaleString()}` : 'ราคา'}
+                  {item.price ? `฿${item.price.toLocaleString()}` : 'ราคา เหมี๊ยว' }
                 </p>
               </div>
+              
             ))}
           </div>
         )}
