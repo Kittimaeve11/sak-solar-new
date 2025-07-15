@@ -1,47 +1,44 @@
 .carouselSlide {
   display: flex;
-  justify-content: center; /* จัดกึ่งกลางแนวนอน */
+  justify-content: center;
   align-items: stretch;
   box-sizing: border-box;
   height: 100%;
-  padding: 0 6px; /* เพิ่ม padding ซ้ายขวานิดหน่อย ให้ช่องว่างเล็กลง */
+  padding: 0 6px;
   margin: 0;
 }
 
 .carouselWrapper {
-  max-width: 1600px;
+  max-width: 1200px;
   width: 100%;
   margin: 0 auto;
-  padding: 1rem 1rem;
+  padding: 1rem;
   position: relative;
   border-radius: 6px;
   box-sizing: border-box;
 }
 
-/* ลด padding ซ้าย-ขวาใน slick-slide ให้แคบลง */
 .carouselWrapper .slick-slide {
   display: flex !important;
   align-items: center;
   justify-content: center;
-  height: auto;
-  padding: 1rem 6px !important; /* ลดจาก 1rem 0 เป็น 1rem 6px */
+  padding: 0 !important;
+  /* ✅ ลบ padding ซ้ำซ้อน */
   box-sizing: border-box;
 }
 
 .carouselInner {
-  max-width: 1300px;
-  margin: 0 auto; /* กึ่งกลางภายใน wrapper */
+  max-width: 1050px;
+  margin: 0 auto;
 }
 
-/* ปรับ slick-track ให้อยู่ใน .carouselInner */
 .carouselInner .slick-track {
   display: flex !important;
-  gap: 0px;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  gap: 0;
+  margin: 0 !important;
+  padding: 0 !important;
 }
+
 .carouselHeader {
   display: flex;
   justify-content: space-between;
@@ -59,7 +56,7 @@
 .carouselLink {
   font-size: 1rem;
   color: #0056b3;
-  text-decoration: none; 
+  text-decoration: none;
   cursor: pointer;
   font-weight: 600;
   transition: color 0.3s ease;
@@ -67,72 +64,88 @@
 
 .carouselLink:hover {
   color: #F25C05;
-  text-decoration: none; 
 }
 
 .carouselStaticWrapper {
   display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: 0rem;
   flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  padding: 1rem 0;
 }
 
-/* การ์ดสินค้า */
+/* ✅ ใช้ขนาดเดียวกันกับ carouselCard */
+.carouselStaticWrapper .carouselCard {
+  width: 250px;
+}
+
+/* Responsive: Tablet (3 ใบต่อแถว) */
+@media (max-width: 1024px) {
+  .carouselStaticWrapper .carouselCard {
+    width: calc(33.33% - 24px);
+  }
+}
+
+/* Responsive: มือถือ (เต็มแถว) */
+@media (max-width: 640px) {
+  .carouselStaticWrapper .carouselCard {
+    width: 100%;
+  }
+}
+
+/* ✅ Card */
 .carouselCard {
   background-color: #ffffff;
   border-radius: 6px;
   border: 1px solid #ebebeb;
-  width: 300px;
-  height: 450px;
-  padding: 0rem;
-  /* box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06); */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 250px;
+  height: 370px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* ให้เนื้อหาชิดซ้าย */
+  align-items: flex-start;
   text-align: left;
   position: relative;
   overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
 .carouselCard:hover {
   transform: translateY(-6px);
-  /* box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1); */
 }
 
 .carouselCard img {
-  width: 100%; /* เต็มกรอบการ์ด */
+  width: 100%;
   height: auto;
-  object-fit: cover; /* ให้รูปครอบเต็มขอบ */
+  object-fit: cover;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
 }
 
 .carouselCard h3 {
-  font-size: 1.1rem;
+  font-size: 18px;
   font-weight: 600;
   color: #2a3e5e;
-  margin: 0.75rem 1rem 0.25rem;
+  margin: 0.75rem 1rem 0rem;
   min-height: 2.6em;
 }
 
 .carouselCard p {
-  font-size: 0.9rem;
+  font-size: 16px;
   margin: 0.3rem 1rem 1rem;
 }
 
 .carouselCard .price {
   position: absolute;
-  bottom: 1rem;
+  bottom: 0.5rem;
   left: 1rem;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #ff0000;
   margin: 0;
 }
 
-/* Arrows */
+/* ✅ Arrows */
 .carouselArrow {
   position: absolute;
   top: 50%;
@@ -140,8 +153,8 @@
   background-color: #004bad;
   color: white;
   border-radius: 50%;
-  width: 54px;
-  height: 54px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -157,10 +170,9 @@
 }
 
 .carouselArrow.left {
-  left: -25px;
+  left: -20px;
 }
 
 .carouselArrow.right {
-  right: -25px;
+  right: -20px;
 }
-

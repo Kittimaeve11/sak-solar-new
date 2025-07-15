@@ -30,9 +30,9 @@ export default function HomePage() {
   useEffect(() => {
     const loadData = async () => {
       const [prov, amph, tamb] = await Promise.all([
-        fetch('/data/thai_provinces.json').then(res => res.json()),
-        fetch('/data/thai_amphures.json').then(res => res.json()),
-        fetch('/data/thai_tambons.json').then(res => res.json()),
+        fetch('/data/thai_provinces.json').then((res) => res.json()),
+        fetch('/data/thai_amphures.json').then((res) => res.json()),
+        fetch('/data/thai_tambons.json').then((res) => res.json()),
       ]);
       setProvinces(prov);
       setAmphures(amph);
@@ -45,60 +45,66 @@ export default function HomePage() {
     setProductOptions(products);
   }, []);
 
-  // ✅ เตรียมข้อมูลสำหรับ Solar Rooftop
-  const solarRooftopItems = products
-    .find((p) => p.slug === 'solar-rooftop')
-    ?.brands.flatMap((brand) =>
-      brand.packages?.flatMap((pkg) =>
-        pkg.items.map((item) => ({
+  // เตรียมข้อมูลสำหรับ Solar Rooftop
+  const solarRooftopItems =
+    products
+      .find((p) => p.slug === 'solar-rooftop')
+      ?.brands.flatMap((brand) =>
+        brand.packages?.flatMap((pkg) =>
+          pkg.items.map((item) => ({
+            ...item,
+            // แสดงชื่อ inverter_model ตามด้วยชื่อแบรนด์
+            name: `${item.inverter_model} (${brand.name})`,
+            image: item.mainImage,
+          }))
+        )
+      ) || [];
+
+  // เตรียมข้อมูลสำหรับ Solar Air
+  const solarAirItems =
+    products
+      .find((p) => p.slug === 'solar-air')
+      ?.brands.flatMap((brand) =>
+        brand.items?.map((item) => ({
           ...item,
-          name: `${pkg.name} (${brand.name})`,
+          name: `${item.model} (${brand.name})`,
           image: item.mainImage,
         }))
-      )
-    ) || [];
+      ) || [];
 
-  const solarAirItems = products
-    .find((p) => p.slug === 'solar-air')
-    ?.brands.flatMap((brand) =>
-      brand.items?.map((item) => ({
-        ...item,
-        name: `แอร์โซลาร์ (${brand.name})`,
-        image: item.mainImage,
-      }))
-    ) || []; return (
-      <>
-        <BannerSlider />
-        <h5 className="headline">
-          ติดตั้งโซลาร์เซลล์กับทีมช่างที่ได้มารฐาน <br />
-          และได้รับการรับรองจากการไฟฟ้า (PEA)
-        </h5>
+  return (
+    <>
+      <BannerSlider />
+      <h5 className="headline">
+        ติดตั้งโซลาร์เซลล์กับทีมช่างที่ได้มารฐาน <br />
+        และได้รับการรับรองจากการไฟฟ้า (PEA)
+      </h5>
 
-        <FreeServices contacts={contacts} locale={locale} />
-        {/* <Installation /> */}
+      <FreeServices contacts={contacts} locale={locale} />
+      {/* <Installation /> */}
 
-        <div>
-          <ProductCarousel
-            title="Solar Rooftop"
-            items={solarRooftopItems}
-            link="/products/solar-rooftop"
-          />
-
-          <ProductCarousel
-            title="Solar Air"
-            items={solarAirItems}
-            link="/products/solar-air"
-          />
-        </div>
-
-        <SolarCalculatorForm />
-
-        <ContactForm
-          productOptions={productOptions}
-          provinces={provinces}
-          amphures={amphures}
-          tambons={tambons}
+      <div>
+        <ProductCarousel
+          title="Solar Rooftop"
+          items={solarRooftopItems}
+          link="/products/solar-rooftop"
         />
-      </>
-    );
+        {/* <hr /> */}
+        <ProductCarousel
+          title="Solar Air"
+          items={solarAirItems}
+          link="/products/solar-air"
+        />
+      </div>
+
+      <SolarCalculatorForm />
+
+      <ContactForm
+        productOptions={productOptions}
+        provinces={provinces}
+        amphures={amphures}
+        tambons={tambons}
+      />
+    </>
+  );
 }

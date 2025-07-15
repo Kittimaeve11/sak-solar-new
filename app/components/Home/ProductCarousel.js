@@ -22,15 +22,15 @@ function Arrow({ onClick, direction }) {
 }
 
 export default function ProductCarousel({ title, items, link }) {
-  const showSlider = items.length >= 3;
+  const showSlider = items.length > 4; // ✅ ใช้ Slider เฉพาะเมื่อมีมากกว่า 4
 
   const settings = {
     dots: false,
-    infinite: showSlider,
+    infinite: true,
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
-    arrows: showSlider,
+    arrows: true,
     nextArrow: <Arrow direction="right" />,
     prevArrow: <Arrow direction="left" />,
     responsive: [
@@ -61,9 +61,8 @@ export default function ProductCarousel({ title, items, link }) {
               <div key={i} className="carouselSlide">
                 <div className="carouselCard">
                   <Image src={item.image} alt={item.name} width={300} height={180} />
-                  
                   <h3>{item.name}</h3>
-                  <p>{item.model || item.inverter_model}</p>
+                  {/* <p>{item.model || item.inverter_model}</p> */}
                   <p className="price">
                     {item.price ? `฿${item.price.toLocaleString()}` : 'ราคา'}
                   </p>
@@ -77,18 +76,15 @@ export default function ProductCarousel({ title, items, link }) {
               <div key={i} className="carouselCard">
                 <Image src={item.image} alt={item.name} width={300} height={180} />
                 <h3>{item.name}</h3>
-                <p>{item.model || item.inverter_model}</p>
+                {/* <p>{item.model || item.inverter_model}</p> */}
                 <p className="price">
-                  {item.price ? `฿${item.price.toLocaleString()}` : 'ราคา เหมี๊ยว' }
+                  {item.price ? `฿${item.price.toLocaleString()}` : 'ราคา'}
                 </p>
               </div>
-              
             ))}
           </div>
         )}
       </div>
-      
     </div>
-    
   );
 }

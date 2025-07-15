@@ -1,7 +1,7 @@
 {
-  "/page": "app/page.js",
   "/portfolio/page": "app/portfolio/page.js",
-  "/products/page": "app/products/page.js",
-  "/products/solar-rooftop/page": "app/products/solar-rooftop/page.js",
-  "/products/solar-air/page": "app/products/solar-air/page.js"
+  "/page": "app/page.js",
+  "/editorial/page": "app/editorial/page.js",
+  "/Faq/page": "app/Faq/page.js",
+  "/products/page": "app/products/page.js"
 }

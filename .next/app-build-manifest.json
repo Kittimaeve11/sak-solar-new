@@ -30,18 +30,24 @@
     "/review/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
+      "static/css/app/review/page.css",
       "static/chunks/app/review/page.js"
+    ],
+    "/products/solar-rooftop/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/products/solar-rooftop/page.css",
+      "static/chunks/app/products/solar-rooftop/page.js"
     ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/_not-found/page.js"
     ],
-    "/Contact/page": [
+    "/api/review/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/Contact/page.css",
-      "static/chunks/app/Contact/page.js"
+      "static/chunks/app/api/review/route.js"
     ],
     "/portfolio/page": [
       "static/chunks/webpack.js",
@@ -54,23 +60,33 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/portfolio/route.js"
     ],
+    "/editorial/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/editorial/page.css",
+      "static/chunks/app/editorial/page.js"
+    ],
+    "/api/editorial/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/editorial/route.js"
+    ],
+    "/Faq/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/Faq/page.css",
+      "static/chunks/app/Faq/page.js"
+    ],
+    "/api/faq/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/faq/route.js"
+    ],
     "/products/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/products/page.css",
       "static/chunks/app/products/page.js"
-    ],
-    "/products/solar-rooftop/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/products/solar-rooftop/page.css",
-      "static/chunks/app/products/solar-rooftop/page.js"
-    ],
-    "/products/solar-air/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/css/app/products/solar-air/page.css",
-      "static/chunks/app/products/solar-air/page.js"
     ]
   }
 }
