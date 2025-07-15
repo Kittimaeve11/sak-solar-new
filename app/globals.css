@@ -349,7 +349,7 @@ h6 {
   line-height: 1.5;
   box-sizing: border-box;
   color: #264798;
-
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .form-field:focus {
@@ -358,13 +358,11 @@ h6 {
   box-shadow: 0 4px 12px rgba(54, 122, 245, 0.25);
   background-color: #fff;
   color: #264798;
-
 }
 
 .form-field::placeholder {
   color: #AAAAAB;
 }
-
 
 /* ====== Select Dropdown ====== */
 .form-select-wrapper {
@@ -380,7 +378,6 @@ h6 {
 .form-select {
   width: 100%;
   padding: 0.6rem;
-  /* ให้เหมือน input */
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
@@ -388,9 +385,8 @@ h6 {
   font-size: 15px;
   color: #264798;
   line-height: 1.5;
-  /* เพิ่มให้ความสูงเท่ากันในทุก browser */
   box-sizing: border-box;
-  /* ป้องกัน padding ทำให้ขยาย */
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .form-select option {
@@ -399,8 +395,7 @@ h6 {
 }
 
 .form-select.placeholder {
-  color: #AAAAAB;
-  /* สีอ่อนสำหรับ placeholder */
+  color: #AAAAAB; /* สีอ่อนสำหรับ placeholder */
 }
 
 .form-select:focus {
@@ -434,6 +429,7 @@ h6 {
   font-size: 15px;
   resize: vertical;
   color: #264798;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .form-textarea:focus {
@@ -443,19 +439,19 @@ h6 {
   background-color: #fff;
 }
 
-
 /* ====== Error Message ====== */
 .error-text {
   color: rgb(236, 3, 3);
-  font-size: 16px;
-  margin-top: 0.8rem;
-  margin-bottom: 1rem;
+  font-size: 14px;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
 }
 
 .required-asterisk {
   color: rgb(236, 3, 3);
 }
 
+/* ====== Checkbox Custom Styling ====== */
 .checkbox-wrapper {
   margin-top: 1rem;
 }
@@ -484,15 +480,15 @@ h6 {
   border: 2px solid #367AF5;
   border-radius: 50%;
   background-color: #fff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.checkbox-input:checked~.custom-checkbox {
+.checkbox-input:checked ~ .custom-checkbox {
   background-color: #367AF5;
   box-shadow: inset 0 0 0 2.5px white;
 }
 
-
-
+/* ====== Radio Buttons ====== */
 .form-radio {
   color: #264798;
   display: inline-flex;
@@ -512,7 +508,7 @@ h6 {
   border-radius: 50%;
   margin-right: 0.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .radio-input:checked::before {
@@ -525,6 +521,38 @@ h6 {
   background-color: #367AF5;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+  transition: background-color 0.3s ease;
+}
+
+/* ====== Error Styling ====== */
+
+/* สำหรับกลุ่ม radio ที่มี error */
+.error-border .radio-input {
+  border-color: red !important;
+}
+
+.error-border .radio-input:checked::before {
+  background-color: red !important;
+}
+
+/* สำหรับ input, select, textarea ที่มี error */
+.error-border .radio-input {
+  border-color: red;
+}
+
+.error-border .radio-input:checked::before {
+  background-color: red;
+}
+
+.input-error {
+  border: 1px solid red !important;
+}
+
+/* กรณี input, select ที่ใช้ class error-border */
+.form-field.error-border,
+.form-select.error-border,
+.form-textarea.error-border {
+  border: 2px solid red !important;
 }
 
 /* เมาส์ชี้แล้วดุ๊กดิ๊ก */

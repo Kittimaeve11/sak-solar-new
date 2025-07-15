@@ -1,0 +1,166 @@
+.carouselSlide {
+  display: flex;
+  justify-content: center; /* จัดกึ่งกลางแนวนอน */
+  align-items: stretch;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0 6px; /* เพิ่ม padding ซ้ายขวานิดหน่อย ให้ช่องว่างเล็กลง */
+  margin: 0;
+}
+
+.carouselWrapper {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+  position: relative;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* ลด padding ซ้าย-ขวาใน slick-slide ให้แคบลง */
+.carouselWrapper .slick-slide {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  padding: 1rem 6px !important; /* ลดจาก 1rem 0 เป็น 1rem 6px */
+  box-sizing: border-box;
+}
+
+.carouselInner {
+  max-width: 1300px;
+  margin: 0 auto; /* กึ่งกลางภายใน wrapper */
+}
+
+/* ปรับ slick-track ให้อยู่ใน .carouselInner */
+.carouselInner .slick-track {
+  display: flex !important;
+  gap: 0px;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.carouselHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: -1rem;
+  padding: 0 1rem;
+}
+
+.carouselTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1b2f50;
+}
+
+.carouselLink {
+  font-size: 1rem;
+  color: #0056b3;
+  text-decoration: none; 
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.carouselLink:hover {
+  color: #F25C05;
+  text-decoration: none; 
+}
+
+.carouselStaticWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0rem;
+  flex-wrap: wrap;
+}
+
+/* การ์ดสินค้า */
+.carouselCard {
+  background-color: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #ebebeb;
+  width: 300px;
+  height: 450px;
+  padding: 0rem;
+  /* box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06); */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ให้เนื้อหาชิดซ้าย */
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.carouselCard:hover {
+  transform: translateY(-6px);
+  /* box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1); */
+}
+
+.carouselCard img {
+  width: 100%; /* เต็มกรอบการ์ด */
+  height: auto;
+  object-fit: cover; /* ให้รูปครอบเต็มขอบ */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.carouselCard h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2a3e5e;
+  margin: 0.75rem 1rem 0.25rem;
+  min-height: 2.6em;
+}
+
+.carouselCard p {
+  font-size: 0.9rem;
+  margin: 0.3rem 1rem 1rem;
+}
+
+.carouselCard .price {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ff0000;
+  margin: 0;
+}
+
+/* Arrows */
+.carouselArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #004bad;
+  color: white;
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  border: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.carouselArrow:hover {
+  background-color: #003080;
+}
+
+.carouselArrow.left {
+  left: -25px;
+}
+
+.carouselArrow.right {
+  right: -25px;
+}
+

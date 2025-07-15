@@ -76,7 +76,7 @@ export default function Footer() {
                 <ul>
                   {contactMenu.items.map(({ label }, i) => (
                     <li key={label + i}>
-                      <span style={{ color: 'white' }}>{label}</span>
+                      <span style={{ color: "white" }}>{label}</span>
                     </li>
                   ))}
                 </ul>
@@ -103,8 +103,7 @@ export default function Footer() {
             )}
           </div>
         </div>
-      <div className={styles.footerBottomImage}></div>
-
+        <div className={styles.footerBottomImage}></div>
       </footer>
 
       <div className={styles.footerBottomWrapper}>
@@ -117,12 +116,22 @@ export default function Footer() {
               width={100}
               height={40}
             />
-            <Image
-              src="/images/Logo-of-the-Provincial-Electricity-Authority-of-Thailand.png"
-              alt="โลโก้การไฟฟ้าส่วนภูมิภาค"
-              width={100}
-              height={40}
-            />
+
+            {/* ใช้ Link + legacyBehavior + a ครอบ Image เพื่อเปิด PDF */}
+            <Link
+              href="/file/Inverter.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "inline-flex", alignItems: "center" }}
+            >
+              <Image
+                src="/images/Logo-of-the-Provincial-Electricity-Authority-of-Thailand.png"
+                alt="โลโก้การไฟฟ้าส่วนภูมิภาค"
+                width={100}
+                height={40}
+              />
+            </Link>
+
             <Image
               src="/images/ERCNewLogo.png"
               alt="โลโก้กกพ"

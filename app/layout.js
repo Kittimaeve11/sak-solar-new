@@ -40,7 +40,7 @@ export default function RootLayout({ children }) {
           <TabMenu />
           <main>{children}</main>
           <ToastProvider />
-          <FloatingButtons />
+          {/* <FloatingButtons /> */}
           <BackToTopButton />
           {/* <ContactChannels /> */}
           {/* <CookieBanner /> */}

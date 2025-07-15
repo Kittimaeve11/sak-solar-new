@@ -112,7 +112,16 @@ export default function SolarCalculatorForm() {
     }
 
     setFormValues((prev) => ({ ...prev, [field]: value }));
+
+    // ลบ error ของฟิลด์นั้นออกทันทีที่แก้ไข
+    setErrors((prevErrors) => {
+      if (!prevErrors[field]) return prevErrors;
+      const updatedErrors = { ...prevErrors };
+      delete updatedErrors[field];
+      return updatedErrors;
+    });
   };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -160,18 +169,20 @@ export default function SolarCalculatorForm() {
                 <input
                   type="text"
                   inputMode="numeric"
-                  className="form-field"
-                  value={Number(formValues.electricityCost).toLocaleString('en-US') || ''}
+                  className={`form-field ${errors.electricityCost ? 'input-error' : ''}`}
+                  placeholder="กรุณากรอกค่าไฟต่อเดือนของท่าน**"
+                  value={formValues.electricityCost !== '' ? Number(formValues.electricityCost).toLocaleString('en-US') : ''}
                   onChange={handleChange('electricityCost')}
                 />
                 {errors.electricityCost && <div className="error-text">{errors.electricityCost}</div>}
               </div>
 
-              <div className={`${styles.formGroup} ${styles.alignRight}`}>
+              <div className="form-group align-right">
                 <label className="form-label" style={{ marginBottom: '1rem' }}>
                   ระบบไฟฟ้า:
                 </label>
-                <div className={styles.radioGroup}>
+
+                <div className={`radio-group ${errors.systemType ? 'error-border' : ''}`}>
                   <label className="form-radio">
                     <input
                       type="radio"
@@ -179,9 +190,11 @@ export default function SolarCalculatorForm() {
                       value="single"
                       checked={formValues.systemType === 'single'}
                       onChange={handleChange('systemType')}
-                    />{' '}
+                      className="radio-input"
+                    />
                     1 เฟส
                   </label>
+
                   <label className="form-radio">
                     <input
                       type="radio"
@@ -189,10 +202,12 @@ export default function SolarCalculatorForm() {
                       value="three"
                       checked={formValues.systemType === 'three'}
                       onChange={handleChange('systemType')}
-                    />{' '}
+                      className="radio-input"
+                    />
                     3 เฟส
                   </label>
                 </div>
+
                 {errors.systemType && (
                   <div className="error-text" style={{ marginTop: '0.5rem' }}>
                     {errors.systemType}
@@ -200,6 +215,7 @@ export default function SolarCalculatorForm() {
                 )}
               </div>
             </div>
+
 
             <label className="form-label">เปอร์เซ็นต์การใช้ไฟฟ้าในช่วงกลางวันและกลางคืน</label>
             <input
@@ -219,51 +235,34 @@ export default function SolarCalculatorForm() {
             </div>
 
             <div className={styles.formGroup}>
-              <label className="form-label">พื้นที่หลังคาโดยประมาณ (ตารางเมตร):</label>
+              <label className="form-label">
+                พื้นที่หลังคาโดยประมาณ (ตารางเมตร):</label>
               <input
                 type="text"
                 inputMode="decimal"
-                className="form-field"
+                className={`form-field ${errors.roofArea ? 'input-error' : ''}`}
                 disabled={!formValues.systemType}
                 value={formValues.roofArea}
                 onChange={handleChange('roofArea')}
-                onFocus={() => {
-                  console.log('Roof input focus, systemType=', formValues.systemType);
-                  if (!formValues.systemType) setAttemptedRoofInput(true);
-                }}
-                onKeyDown={(e) => {
-                  if (!formValues.systemType) {
-                    e.preventDefault();
-                    return;
-                  }
-                  const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', '.', 'Delete'];
-                  const isNumberKey = /^\d$/.test(e.key);
-                  if (!isNumberKey && !allowedKeys.includes(e.key)) {
-                    e.preventDefault();
-                  }
-                }}
-                onPaste={(e) => {
-                  if (!formValues.systemType) e.preventDefault();
-                }}
-                onWheel={(e) => {
-                  if (!formValues.systemType) e.preventDefault();
-                }}
                 placeholder={
                   formValues.systemType
                     ? formValues.systemType === 'single'
                       ? 'กรอกพื้นที่หลังคา : 9-45 ตารางเมตร'
                       : 'กรอกพื้นที่หลังคา : 45-179 ตารางเมตร'
-                    : ''
+                    : 'กรุณาเลือกระบบไฟฟ้าก่อน**'
                 }
+                style={{
+                  backgroundColor: !formValues.systemType ? '#f5f5f5' : 'white',
+                  cursor: !formValues.systemType ? 'not-allowed' : 'text',
+                }}
               />
               {errors.roofArea && <div className="error-text">{errors.roofArea}</div>}
-              {!formValues.systemType && attemptedRoofInput && !errors.roofArea && (
-                <div className="error-text">
+              {!formValues.systemType && (
+                <div className="error-text" >
                   *กรุณาเลือกระบบไฟฟ้าก่อนจึงจะสามารถกรอกพื้นที่หลังคาได้
                 </div>
               )}
             </div>
-
 
             <h6 className={styles.instructions}>
               หมายเหตุ : ระบบไฟ 1 เฟส จะต้องระบุพื้นที่หลังคาให้อยู่ในช่วง 9-45 ตารางเมตร

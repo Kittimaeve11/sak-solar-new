@@ -186,6 +186,20 @@ export const products = [
               '/images/solar2/item7-2.jpg',
             ],
           },
+           {
+            id: 'item8',
+            model: 'SIHC 24BIF/ SOHC - 24BIF',
+            size: '22,044 BTU',
+            panel_type: 'Longi Hi-Mo 7 (625 Watt)',
+            panel_count: 5,
+            price: 66444,
+            area: '15 ตารางเมตร',
+            mainImage: '/products/solar-air.jpg',
+            gallery: [
+              '/images/solar2/item7-1.jpg',
+              '/images/solar2/item7-2.jpg',
+            ],
+          },
         ],
       },
       {

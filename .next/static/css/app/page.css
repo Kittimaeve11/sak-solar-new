@@ -352,7 +352,7 @@ h6 {
   line-height: 1.5;
   box-sizing: border-box;
   color: #264798;
-
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .form-field:focus {
@@ -361,13 +361,11 @@ h6 {
   box-shadow: 0 4px 12px rgba(54, 122, 245, 0.25);
   background-color: #fff;
   color: #264798;
-
 }
 
 .form-field::placeholder {
   color: #AAAAAB;
 }
-
 
 /* ====== Select Dropdown ====== */
 .form-select-wrapper {
@@ -383,7 +381,6 @@ h6 {
 .form-select {
   width: 100%;
   padding: 0.6rem;
-  /* ให้เหมือน input */
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
@@ -391,9 +388,8 @@ h6 {
   font-size: 15px;
   color: #264798;
   line-height: 1.5;
-  /* เพิ่มให้ความสูงเท่ากันในทุก browser */
   box-sizing: border-box;
-  /* ป้องกัน padding ทำให้ขยาย */
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .form-select option {
@@ -402,8 +398,7 @@ h6 {
 }
 
 .form-select.placeholder {
-  color: #AAAAAB;
-  /* สีอ่อนสำหรับ placeholder */
+  color: #AAAAAB; /* สีอ่อนสำหรับ placeholder */
 }
 
 .form-select:focus {
@@ -437,6 +432,7 @@ h6 {
   font-size: 15px;
   resize: vertical;
   color: #264798;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .form-textarea:focus {
@@ -446,19 +442,19 @@ h6 {
   background-color: #fff;
 }
 
-
 /* ====== Error Message ====== */
 .error-text {
   color: rgb(236, 3, 3);
-  font-size: 16px;
-  margin-top: 0.8rem;
-  margin-bottom: 1rem;
+  font-size: 14px;
+  margin-top: 0.3rem;
+  margin-bottom: 0.5rem;
 }
 
 .required-asterisk {
   color: rgb(236, 3, 3);
 }
 
+/* ====== Checkbox Custom Styling ====== */
 .checkbox-wrapper {
   margin-top: 1rem;
 }
@@ -487,15 +483,15 @@ h6 {
   border: 2px solid #367AF5;
   border-radius: 50%;
   background-color: #fff;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.checkbox-input:checked~.custom-checkbox {
+.checkbox-input:checked ~ .custom-checkbox {
   background-color: #367AF5;
   box-shadow: inset 0 0 0 2.5px white;
 }
 
-
-
+/* ====== Radio Buttons ====== */
 .form-radio {
   color: #264798;
   display: inline-flex;
@@ -515,7 +511,7 @@ h6 {
   border-radius: 50%;
   margin-right: 0.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .radio-input:checked::before {
@@ -528,6 +524,38 @@ h6 {
   background-color: #367AF5;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+  transition: background-color 0.3s ease;
+}
+
+/* ====== Error Styling ====== */
+
+/* สำหรับกลุ่ม radio ที่มี error */
+.error-border .radio-input {
+  border-color: red !important;
+}
+
+.error-border .radio-input:checked::before {
+  background-color: red !important;
+}
+
+/* สำหรับ input, select, textarea ที่มี error */
+.error-border .radio-input {
+  border-color: red;
+}
+
+.error-border .radio-input:checked::before {
+  background-color: red;
+}
+
+.input-error {
+  border: 1px solid red !important;
+}
+
+/* กรณี input, select ที่ใช้ class error-border */
+.form-field.error-border,
+.form-select.error-border,
+.form-textarea.error-border {
+  border: 2px solid red !important;
 }
 
 /* เมาส์ชี้แล้วดุ๊กดิ๊ก */
@@ -763,71 +791,6 @@ h6 {
 
 .Home_overlayLink__MnHgW:hover {
   background: rgba(0, 0, 0, 0.7);
-}
-
-.Home_gridWrapper__Sks2M {
-  display: flex;
-  justify-content: center;
-  /* จัดกึ่งกลางแนวนอน */
-  align-items: center;
-  /* ถ้าอยากจัดกลางแนวตั้งด้วย */
-  width: 100%;
-  padding: 1rem 0rem
-}
-
-.Home_gridContainer__HOWC1 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  /* ปรับขนาด responsive */
-  gap: 1rem;
-  /* ช่องว่างระหว่าง card */
-  justify-content: center;
-  /* สำคัญ: ทำให้ items อยู่กลาง */
-  max-width: 1200px;
-  /* ปรับได้ตามความกว้างสูงสุด */
-}
-
-
-/* การ์ด */
-.Home_cardfree__U4dxP {
-  background-color: #FAFBFF !important;
-  padding: 1.30rem;
-  border-radius: 8px;
-  border: 1px solid #ebebeb;
-  text-align: center;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto;
-  width: 100%;
-  max-width: 210px;
-  height: 230px;
-}
-
-.Home_cardfree__U4dxP:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  /* เพิ่มเงาด้านล่างเล็กน้อย */
-}
-
-
-/* ไอคอน */
-.Home_icon___qAhP {
-  width: 56px;
-  height: 56px;
-  margin-bottom: 1rem;
-  object-fit: contain;
-}
-
-/* ป้ายข้อความ */
-.Home_textfree__DXc28 {
-  color: #264798;
-  font-weight: 400;
-  font-size: 0.95rem;
-  white-space: pre-wrap;
-  text-align: center;
 }
 
 
@@ -1554,4 +1517,244 @@ h6 {
     opacity: .75;
     color: black;
 }
+
+/*!***************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/components/Home/FreeServices.module.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************/
+.FreeServices_gridWrapper__eiA5l {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 0rem;
+}
+
+.FreeServices_gridContainer__s67nK {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* ตั้ง min width เป็น 255px */
+  gap: 1.5rem;
+  justify-content: center;
+  max-width: 1500px;
+}
+
+/* การ์ด */
+.FreeServices_cardfree__Pe_XV {
+  background-color: #FAFBFF !important;
+  padding: 1.3rem;
+  border-radius: 8px;
+  border: 1px solid #ebebeb;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 260px; 
+  height: 280px;
+  box-sizing: border-box;
+}
+
+.FreeServices_cardfree__Pe_XV:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  /* เพิ่มเงาด้านล่างเล็กน้อย */
+}
+
+
+/* ไอคอน */
+.FreeServices_icon__JqN5v {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1rem;
+  object-fit: contain;
+}
+
+/* ป้ายข้อความ */
+.FreeServices_textfree__FBFbD {
+  color: #264798;
+  font-size: 17px;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+.FreeServices_headersolar__ZkF_a {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 400;
+  /* ใช้ Thin */
+  text-align: center;
+  color: #F2780C;
+}
+
+/*!*************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./app/components/Home/ProductCarousel.css ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************/
+.carouselSlide {
+  display: flex;
+  justify-content: center; /* จัดกึ่งกลางแนวนอน */
+  align-items: stretch;
+  box-sizing: border-box;
+  height: 100%;
+  padding: 0 6px; /* เพิ่ม padding ซ้ายขวานิดหน่อย ให้ช่องว่างเล็กลง */
+  margin: 0;
+}
+
+.carouselWrapper {
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 1rem;
+  position: relative;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* ลด padding ซ้าย-ขวาใน slick-slide ให้แคบลง */
+.carouselWrapper .slick-slide {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  height: auto;
+  padding: 1rem 6px !important; /* ลดจาก 1rem 0 เป็น 1rem 6px */
+  box-sizing: border-box;
+}
+
+.carouselInner {
+  max-width: 1300px;
+  margin: 0 auto; /* กึ่งกลางภายใน wrapper */
+}
+
+/* ปรับ slick-track ให้อยู่ใน .carouselInner */
+.carouselInner .slick-track {
+  display: flex !important;
+  gap: 0px;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.carouselHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: -1rem;
+  padding: 0 1rem;
+}
+
+.carouselTitle {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1b2f50;
+}
+
+.carouselLink {
+  font-size: 1rem;
+  color: #0056b3;
+  text-decoration: none; 
+  cursor: pointer;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.carouselLink:hover {
+  color: #F25C05;
+  text-decoration: none; 
+}
+
+.carouselStaticWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0rem;
+  flex-wrap: wrap;
+}
+
+/* การ์ดสินค้า */
+.carouselCard {
+  background-color: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #ebebeb;
+  width: 300px;
+  height: 450px;
+  padding: 0rem;
+  /* box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06); */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ให้เนื้อหาชิดซ้าย */
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.carouselCard:hover {
+  transform: translateY(-6px);
+  /* box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1); */
+}
+
+.carouselCard img {
+  width: 100%; /* เต็มกรอบการ์ด */
+  height: auto;
+  object-fit: cover; /* ให้รูปครอบเต็มขอบ */
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.carouselCard h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2a3e5e;
+  margin: 0.75rem 1rem 0.25rem;
+  min-height: 2.6em;
+}
+
+.carouselCard p {
+  font-size: 0.9rem;
+  margin: 0.3rem 1rem 1rem;
+}
+
+.carouselCard .price {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ff0000;
+  margin: 0;
+}
+
+/* Arrows */
+.carouselArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #004bad;
+  color: white;
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  border: none;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.carouselArrow:hover {
+  background-color: #003080;
+}
+
+.carouselArrow.left {
+  left: -25px;
+}
+
+.carouselArrow.right {
+  right: -25px;
+}
+
 
