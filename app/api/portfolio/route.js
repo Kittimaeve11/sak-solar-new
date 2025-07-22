@@ -236,7 +236,7 @@ export async function GET() {
     const projects = [];
     const baseCount = projectData.length;
 
-    for (let i = 0; i < 550; i++) {
+    for (let i = 0; i < 12; i++) {
         const base = projectData[i % baseCount];
         projects.push({
             ...base,

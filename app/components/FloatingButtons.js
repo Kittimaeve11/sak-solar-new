@@ -1,45 +1,52 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { FaLine } from "react-icons/fa6";
-import { AiFillTikTok } from "react-icons/ai";
-import { FaFacebookSquare, FaYoutube, FaInstagramSquare } from "react-icons/fa";
-import Image from 'next/image';
-
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
-const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
-
-export default function ContactWidget() {
+import { FaFacebookSquare,FaFacebook, FaLine, FaInstagramSquare, FaYoutube } from 'react-icons/fa';
+import { AiFillTikTok } from 'react-icons/ai';
+import { PiInstagramLogoFill } from "react-icons/pi";
+export default function FloatingContactButton() {
   const [open, setOpen] = useState(false);
-  const [contacts, setContacts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [iconIndex, setIconIndex] = useState(0);
 
-  useEffect(() => {
-    if (open && contacts.length === 0) {
-      fetch(`${baseUrl}/api/contactapi`, {
-        headers: { 'X-API-KEY': apiKey }
-      })
-        .then(res => res.json())
-        .then(data => {
-          setContacts(data.result || []);
-          setLoading(false);
-        })
-        .catch(() => setLoading(false));
-    }
-  }, [open, contacts.length]);
+  // 1. สีขาว: ใช้ในปุ่ม
+  const rotatingIconsWhite = [
+    <FaFacebook style={{ color: "#ffffff", fontSize: 35 }} />,
+    <FaLine style={{ color: "#ffffff", fontSize: 35 }} />,
+    <PiInstagramLogoFill  style={{ color: "#ffffff", fontSize: 35 }} />,
+    <FaYoutube style={{ color: "#ffffff", fontSize: 35 }} />,
+    <AiFillTikTok style={{ color: "#ffffff", fontSize: 35 }} />,
+  ];
 
-  // Icon array ตามลำดับ social ของคุณ
-  const socialIcons = {
-    facebook: <FaFacebookSquare style={{ color: "#1877f2", fontSize: 28 }} />,
-    line: <FaLine style={{ color: "#00c300", fontSize: 28 }} />,
-    instagram: <FaInstagramSquare style={{ color: "#F5058D", fontSize: 28 }} />,
-    youtube: <FaYoutube style={{ color: "#FF0033", fontSize: 28 }} />,
-    tiktok: <AiFillTikTok style={{ color: "#101010", fontSize: 28 }} />,
+  // 2. สีจริง: ใช้ในกล่องข้อมูล
+  const socialList = [
+    { name: "facebook", url: "https://facebook.com/yourpage" },
+    { name: "line", url: "https://line.me/ti/p/yourlineid" },
+    { name: "instagram", url: "https://instagram.com/yourhandle" },
+    { name: "youtube", url: "https://youtube.com/yourchannel" },
+    { name: "tiktok", url: "https://tiktok.com/@yourhandle" },
+  ];
+
+  const coloredIcons = {
+    facebook: <FaFacebookSquare style={{ color: "#1877f2", fontSize: 24 }} />,
+    line: <FaLine style={{ color: "#00c300", fontSize: 24 }} />,
+    instagram: <FaInstagramSquare style={{ color: "#F5058D", fontSize: 24 }} />,
+    youtube: <FaYoutube style={{ color: "#FF0033", fontSize: 24 }} />,
+    tiktok: <AiFillTikTok style={{ color: "#101010", fontSize: 24 }} />,
   };
+
+  // เปลี่ยนไอคอนทุก 2 วินาที
+  useEffect(() => {
+    if (!open) {
+      const interval = setInterval(() => {
+        setIconIndex((prev) => (prev + 1) % rotatingIconsWhite.length);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [open]);
 
   return (
     <>
-      {/* ปุ่มกลมขวาล่าง */}
+      {/* ปุ่มลอย */}
       <button
         onClick={() => setOpen(!open)}
         aria-label={open ? "ปิดช่องทางติดต่อ" : "เปิดช่องทางติดต่อ"}
@@ -63,76 +70,53 @@ export default function ContactWidget() {
           transition: 'background-color 0.3s ease',
         }}
       >
-        {open ? "×" : "☎️"}
+        {open ? "×" : rotatingIconsWhite[iconIndex]}
       </button>
 
-      {/* กรอบแสดงข้อมูล ช่องทางติดต่อ */}
-      <div
-        style={{
-          position: 'fixed',
-          bottom: 90,
-          right: 20,
-          width: open ? 320 : 0,
-          maxHeight: open ? 420 : 0,
-          overflow: 'hidden',
-          backgroundColor: 'white',
-          borderRadius: 12,
-          boxShadow: '0 4px 20px rgba(0,0,0,0.25)',
-          padding: open ? 20 : 0,
-          opacity: open ? 1 : 0,
-          transition: 'all 0.35s ease',
-          zIndex: 999,
-        }}
-      >
-        {loading && <p>กำลังโหลดข้อมูล...</p>}
-
-        {!loading && contacts.length === 0 && <p>ไม่พบข้อมูลติดต่อ</p>}
-
-        {!loading && contacts.length > 0 && contacts.map(item => {
-          const socialList = [
-            { name: "facebook", url: item.facebook },
-            { name: "line", url: item.line },
-            { name: "instagram", url: item.instagram },
-            { name: "youtube", url: item.youtube },
-            { name: "tiktok", url: item.tiktok },
-          ].filter(s => s.url && s.url.trim() !== '');
-
-          return (
-            <div key={item.id}>
-              <h3 style={{ marginBottom: 12, fontWeight: '600' }}>ช่องทางติดต่อ</h3>
-
-              <p><strong>ที่อยู่:</strong> {item.address_th}</p>
-              <p><strong>โทร:</strong> {item.phone_number}</p>
-              <p><strong>อีเมล:</strong> {item.email_main}</p>
-
-              <div style={{ marginTop: 16, display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-                {socialList.map(({ name, url }) => (
-                  <a
-                    key={name}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 36,
-                      height: 36,
-                      borderRadius: '50%',
-                      backgroundColor: '#f3f4f6',
-                      color: '#000',
-                      textDecoration: 'none',
-                    }}
-                    aria-label={name}
-                  >
-                    {socialIcons[name]}
-                  </a>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {/* กล่องข้อมูลช่องทางติดต่อ */}
+      {open && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: 90,
+            right: 20,
+            padding: 16,
+            borderRadius: 12,
+            backgroundColor: '#ffffff',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            zIndex: 999,
+            width: 220,
+            animation: 'fadeIn 0.3s ease-in-out',
+          }}
+        >
+          <h4 style={{ fontSize: 16, marginBottom: 12, color: '#111', fontWeight: 'bold' }}>
+            ช่องทางติดต่อเรา
+          </h4>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            {socialList.map(({ name, url }) => (
+              <a
+                key={name}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: 36,
+                  height: 36,
+                  borderRadius: '50%',
+                  backgroundColor: '#f3f4f6',
+                  textDecoration: 'none',
+                }}
+                aria-label={name}
+              >
+                {coloredIcons[name]}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
     </>
   );
 }

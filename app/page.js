@@ -1,17 +1,17 @@
+// app/page.jsx
 'use client';
 
-import { useLocale } from './Context/LocaleContext';
-import './globals.css';
-import styles from './Home.module.css';
-import Image from 'next/image';
+import SlideEditorial from './components/Home/SlideEditorial';  // ปรับ path ตามโฟลเดอร์จริงของคุณ
 import BannerSlider from './components/BannerSlider';
-import { useEffect, useState } from 'react';
 import FreeServices from './components/Home/FreeServices';
 import SolarCalculatorForm from './components/Home/SolarCalculatorForm';
 import ContactForm from './components/Home/ContactForm';
-import { products } from './data/products';
-import Installation from './components/Home/Installation';
 import ProductCarousel from './components/Home/ProductCarousel';
+import { products } from './data/products';
+import { useLocale } from './Context/LocaleContext';
+import { useEffect, useState } from 'react';
+import SlidePortfolio from './components/Home/SlidePortfolio';
+import SlideReview from './components/Home/SlideReview';
 
 export default function HomePage() {
   const [contacts, setContacts] = useState([]);
@@ -45,7 +45,7 @@ export default function HomePage() {
     setProductOptions(products);
   }, []);
 
-  // เตรียมข้อมูลสำหรับ Solar Rooftop
+  // ตัวอย่างเตรียมข้อมูลสินค้าสำหรับ ProductCarousel
   const solarRooftopItems =
     products
       .find((p) => p.slug === 'solar-rooftop')
@@ -53,14 +53,12 @@ export default function HomePage() {
         brand.packages?.flatMap((pkg) =>
           pkg.items.map((item) => ({
             ...item,
-            // แสดงชื่อ inverter_model ตามด้วยชื่อแบรนด์
             name: `${item.inverter_model} (${brand.name})`,
             image: item.mainImage,
           }))
         )
       ) || [];
 
-  // เตรียมข้อมูลสำหรับ Solar Air
   const solarAirItems =
     products
       .find((p) => p.slug === 'solar-air')
@@ -75,13 +73,14 @@ export default function HomePage() {
   return (
     <>
       <BannerSlider />
+
+
       <h5 className="headline">
         ติดตั้งโซลาร์เซลล์กับทีมช่างที่ได้มารฐาน <br />
         และได้รับการรับรองจากการไฟฟ้า (PEA)
       </h5>
 
       <FreeServices contacts={contacts} locale={locale} />
-      {/* <Installation /> */}
 
       <div>
         <ProductCarousel
@@ -89,7 +88,6 @@ export default function HomePage() {
           items={solarRooftopItems}
           link="/products/solar-rooftop"
         />
-        {/* <hr /> */}
         <ProductCarousel
           title="Solar Air"
           items={solarAirItems}
@@ -105,6 +103,9 @@ export default function HomePage() {
         amphures={amphures}
         tambons={tambons}
       />
+      <SlideEditorial />
+      <SlidePortfolio />
+      <SlideReview />
     </>
   );
 }

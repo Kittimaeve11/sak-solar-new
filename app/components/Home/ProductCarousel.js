@@ -24,27 +24,28 @@ function Arrow({ onClick, direction }) {
 export default function ProductCarousel({ title, items, link }) {
   const showSlider = items.length > 4; // ✅ ใช้ Slider เฉพาะเมื่อมีมากกว่า 4
 
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    arrows: true,
-    nextArrow: <Arrow direction="right" />,
-    prevArrow: <Arrow direction="left" />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: { slidesToShow: 2 },
-      },
-      {
-        breakpoint: 640,
-        settings: { slidesToShow: 1 },
-      },
-    ],
-  };
-
+const settings = {
+  dots: false,
+  infinite: true,        // เปิดวนลูป
+  speed: 400,            // ลดความหน่วงของ animation
+  slidesToShow: 4,
+  slidesToScroll: 1,
+  arrows: true,
+  swipeToSlide: true,    // เปิดให้ลากลื่น
+  cssEase: 'ease-out',   // easing animation ให้ลื่นกว่า
+  nextArrow: <Arrow direction="right" />,
+  prevArrow: <Arrow direction="left" />,
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: { slidesToShow: 2, slidesToScroll: 1, swipeToSlide: true },
+    },
+    {
+      breakpoint: 640,
+      settings: { slidesToShow: 1, slidesToScroll: 1, swipeToSlide: true },
+    },
+  ],
+};
   return (
     <div className="carouselWrapper">
       <div className="carouselHeader">

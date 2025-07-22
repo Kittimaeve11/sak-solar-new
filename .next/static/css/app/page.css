@@ -1,1191 +1,193 @@
-/*!*************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./app/globals.css ***!
-  \*************************************************************************************************************************************************************************************************************************************************************/
-@font-face {
-  font-family: 'SukhumvitTadmai';
-  src: url('/fonts/SukhumvitTadmai-Text.otf') format('opentype');
-  font-weight: 400;
-  /* normal */
+/*!************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./app/components/Home/SlideEditorial.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************/
+.editorial-wrapperslide {
+    padding: 0rem 1rem;
+    max-width: 1200px;
+    margin: auto;
+    padding-top: 1rem;
+
 }
 
-@font-face {
-  font-family: 'SukhumvitTadmai';
-  src: url('/fonts/SukhumvitTadmai-UltraLight.otf') format('opentype');
-  font-weight: 200;
+.editorial-headerslide {
+    display: flex;
+    justify-content: flex-end;
+    /* 👉 จัดชิดขวา */
+    margin-bottom: 1rem;
 }
 
-@font-face {
-  font-family: 'SukhumvitTadmai';
-  src: url('/fonts/SukhumvitTadmai-SemiBold.otf') format('opentype');
-  font-weight: 600;
-}
-
-@font-face {
-  font-family: 'SukhumvitTadmai';
-  src: url('/fonts/SukhumvitTadmai-ExtraBold.otf') format('opentype');
-  font-weight: 800;
-}
-
-.font-300 {
-  font-family: 'SukhumvitTadmai', sans-serif;
-  font-weight: 200;
-  transform: scaleX(1.01);
-  letter-spacing: 0.3px;
-}
-
-.font-500 {
-  font-family: 'SukhumvitTadmai', sans-serif;
-  font-weight: 400;
-  text-shadow: 0 0 0.2px black;
-}
-
-.font-700 {
-  font-family: 'SukhumvitTadmai', sans-serif;
-  font-weight: 600;
-  text-shadow: 0.3px 0 black, -0.3px 0 black;
-}
-
-
-/* ใช้ SukhumvitTadmai แบบที่ฝังไว้ */
-* {
-  font-family: "SukhumvitTadmai", sans-serif;
-  font-weight: 400;
-  box-sizing: border-box;
-}
-
-.error-page {
-  font-family: "SukhumvitTadmai", sans-serif;
-  font-weight: 400;
-  color: #243865;
-}
-
-/* :root {
-  --nav-color: #102e50;
-  --nav-hover-color: gray;
-  --accent-color: #e78b48;
-  --nav-dropdown-background-color: #fff;
-  --nav-dropdown-color: #102e50;
-  --nav-dropdown-hover-color: gray;
-  --nav-font: Arial, sans-serif;
-  --nav-mobile-background-color: #fff;
-  --default-color: #000;
-  --contrast-color: #fff;
+/* .slide-item {
+    padding: 0 12px;
+    box-sizing: border-box;
 } */
 
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+.editorial-cardslide {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+    margin-bottom: 10px;
+    text-decoration: none;
+    /* เพิ่ม */
+    color: inherit;
+    /* เพิ่ม */
 }
 
-/* แทปใต้ Banner */
-.headline {
-  background-color: #0D3973;
-  color: white;
-  text-align: center;
-  padding: 10px 5px;
-  margin: 0px 0;
-  line-height: 1.8;
+/* .editorial-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+} */
+
+.card-imageslide {
+    border-radius: 6px 6px 0 0;
+    display: block;
 }
 
-h1 {
-  font-size: 30px;
-  color: #243865;
+.editorial-cardslide:hover .card-imageslide {
+    filter: brightness(0.4);
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
 }
 
-h2 {
-  font-size: 24px;
-  color: #243865;
-
+.card-contentslide {
+    padding: 10px 25px 16px 25px;
 }
 
-h3 {
-  font-size: 20px;
-  color: #243865;
+/* หัวข้อ: จำกัด 1 บรรทัด */
+.card-titleslide {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 0rem;
 
+    display: block;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    box-sizing: border-box;
 }
 
-h4 {
-  font-size: 18px;
-  color: #243865;
+/* เนื้อหา: จำกัด 2 บรรทัด */
+.card-snippetslide {
+    color: #555;
+    font-size: 15px;
+    margin-top: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
+    text-decoration: none;
+    /* เพิ่ม */
+    border-bottom: none;
+    /* เพิ่ม */
+    box-shadow: none;
+    /* เพิ่ม */
 }
 
-h5 {
-  font-size: 16px;
-  color: #243865;
-
+.editorial-dateslide {
+    color: #888;
+    font-size: 14px;
 }
 
-h6 {
-  font-size: 14px;
-  color: #243865;
 
+
+.headersolarslide {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+    /* ใช้ Thin */
+    text-align: center;
+    color: #F2780C;
 }
 
-.container {
-  padding: 0;
-  margin: 0;
-  width: 100vw;
-  max-width: 100vw;
-}
-
-.layout-container {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  padding: 0 16px 5px 16px;
-  /* ลด padding-bottom จาก 10px เหลือ 5px */
-  gap: 24px;
-  /* ช่องไฟระหว่างบล็อก */
-}
-
-.headtitle {
-  font-size: clamp(1.2rem, 5vw, 2rem);
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 0.5rem;
-  color: #243865;
-}
-
-.headtitleone {
-  font-size: clamp(1.2rem, 5vw, 2rem);
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 0.5rem;
-  color: #F2780C;
-}
-
-.buttonPrimary {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: #367AF5;
-  color: white;
-  border: none;
+/* Skeleton Loading - Pulse effect */
+.skeleton {
+  background-color: #e0e0e0;
   border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin: 1rem 0.5rem;
-  /* ✅ เพิ่มระยะห่างซ้ายขวา */
+  animation: pulse 1.5s infinite ease-in-out;
 }
 
-.buttonPrimary:hover {
-  background: #1E61DC;
-}
-
-.buttonDelete {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: #EC3B32;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin: 1rem 0.5rem;
-  /* ✅ เพิ่มระยะห่างซ้ายขวา */
-}
-
-.buttonDelete:hover {
-  background: #d50000;
-}
-
-.buttonSecondarybule {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: white;
-  color: #367AF5;
-  border: 2px solid #367AF5;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 1rem 0.5rem;
-  /*  เพิ่มระยะห่างซ้ายขวา */
-
-}
-
-.buttonSecondarybule:hover {
-  background-color: #367AF5;
-  color: white;
-}
-
-.buttonSecondaryonebule {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: white;
-  color: #367AF5;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 1rem 0.5rem;
-  /*  เพิ่มระยะห่างซ้ายขวา */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.buttonSecondaryonebule:hover {
-  background-color: #367AF5;
-  color: white;
-}
-
-.buttonSecondarydelte {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: white;
-  color: #F44336;
-  border: 2px solid #F44336;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 1rem 0.5rem;
-  /*  เพิ่มระยะห่างซ้ายขวา */
-
-}
-
-.buttonSecondarydelte:hover {
-  background-color: #F44336;
-  color: white;
-}
-
-.buttonSecondaryonedelte {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: white;
-  color: #F44336;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 1rem 0.5rem;
-  /*  เพิ่มระยะห่างซ้ายขวา */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.buttonSecondaryonedelte:hover {
-  background-color: #F44336;
-  color: white;
-}
-
-.buttonPrimaryorange {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: #FF5E06;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin: 1rem 0.5rem;
-  /* ✅ เพิ่มระยะห่างซ้ายขวา */
-}
-
-.buttonPrimaryorange:hover {
-  background: #E55100;
-}
-
-.buttonSecondaryorange {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: white;
-  color: #FF5E06;
-  border: 2px solid #FF5E06;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 1rem 0.5rem;
-  /*  เพิ่มระยะห่างซ้ายขวา */
-
-}
-
-.buttonSecondaryorange:hover {
-  background-color: #FF5E06;
-  color: white;
-}
-
-.buttonSecondaryoneorange {
-  font-weight: 400;
-  padding: 0.6rem 1.8rem;
-  background-color: white;
-  color: #FF5E06;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin: 1rem 0.5rem;
-  /*  เพิ่มระยะห่างซ้ายขวา */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
-}
-
-.buttonSecondaryoneorange:hover {
-  background-color: #FF5E06;
-  color: white;
-}
-
-/* ฟอร์ม */
-.form-container {
-  /* background-color: #FAFBFF; */
-  width: 100%;
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-/* ====== Label ====== */
-.form-label {
-  display: block;
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-  color: #264798;
-}
-
-/* ====== Text Input Field ====== */
-.form-field {
-  width: 100%;
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 15px;
-  line-height: 1.5;
-  box-sizing: border-box;
-  color: #264798;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.form-field:focus {
-  border-color: #367AF5;
-  outline: none;
-  box-shadow: 0 4px 12px rgba(54, 122, 245, 0.25);
-  background-color: #fff;
-  color: #264798;
-}
-
-.form-field::placeholder {
-  color: #AAAAAB;
-}
-
-/* ====== Select Dropdown ====== */
-.form-select-wrapper {
-  margin-bottom: 1rem;
-}
-
-.custom-select-container {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
-
-.form-select {
-  width: 100%;
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
-  appearance: none;
-  font-size: 15px;
-  color: #264798;
-  line-height: 1.5;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.form-select option {
-  color: #264798;
-  font-size: 15px !important;
-}
-
-.form-select.placeholder {
-  color: #AAAAAB; /* สีอ่อนสำหรับ placeholder */
-}
-
-.form-select:focus {
-  border-color: #367AF5;
-  color: #264798;
-  outline: none;
-  box-shadow: 0 4px 12px rgba(54, 122, 245, 0.25);
-  background-color: #fff;
-}
-
-.select-arrow {
-  position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: #adadad;
-  font-size: 1.3rem;
-}
-
-/* ====== Checkbox ====== */
-.form-checkbox {
-  margin-right: 0.5rem;
-}
-
-.form-textarea {
-  width: 100%;
-  padding: 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 15px;
-  resize: vertical;
-  color: #264798;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.form-textarea:focus {
-  border-color: #367AF5;
-  outline: none;
-  box-shadow: 0 4px 12px rgba(54, 122, 245, 0.25);
-  background-color: #fff;
-}
-
-/* ====== Error Message ====== */
-.error-text {
-  color: rgb(236, 3, 3);
-  font-size: 14px;
-  margin-top: 0.3rem;
-  margin-bottom: 0.5rem;
-}
-
-.required-asterisk {
-  color: rgb(236, 3, 3);
-}
-
-/* ====== Checkbox Custom Styling ====== */
-.checkbox-wrapper {
-  margin-top: 1rem;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-  padding-left: 1.5rem;
-}
-
-.checkbox-input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.custom-checkbox {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  height: 1rem;
-  width: 1rem;
-  border: 2px solid #367AF5;
-  border-radius: 50%;
-  background-color: #fff;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.checkbox-input:checked ~ .custom-checkbox {
-  background-color: #367AF5;
-  box-shadow: inset 0 0 0 2.5px white;
-}
-
-/* ====== Radio Buttons ====== */
-.form-radio {
-  color: #264798;
-  display: inline-flex;
-  align-items: center;
-  margin-right: 1.5rem;
-  cursor: pointer;
-  position: relative;
-}
-
-.radio-input {
-  appearance: none;
-  -webkit-appearance: none;
-  position: relative;
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid #367AF5;
-  border-radius: 50%;
-  margin-right: 0.5rem;
-  cursor: pointer;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-.radio-input:checked::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0.5rem;
-  height: 0.5rem;
-  background-color: #367AF5;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: background-color 0.3s ease;
-}
-
-/* ====== Error Styling ====== */
-
-/* สำหรับกลุ่ม radio ที่มี error */
-.error-border .radio-input {
-  border-color: red !important;
-}
-
-.error-border .radio-input:checked::before {
-  background-color: red !important;
-}
-
-/* สำหรับ input, select, textarea ที่มี error */
-.error-border .radio-input {
-  border-color: red;
-}
-
-.error-border .radio-input:checked::before {
-  background-color: red;
-}
-
-.input-error {
-  border: 1px solid red !important;
-}
-
-/* กรณี input, select ที่ใช้ class error-border */
-.form-field.error-border,
-.form-select.error-border,
-.form-textarea.error-border {
-  border: 2px solid red !important;
-}
-
-/* เมาส์ชี้แล้วดุ๊กดิ๊ก */
-@keyframes wiggle {
-
-  0%,
-  100% {
-    transform: rotate(0deg);
+@keyframes pulse {
+  0% {
+    background-color: #e0e0e0;
   }
 
   50% {
-    transform: rotate(5deg);
+    background-color: #f0f0f0;
+  }
+
+  100% {
+    background-color: #e0e0e0;
   }
 }
 
-.hover-wiggle:hover {
-  animation: wiggle 0.6s ease-in-out infinite;
-}
-
-
-.circle-shadow {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  /* ลดความฟุ้งลง */
-  display: inline-block;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.circle-shadow:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  /* เงาเวลา hover นุ่มขึ้นแต่ยังคม */
-}
-
-.banner-container {
-  width: 100%;
-}
-
-.banner-wrapper {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.banner-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.spinner-container {
+/* Skeleton Card Container */
+.skeleton-card {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100px;
-  /* 👈 ปรับสูงพอให้ spinner อยู่กลาง */
-  width: 100%;
-}
-
-.spinner {
-  width: 60px;
-  height: 60px;
-  border: 6px solid #ccc;
-  border-top: 6px solid #F25C05;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-.ellipsis {
-  display: flex;
-  align-items: center;
-  padding: 0 8px;
-  font-weight: 600;
-}
-
-
-
-.page-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-
-
-.page-buttons button {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
+  flex-direction: column;
   border-radius: 6px;
+  overflow: hidden;
   background-color: white;
-  cursor: pointer;
-  justify-content: center;
-  font-size: 14px;
-  transition: background-color 0.2s ease;
-  flex-direction: row;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  height: 100%;
+  padding-bottom: 24px;
+  margin-bottom: 24px;
 }
 
-
-.page-buttons button:hover {
-  background-color: #f0f0f0;
+/* Skeleton Image Placeholder */
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  border-radius: 6px 6px 0 0;
 }
 
-.page-buttons button.active-page {
-  background-color: #f5741f;
-  color: white;
-  font-weight: bold;
-  border-color: #f5741f;
-}
-
-.page-buttons button:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
-/* Button with arrow */
-.btn-with-arrow {
-  display: inline-flex;
-  align-items: center;
-  font-size: 14px;
-  line-height: 1;
-  gap: 6px;
-  padding: 8px 12px;
-  border: none;
-  background: white;
-  cursor: pointer;
+/* Skeleton Text Placeholders */
+.skeleton-title,
+.skeleton-line {
+  margin-left: 25px;
+  margin-right: 25px;
   border-radius: 6px;
-  transition: background-color 0.2s ease;
+  background-color: #ddd;
 }
 
-.btn-with-arrow:hover {
-  background-color: #f0f0f0;
+.skeleton-title {
+  height: 22px;
+  width: 60%;
+  margin-top: 20px;
+  margin-bottom: 12px;
 }
 
-
-
-.arrow-icon {
-  font-size: 14px;
-  line-height: 1;
-  vertical-align: middle;
-  color: #313131;
-}
-/*!***************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/Home.module.css ***!
-  \***************************************************************************************************************************************************************************************************************************************************************/
-/* รูปเกี่ยวกับเรา */
-.Home_about-wrapper__hggxb {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem 2rem;
-  min-height: auto;
-  /* background-color: rgba(255, 255, 255, 0.329); ✅ สีขาวโปร่งแสง */
-  background-image: url("/images/home-about.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-blend-mode: lighten;
-  /* ✅ ผสมสีให้ภาพจางลง */
-  box-sizing: border-box;
+.skeleton-line {
+  height: 14px;
+  width: 85%;
+  margin-bottom: 10px;
 }
 
-.Home_highlight-section__nbURc {
-  text-align: center;
-  max-width: 900px;
-  width: 100%;
-  padding: 1rem;
-  background-color: rgba(255, 255, 255, 0.89);
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+.skeleton-line:last-child {
+  width: 70%;
+  margin-bottom: 0;
 }
 
-.Home_highlight-logo__oF4VK {
-  margin: 0 auto 0.25rem auto;
-  display: block;
-  width: 200px;
-  height: auto;
+/* Fade-in animation */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.25s ease-in forwards;
 }
 
-.Home_highlight-section__nbURc h2 {
-  margin: 0;
-  /* ลบ margin ทั้งหมด */
-  font-weight: 400;
-}
-
-.Home_highlight-section__nbURc h5 {
-  margin: 0 0 2rem 0;
-  font-weight: 400;
-  color: #19489D;
-}
-
-.Home_highlight-text__0sYG2 h4 {
-  margin-top: 0.5rem;
-  /* ✅ เพิ่มระยะห่างจาก h5 */
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
-  font-weight: 400;
-}
-
-.Home_imageWrapper__mio59 {
-  width: 100%;
-  overflow: hidden;
-}
-
-.Home_imageContainer__N4HwU {
-  position: relative;
-}
-
-.Home_overlayLink__MnHgW {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  color: white;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 8px 16px;
-  border-radius: 4px;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1rem;
-  z-index: 9999;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.Home_overlayLink__MnHgW:hover {
-  background: rgba(0, 0, 0, 0.7);
-}
-
-
-
-/* คำนวณโซลาร์ */
-@keyframes Home_fadeInUp__zS5ad {
+@keyframes fadeIn {
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(5px);
   }
 
   100% {
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.Home_containersolar__aZH6_ {
-  background-color: #FAFBFF;
-  padding: 1rem 0;
-  width: 100%;
-}
-
-.Home_formWrapper__ODMSd {
-  max-width: 670px;
-  margin: 0 auto;
-  padding: 0rem;
-  font-family: sans-serif;
-  border-radius: 8px;
-}
-
-.Home_headersolar__6n6ZZ {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-weight: 400;
-  /* ใช้ Thin */
-  text-align: center;
-  color: #F2780C;
-}
-
-.Home_instructions__ThS4L {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-  gap: 0px;
-  color: #264798;
-
-}
-
-.Home_instructions1__OGk7o {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  margin-left: 3.5rem;
-  color: #264798;
-}
-
-.Home_instructions2__OX3VG {
-  margin-top: 0;
-  margin-bottom: 1rem;
-
-  color: #F2780C;
-}
-
-.Home_solar-form__cEtCX {
-  max-width: 700px;
-  margin: 0 auto;
-  border-radius: 10px;
-}
-
-.Home_recommend__j3pLd {
-  color: #F2780C;
-  font-weight: bold;
-}
-
-.Home_inputWrapper__8QWs0 {
-  margin-bottom: 1rem;
-}
-
-.Home_inputGroupRow__qhr0W {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 1rem;
-}
-
-.Home_formControl__ZIe7O {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #5a8fd9;
-  border-radius: 6px;
-  background-color: #FAFBFF;
-  border-radius: 4px;
-  font-size: 1rem;
-  color: #243865;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.Home_formControl__ZIe7O:focus {
-  border-color: #243865;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-}
-
-.Home_rangeControl__lwyT2 {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 9px;
-  border-radius: 5px;
-  background: #ffffff;
-  outline: none;
-  border: 1px solid #ccc;
-  /* เพิ่มขอบ 1px */
-}
-
-/* สำหรับ ตัวเลื่ออน*/
-.Home_rangeControl__lwyT2::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
-  background: #F2780C;
-  border-radius: 50%;
-  border: none;
-  margin-top: 0px;
-  /* (thumb-height - track-height) / 2 */
-  cursor: pointer;
-}
-
-/* สำหรับ Firefox */
-.Home_rangeControl__lwyT2::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: #F2780C;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-}
-
-.Home_rangeControl__lwyT2::-moz-range-track {
-  height: 6px;
-  background: #f2f2f2;
-  border-radius: 3px;
-}
-
-.Home_usageSplit__Xjzsn {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.85rem;
-  color: #555;
-  font-weight: 400;
-  margin-bottom: 1.5rem;
-}
-
-.Home_buttonGroup__isBN_ {
-  display: flex;
-  justify-content: flex-end;
-  /* ชิดขวาทั้งหมด */
-  margin-top: 1.5rem;
-}
-
-.Home_results__k_KSW {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 2rem;
-  animation: Home_fadeInUp__zS5ad 0.6s ease-out;
-}
-
-.Home_card__Chabw {
-  background-color: #f9f9f9;
-  /* สีพื้นหลังอ่อน ๆ สบายตา */
-  border-radius: 8px;
-  /* ขอบโค้งมน */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  /* เงานุ่ม ๆ */
-  padding: 16px 20px;
-  /* ระยะห่างด้านใน */
-  margin: 12px 0;
-  /* เว้นระยะห่างระหว่างบล็อก */
-  font-size: 1.1rem;
-  /* ขนาดตัวอักษรพอดี */
-  color: #333;
-  /* สีตัวอักษรเข้ม อ่านง่าย */
-  transition: background-color 0.3s ease;
-  /* เวลาเปลี่ยนสี */
-  cursor: default;
-  /* เคอร์เซอร์แบบปกติ */
-}
-
-/* เพิ่มเอฟเฟกต์เมื่อชี้เมาส์ */
-.Home_card__Chabw:hover {
-  background-color: #e6f0ff;
-  /* สีฟ้าอ่อนเวลาชี้ */
-  box-shadow: 0 4px 10px rgba(0, 90, 255, 0.2);
-}
-
-/* ถ้าอยากเน้นข้อความหัวข้อ */
-.Home_card__Chabw strong {
-  color: #0055cc;
-}
-
-.Home_results__k_KSW {
-  animation: Home_fadeInUp__zS5ad 0.6s ease-in-out;
-  width: 100%;
-  max-width: 1000px;
-  /* ขยายให้กว้างมากขึ้น */
-  margin: 0 auto;
-  padding: 0 20px;
-  /* เพิ่ม padding เพื่อไม่ให้ติดขอบจอเกินไป */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.Home_container__P8LeA {
-  width: 100%;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border-radius: 8px; /* 👈 เพิ่มขอบมน */
-}
-
-
-/* แถว highlight สีส้ม */
-.Home_rowsolar__UE9U9.Home_highlight__nG_WM {
-  background-color: #f58220;
-  color: white;
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  border-radius: 8px 8px 0 0;
-  font-weight: bold;
-}
-
-/* แถวทั่วไปพื้นหลังขาว */
-.Home_rowsolar__UE9U9 {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  padding: 15px 20px;
-  border-bottom: 1px solid #eee;
-}
-
-/* แถวกลางวัน/กลางคืน */
-.Home_rowSimple__IOUA7 {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  padding: 12px 30px;
-  border-bottom: 1px solid #eee;
-}
-
-/* ไอคอน */
-.Home_iconsolar__e2_ja {
-  width: 70px;
-  /* ลดขนาดจาก 36px เป็น 24px */
-  height: 70px;
-  margin-right: 20px;
-  flex-shrink: 0;
-}
-
-.Home_iconsolar__e2_ja img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.Home_iconSmall__jOdql {
-  width: 50px;
-  height: 50px;
-  margin-right: 35px;
-  flex-shrink: 0;
-}
-
-.Home_iconSmall__jOdql img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.Home_iconSimple__aIH_x {
-  width: 36px;
-  height: 36px;
-  margin-right: 20px;
-  flex-shrink: 0;
-}
-
-.Home_iconSimple__aIH_x img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.Home_textsolar__bqNHC {
-  font-size: 18px;
-  color: #ffffff;
-  font-weight: 600
-}
-
-.Home_textelectricity__8E4An {
-  font-size: 18px;
-  color: #243865;
-  font-weight: 600
-}
-
-
-.Home_textFull__Y48h2 {
-  font-size: 16px;
-  color: #444;
-}
-
-.Home_valuesolar__CUzPF {
-  font-size: 18px;
-  margin-left: auto;
-  font-weight: bold;
-  color: #ffffff;
-}
-
-.Home_value__CHu_5 {
-  margin-left: auto;
-  font-weight: bold;
-  color: #525151;
-  font-size: 16px;
-
-}
-
-.Home_valueHighlight__QSJL_ {
-  color: #f58220;
-  font-weight: bold;
-  font-size: 18px;
-
-}
-
-/* กล่องข้อมูลด้านล่าง */
-.Home_cardBox____WFT {
-  background-color: white;
-  padding: 20px;
-  border-radius: 0 0 8px 8px;
-  margin-top: 10px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.05);
-}
-
-.Home_cardBottom__ifQtK {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  font-size: 16px;
-  color: #333;
-  border-bottom: 1px solid #eee;
-}
-
-.Home_cardBottom__ifQtK:last-child {
-  border-bottom: none;
-}
-
-.Home_labelsolarHead__aoYuz {
-  font-size: 18px;
-  color: #264798;
-  font-weight: 600;
-}
-
-.Home_labelsolar__LzQPa {
-  font-size: 16px;
-
-  color: #264798;
-}
-
-/* ปุ่มคำนวณใหม่ */
-.Home_buttonWrapper__CZcOg {
-  margin-top: 24px;
-  text-align: center;
-}
-
-/* .row {
-  display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-} */
-
-.Home_formGroup__4JTvI {
-  display: flex;
-  flex-direction: column;
-}
-
-.Home_flexGrow__Wi2IE {
-  flex-grow: 1;
-}
-
-.Home_alignRight__irTvB {
-  margin-left: auto;
-  min-width: 100px;
-  /* หรือขนาดที่เหมาะสม */
-}
-
-.Home_buttonWrapper__CZcOg {
-  width: 100%;
-  text-align: center;
-  margin-top: 0px;
 }
 /*!*****************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./node_modules/slick-carousel/slick/slick.css ***!
@@ -1588,6 +590,500 @@ h6 {
   color: #F2780C;
 }
 
+/*!************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/components/Home/SolarForm.module.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************/
+/* พื้นหลังฟอร์ม */
+.SolarForm_containersolar__VzuJW {
+  background-color: #FAFBFF;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+/* ฟอร์มหลัก */
+.SolarForm_formWrapper__X92lv {
+  max-width: 670px;
+  margin: 0 auto;
+  font-family: sans-serif;
+  border-radius: 8px;
+}
+
+/* หัวข้อ */
+.SolarForm_headersolar__yjlA9 {
+  margin: 1rem 0;
+  font-weight: 400;
+  text-align: center;
+  color: #F2780C;
+}
+
+/* คำแนะนำ */
+.SolarForm_instructions__KDGRK {
+  margin: 0.5rem 0;
+  color: #0d0d0e;
+}
+
+.SolarForm_instructions1__aoLPi {
+  margin-left: 3.5rem;
+  margin-bottom: 0.5rem;
+  color: #264798;
+}
+
+.SolarForm_instructions2__MBmMq {
+  margin-bottom: 1rem;
+  color: #F2780C;
+}
+
+/* ฟอร์มคำนวณ */
+.SolarForm_solar-form__CKHcq {
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.SolarForm_buttonGroup__HJ3iD {
+  display: flex;
+  justify-content: flex-end;
+  /* ชิดขวาทั้งหมด */
+  margin-top: 1.5rem;
+}
+
+/* แสดงผล */
+.SolarForm_results__7N9Nm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  animation: SolarForm_fadeInUp__Sctzc 0.6s ease-in-out;
+}
+
+/* กล่องผลลัพธ์ */
+.SolarForm_recommendCard__sUHUc {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  max-width: 700px;
+  margin: auto;
+}
+
+/* หัวข้อสีส้ม */
+.SolarForm_headerOrange__7DhsX {
+  display: flex;
+  align-items: center;
+  background: #E88534;
+  color: white;
+  padding-top: 20px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+  padding-left: 40px;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.SolarForm_labelhead___sJaa {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.SolarForm_label__FJbME {
+  font-size: 18px;
+  font-weight: 600;
+  color: #E88534;
+}
+
+.SolarForm_labelone__cXOTC {
+  font-size: 16px;
+  font-weight: 600;
+  color: #E88534;
+}
+
+.SolarForm_valueLarge__Y3MLa {
+  font-size: 26px;
+  font-weight: bold;
+  margin-top: -10px;
+}
+
+/* กล่องแสดงข้อมูล */
+.SolarForm_rowWhite__ds78g,
+.SolarForm_rowSimple__0lWOm,
+.SolarForm_rowsolar__MYmxs {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 12px 20px;
+  gap: 12px;
+  border-bottom: 1.2px solid #eee;
+}
+
+.SolarForm_rowsolar__MYmxs.SolarForm_highlight__DAPu0 {
+  background-color: #f58220;
+  color: white;
+  border-radius: 8px 8px 0 0;
+  font-weight: bold;
+}
+
+
+/* ข้อความ */
+.SolarForm_textsolar__4wfXW {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.SolarForm_textelectricity__Ss_up {
+  font-size: 18px;
+  font-weight: 600;
+  color: #243865;
+}
+
+.SolarForm_textFull__q7i7Q {
+  font-size: 16px;
+  color: #444;
+}
+
+/* ค่าตัวเลข */
+.SolarForm_valuesolar__0toRa {
+  margin-left: auto;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.SolarForm_value___9Vz6 {
+  margin-left: auto;
+  font-weight: bold;
+  color: #555555;
+  font-size: 18px;
+}
+
+.SolarForm_valueone__c_WEe {
+  margin-left: auto;
+  color: #686767;
+  font-size: 16px;
+}
+
+.SolarForm_valueHighlight__VVm3R {
+  color: #f58220;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+
+
+.SolarForm_labelsolarHead__munW6 {
+  font-size: 18px;
+  color: #264798;
+  font-weight: 600;
+}
+
+.SolarForm_labelsolar__NlFZY {
+  font-size: 16px;
+  color: #264798;
+}
+
+/* หัวข้อคืนทุน */
+.SolarForm_section__sQlLM {
+  margin-top: 0px;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.SolarForm_paybackRow__MENbZ {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.SolarForm_paybackTitle__IJDO6 {
+  font-size: 30px;
+  color: #E88534;
+  font-weight: 600;
+  text-align: left;
+}
+
+.SolarForm_paybackValue__GxATz {
+  font-size: 30px;
+  color: #E88534;
+  font-weight: 600;
+  text-align: right;
+}
+
+.SolarForm_paybackNote__K_kYO {
+  /* text-align: center; */
+  margin-bottom: 12px;
+  color: #444;
+  margin-top: -0.5rem;
+}
+
+.SolarForm_record__wLNJw {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: 10px 20px 10px 50px;
+  /*    top   right  bottom left */
+  border-bottom: 1.2px solid #eee;
+}
+
+.SolarForm_paybackList__G0265 {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: #333;
+}
+
+/* แพ็กเกจสินค้า */
+.SolarForm_packageTitle__ED9dz {
+  color: #E88534;
+  font-weight: 600;
+  font-size: 28px;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.SolarForm_systemType__A3RWs {
+  margin-top: -2.5rem;
+  text-align: center;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.SolarForm_productList__M_L0W {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.SolarForm_productCard__DnqCv {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  width: 200px;
+  padding: 12px;
+  text-align: center;
+}
+
+.SolarForm_productImage__rAqly {
+  width: 100%;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 8px;
+}
+
+.SolarForm_productInfo__elXid h5 {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+/* ปุ่ม */
+.SolarForm_buttonWrapper__E01LB {
+  width: 100%;
+  text-align: center;
+  margin-top: 24px;
+}
+
+/* input */
+.SolarForm_inputWrapper__u_r2R {
+  margin-bottom: 1rem;
+}
+
+.SolarForm_inputGroupRow__cp_V6 {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.SolarForm_formControl__1j3kS {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #5a8fd9;
+  border-radius: 4px;
+  background-color: #FAFBFF;
+  font-size: 1rem;
+  color: #243865;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.SolarForm_formControl__1j3kS:focus {
+  border-color: #243865;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* slider */
+.SolarForm_rangeControl__7_b3V {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 9px;
+  border-radius: 5px;
+  background: #ffffff;
+  outline: none;
+  border: 1px solid #ccc;
+}
+
+.SolarForm_rangeControl__7_b3V::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #F2780C;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.SolarForm_rangeControl__7_b3V::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #F2780C;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.SolarForm_rangeControl__7_b3V::-moz-range-track {
+  height: 6px;
+  background: #f2f2f2;
+  border-radius: 3px;
+}
+
+/* แถบแสดงสัดส่วน */
+.SolarForm_usageSplit__RPV05 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+/* อนิเมชัน */
+@keyframes SolarForm_fadeInUp__Sctzc {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.SolarForm_iconMedium__fTSlu {
+  width: 32px;
+  height: 32px;
+}
+
+.SolarForm_iconLarge__VvQ4o {
+  width: 100px;
+  height: 100px;
+  margin-right: 12px;
+  /* หรือค่าที่เหมาะสม */
+  gap: 12px;
+
+}
+/*!***************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/Home.module.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************/
+.Home_highlight-section__nbURc {
+  text-align: center;
+  max-width: 900px;
+  width: 100%;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.89);
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.Home_highlight-logo__oF4VK {
+  margin: 0 auto 0.25rem auto;
+  display: block;
+  width: 200px;
+  height: auto;
+}
+
+.Home_highlight-section__nbURc h2 {
+  margin: 0;
+  /* ลบ margin ทั้งหมด */
+  font-weight: 400;
+}
+
+.Home_highlight-section__nbURc h5 {
+  margin: 0 0 2rem 0;
+  font-weight: 400;
+  color: #19489D;
+}
+
+.Home_highlight-text__0sYG2 h4 {
+  margin-top: 0.5rem;
+  /* ✅ เพิ่มระยะห่างจาก h5 */
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.Home_imageWrapper__mio59 {
+  width: 100%;
+  overflow: hidden;
+}
+
+.Home_imageContainer__N4HwU {
+  position: relative;
+}
+
+.Home_overlayLink__MnHgW {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: white;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  z-index: 9999;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.Home_overlayLink__MnHgW:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.Home_formWrapper__ODMSd {
+  max-width: 670px;
+  margin: 0 auto;
+  padding: 0rem;
+  font-family: sans-serif;
+  border-radius: 8px;
+}
+
+.Home_headersolar__6n6ZZ {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 400;
+  /* ใช้ Thin */
+  text-align: center;
+  color: #F2780C;
+}
+
+.Home_containersolar__aZH6_ {
+  background-image: url('/images/solar-cellbackfrom.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding-bottom: 1rem;
+  width: 100%;
+}
+
+
+
+
 /*!*************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./app/components/Home/ProductCarousel.css ***!
   \*************************************************************************************************************************************************************************************************************************************************************************************/
@@ -1769,3 +1265,357 @@ h6 {
 .carouselArrow.right {
   right: -20px;
 }
+/*!************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./app/components/Home/SlidePortfolio.css ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************/
+/* SlidePortfolio.css */
+.portfolio-gridslide {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    /* ← เพิ่มระยะห่างระหว่างการ์ด */
+    padding: 0 12px;
+}
+
+.portfolio-wrapperslide {
+    padding: 0rem 1rem;
+    max-width: 1200px;
+    margin: auto;
+    padding-top: 1rem;
+}
+
+
+.portfolio-headerslide {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+
+/* การ์ด carousel */
+.portfolio-cardslide {
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    overflow: hidden;
+    margin-bottom: 10px;
+    transition: box-shadow 0.2s ease;
+    text-decoration: none;
+    /* เพิ่ม */
+    color: inherit;
+    /* เพิ่ม */
+}
+
+/* .portfolio-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+} */
+
+.portfolioslide-image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 0;
+}
+
+.portfolioslide-image {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.portfolio-cardslide:hover .portfolioslide-image {
+    filter: brightness(0.4);
+}
+
+/* Banner logo ซ้ายบน */
+.portfolio-bannerslide {
+    position: absolute;
+    top: 1rem;
+    left: 0;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 4px 10px;
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #243865;
+    z-index: 2;
+}
+
+.banner-logoslide {
+    width: 25px;
+    height: 25px;
+    margin-right: 6px;
+}
+
+.banner-textslide {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #264798;
+    white-space: nowrap;
+}
+
+/* เนื้อหาการ์ด */
+.portfolio-contentslide {
+    padding: 16px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.project-titleslide {
+    font-size: 18px;
+    font-weight: 600;
+    color: #264798;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.project-detailsslide {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.95rem;
+    color: #555;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.project-detailsslide li {
+    display: flex;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+
+.project-detailsslide li strong {
+    color: #264798;
+}
+
+.project-detailsslide li.date-postslide {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: flex-start;
+    color: #264798;
+    margin-top: 6px;
+    border: none;
+}
+
+
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .headersolarslide {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .portfolio-cardslide {
+        margin: 6px;
+    }
+
+    .portfolioslide-image-wrapper {
+        height: 160px;
+    }
+}
+
+/* Skeleton loading effect */
+.skeleton {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { background-color: #e0e0e0; }
+  50% { background-color: #f0f0f0; }
+  100% { background-color: #e0e0e0; }
+}
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding-bottom: 16px;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 180px;
+}
+
+.skeleton-title {
+  height: 20px;
+  margin: 16px 16px 8px 16px;
+  width: 70%;
+}
+
+.skeleton-line {
+  height: 16px;
+  margin: 6px 16px;
+  width: 90%;
+  display: block;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.2s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Responsive grid for skeletons */
+.portfolio-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .skeleton-banner {
+    aspect-ratio: 1.92 / 1;
+  }
+}
+
+/*!*********************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./app/components/Home/SlideReview.css ***!
+  \*********************************************************************************************************************************************************************************************************************************************************************************/
+.review-wrapperslide {
+    padding: 0rem 1rem;
+    max-width: 1200px;
+    margin: auto;
+    padding-top: 1rem;
+
+}
+
+
+.review-header-linkslide {
+    margin-bottom: 1.5rem;
+    text-align: right;
+}
+
+
+
+.video-cardslide {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+}
+
+
+.thumbnail-wrapperslide {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.thumbnailslide {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ทำให้ภาพมืดลงเมื่อ hover */
+.video-cardslide:hover .thumbnailslide {
+    filter: brightness(0.4);
+}
+
+.infoslide {
+    padding: 0.75rem 0.25rem 0.25rem;
+}
+
+.titleslide {
+    font-size: 16px;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dateslide {
+    font-size: 14px;
+    color: #777;
+}
+/* ==== Skeleton Loading ==== */
+.skeleton {
+  background-color: #e0e0e0;
+  animation: pulse 1.5s infinite ease-in-out;
+  border-radius: 4px;
+}
+
+@keyframes pulse {
+  0% { background-color: #e0e0e0; }
+  50% { background-color: #f0f0f0; }
+  100% { background-color: #e0e0e0; }
+}
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 180px;
+}
+
+.skeleton-title {
+  height: 20px;
+  margin: 16px 16px 8px 16px;
+  width: 70%;
+}
+
+.skeleton-line {
+  height: 16px;
+  margin: 6px 16px 16px 16px;
+  width: 90%;
+  display: block;
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.3s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+.review-loading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 16px;
+}
+

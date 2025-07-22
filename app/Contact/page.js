@@ -54,7 +54,7 @@ export default function Page() {
       try {
         const res = await fetch(`${baseUrl}/api/topicsapi`, {
           headers: {
-            'X-API-KEY': `${apiKey}` 
+            'X-API-KEY': `${apiKey}`
           }
         });
 
@@ -383,14 +383,15 @@ export default function Page() {
               <label htmlFor="topic" className="form-label">
                 {messages.selecttop} <span className="required-asterisk">*</span>
               </label>
-              <div className="custom-select-container">
+              <div className={`custom-select-container ${touched.topic && errors.topic ? 'error-border' : ''}`}>
+
                 <select
                   id="topic"
                   name="topic"
                   value={formData.topic}
                   onChange={handleChange}
                   onBlur={() => setTouched((prev) => ({ ...prev, topic: true }))}
-                  className={getClassName(formData.topic, "form-select")}
+                  className={`${getClassName(formData.topic, "form-select")} ${touched.topic && errors.topic ? 'error-border' : ''}`}
                 >
                   <option value="" disabled hidden>
                     {messages.pleaseselect}**
@@ -418,8 +419,7 @@ export default function Page() {
                 onChange={handleChange}
                 onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
                 placeholder={`${messages.please_fill}**`}
-                className={getClassName(formData.name, "form-field")}
-              />
+                className={`${getClassName(formData.name, "form-field")} ${touched.name && errors.name ? 'error-border' : ''}`} />
               {touched.name && errors.name && <p className="error-text">*{errors.name}</p>}
             </div>
 
@@ -435,13 +435,13 @@ export default function Page() {
                 onChange={handleChange}
                 onBlur={() => setTouched((prev) => ({ ...prev, phone: true }))}
                 placeholder={`${messages.onlyphone} (0912345678)**`}
-                className={getClassName(formData.phone, "form-field")}
-                inputMode="numeric"
+                className={`${getClassName(formData.name, "form-field")} ${touched.phone && errors.phone ? 'error-border' : ''}`} inputMode="numeric"
                 maxLength={10}
               />
               {touched.phone && errors.phone && <p className="error-text">*{errors.phone}</p>}
             </div>
 
+            {/* Email */}
             {/* Email */}
             <div>
               <label className="form-label">อีเมล์ (ถ้ามี)</label>
@@ -452,7 +452,7 @@ export default function Page() {
                 onChange={handleChange}
                 onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
                 placeholder="example@example.com"
-                className={getClassName(formData.email, "form-field")}
+                className={`${getClassName(formData.email, "form-field")} ${touched.email && errors.email ? 'error-border' : ''}`}
               />
               {touched.email && errors.email && <p className="error-text">*{errors.email}</p>}
             </div>
@@ -468,7 +468,7 @@ export default function Page() {
                 value={formData.message}
                 onChange={handleChange}
                 onBlur={() => setTouched((prev) => ({ ...prev, message: true }))}
-                className={getClassName(formData.message, "form-textarea")}
+                className={`${getClassName(formData.message, "form-textarea")} ${touched.message && errors.message ? 'error-border' : ''}`}
               />
               {touched.message && errors.message && <p className="error-text">*{errors.message}</p>}
             </div>
@@ -494,7 +494,7 @@ export default function Page() {
       </main>
 
 
-    </div>
+    </div >
   );
 }
 

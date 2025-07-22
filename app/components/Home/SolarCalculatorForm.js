@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import styles from '../../Home.module.css';
+import styles from './SolarForm.module.css';
+import { products } from '@/app/data/products';
+import { BsDash } from "react-icons/bs";
 
 const calculateSolarSize = (electricityCost, dayUsage, installationCost = 0) => {
-  const usageUnits = electricityCost / 5; // สมมุติ 1 หน่วย = 5 บาท
+  const usageUnits = electricityCost / 5;
   const averageDailyUnits = usageUnits / 30;
   const dayUnits = averageDailyUnits * (dayUsage / 100);
   const nightUnits = averageDailyUnits - dayUnits;
+
+  const C = usageUnits * (dayUsage / 100);
 
   const sizeTable = [
     { size: "1.8 kW", max: 270 },
@@ -22,12 +26,12 @@ const calculateSolarSize = (electricityCost, dayUsage, installationCost = 0) => 
     { size: "40 kW", max: 6000 },
   ];
 
-  const recommendedItem = sizeTable.find((item) => usageUnits <= item.max);
+  const recommendedItem = sizeTable.find((item) => C <= item.max);
   const recommended = recommendedItem?.size || "เกิน 60 kW";
 
   const savingsPerMonth = electricityCost * (dayUsage / 100);
   const savingsPerYear = savingsPerMonth * 12;
-
+  const savingsIn25Years = savingsPerYear * 25;
   const paybackPeriod =
     installationCost && savingsPerYear
       ? (installationCost / savingsPerYear).toFixed(1)
@@ -42,6 +46,7 @@ const calculateSolarSize = (electricityCost, dayUsage, installationCost = 0) => 
     dayUsage,
     savingsPerMonth,
     savingsPerYear,
+    savingsIn25Years,
     paybackPeriod,
   };
 };
@@ -61,19 +66,16 @@ export default function SolarCalculatorForm() {
   const validate = () => {
     const newErrors = {};
 
-    // ค่าไฟฟ้าต่อเดือน
     if (!formValues.electricityCost) {
       newErrors.electricityCost = '*กรุณากรอกค่าไฟฟ้า';
     } else if (isNaN(Number(formValues.electricityCost)) || Number(formValues.electricityCost) <= 0) {
       newErrors.electricityCost = '*กรุณากรอกค่าไฟฟ้าเป็นตัวเลขบวก';
     }
 
-    // ระบบไฟฟ้า
     if (!formValues.systemType) {
       newErrors.systemType = '*กรุณาเลือกระบบไฟฟ้า';
     }
 
-    // พื้นที่หลังคา
     if (!formValues.roofArea && formValues.roofArea !== 0) {
       newErrors.roofArea = '*กรุณากรอกพื้นที่หลังคา';
     } else if (!formValues.systemType && formValues.roofArea !== '') {
@@ -96,24 +98,39 @@ export default function SolarCalculatorForm() {
   const handleChange = (field) => (e) => {
     let value = e.target.value;
 
-    // สำหรับ electricityCost ให้ลบ comma ออก
     if (field === 'electricityCost') {
       value = value.replace(/,/g, '');
-      if (!/^\d*$/.test(value)) return; // รับแค่เลข
+      if (!/^\d*$/.test(value)) return;
     }
 
-    // สำหรับ roofArea ให้รับเฉพาะตัวเลขและจุดทศนิยม
     if (field === 'roofArea') {
       if (value === '' || /^\d*\.?\d*$/.test(value)) {
-        // ปล่อยให้ผ่าน
+        const roofNum = parseFloat(value);
+
+        // เช็คว่าค่าที่พิมพ์เกินช่วงไหม
+        let roofError = null;
+        let maxArea = formValues.systemType === 'single' ? 45 : 179;
+        let minArea = formValues.systemType === 'single' ? 9 : 45;
+
+        if (value !== '' && !isNaN(roofNum)) {
+          if (roofNum < minArea) {
+            roofError = `*พื้นที่สำหรับ ${formValues.systemType === 'single' ? '1 เฟส' : '3 เฟส'} ต้องไม่ต่ำกว่า ${minArea} ตารางเมตร.`;
+          } else if (roofNum > maxArea) {
+            roofError = `*พื้นที่สำหรับ ${formValues.systemType === 'single' ? '1 เฟส' : '3 เฟส'} ต้องไม่เกิน ${maxArea} ตารางเมตร.`;
+            // ไม่อัพเดตค่าถ้าเกินขีดจำกัด
+            return; // หยุดไม่ให้พิมพ์ค่าที่เกิน
+          }
+        }
+
+        setErrors((prev) => ({ ...prev, roofArea: roofError }));
       } else {
-        return; // ไม่รับค่าอื่น
+        return; // ไม่อนุญาตพิมพ์อะไรที่ไม่ใช่ตัวเลขและจุด
       }
     }
 
     setFormValues((prev) => ({ ...prev, [field]: value }));
 
-    // ลบ error ของฟิลด์นั้นออกทันทีที่แก้ไข
+    // Reset error เฉพาะ field นี้ ถ้าไม่มี error ใหม่
     setErrors((prevErrors) => {
       if (!prevErrors[field]) return prevErrors;
       const updatedErrors = { ...prevErrors };
@@ -132,7 +149,6 @@ export default function SolarCalculatorForm() {
     const roofAreaNum = Number(formValues.roofArea);
     const { systemType, dayUsage } = formValues;
 
-    // ตรวจสอบความสอดคล้องของพื้นที่กับระบบไฟฟ้าอีกครั้ง
     if (
       (systemType === 'single' && (roofAreaNum < 9 || roofAreaNum > 45)) ||
       (systemType === 'three' && (roofAreaNum < 45 || roofAreaNum > 179))
@@ -141,8 +157,7 @@ export default function SolarCalculatorForm() {
       return;
     }
 
-    const installationCost = 100000; // สมมติ
-
+    const installationCost = 100000;
     const result = calculateSolarSize(electricityCostNum, dayUsage, installationCost);
     setResults(result);
   };
@@ -152,6 +167,34 @@ export default function SolarCalculatorForm() {
     setErrors({});
     setResults(null);
     setAttemptedRoofInput(false);
+  };
+
+  const getRecommendedItems = (systemType) => {
+    if (!systemType) return [];
+
+    // แปลงค่า systemType ให้ตรงกับ power_system ใน data
+    const powerSystemText = systemType === 'single' ? '1 เฟส' : '3 เฟส';
+
+    const solarCategory = products.find((cat) => cat.id === 'solar1'); // Solar Rooftop category
+    if (!solarCategory) return [];
+
+    const matchedItems = [];
+
+    solarCategory.brands.forEach((brand) => {
+      brand.packages.forEach((pkg) => {
+        pkg.items.forEach((item) => {
+          if (item.power_system === powerSystemText) {
+            matchedItems.push({
+              brandName: brand.name,
+              packageName: pkg.name,
+              ...item,
+            });
+          }
+        });
+      });
+    });
+
+    return matchedItems;
   };
 
   return (
@@ -165,7 +208,7 @@ export default function SolarCalculatorForm() {
           <form noValidate onSubmit={handleSubmit}>
             <div className={styles.row}>
               <div className={`${styles.formGroup} ${styles.flexGrow}`}>
-                <label className="form-label">ค่าไฟฟ้าต่อเดือน (บาท):</label>
+                <label className="form-label">ค่าไฟฟ้าต่อเดือน (บาท) :</label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -179,7 +222,7 @@ export default function SolarCalculatorForm() {
 
               <div className="form-group align-right">
                 <label className="form-label" style={{ marginBottom: '1rem' }}>
-                  ระบบไฟฟ้า:
+                  ระบบไฟฟ้า :
                 </label>
 
                 <div className={`radio-group ${errors.systemType ? 'error-border' : ''}`}>
@@ -234,9 +277,10 @@ export default function SolarCalculatorForm() {
               <span>ช่วงกลางคืน {100 - formValues.dayUsage} %</span>
             </div>
 
+
             <div className={styles.formGroup}>
               <label className="form-label">
-                พื้นที่หลังคาโดยประมาณ (ตารางเมตร):</label>
+                พื้นที่หลังคาโดยประมาณ (ตารางเมตร) :</label>
               <input
                 type="text"
                 inputMode="decimal"
@@ -264,12 +308,12 @@ export default function SolarCalculatorForm() {
               )}
             </div>
 
-            <h6 className={styles.instructions}>
+            {/* <h6 className={styles.instructions}>
               หมายเหตุ : ระบบไฟ 1 เฟส จะต้องระบุพื้นที่หลังคาให้อยู่ในช่วง 9-45 ตารางเมตร
             </h6>
             <h6 className={styles.instructions1} style={{ marginLeft: '4rem' }}>
               ระบบไฟ 3 เฟส จะต้องระบุพื้นที่หลังคาให้อยู่ในช่วง 45-179 ตารางเมตร
-            </h6>
+            </h6> */}
 
             <div className={styles.buttonGroup}>
               <button type="submit" className="buttonSecondaryonebule">
@@ -291,93 +335,131 @@ export default function SolarCalculatorForm() {
             <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>
               แพ็กเกจที่ออกแบบมาให้เหมาะกับพื้นที่หลังคาและรูปแบบการใช้พลังงานของคุณ
             </h4>
-
-            <div className={`${styles.results} ${styles.fadeInUp}`}>
-              <div className={styles.container}>
-                {/* แถวสีส้ม */}
-                <div className={`${styles.rowsolar} ${styles.highlight}`}>
-                  <div className={styles.iconsolar}>
-                    <img src="/icons/solar-energy.png" alt="Solar panel" />
-                  </div>
-                  <div className={styles.textsolar}>ขนาดระบบที่แนะนำ</div>
-                  <div className={styles.valuesolar}>{results.recommended}</div>
+            <div className={styles.recommendCard}>
+              <div className={styles.headerOrange}>
+                <img src="/icons/solar-energy.png" alt="Solar panel" className={styles.iconLarge} />
+                <div>
+                  <div className={styles.labelhead}>ขนาดระบบที่แนะนำ</div>
+                  <div className={styles.valueLarge}>{results.recommended}</div>
                 </div>
+              </div>
 
-                {/* แถวสีขาว */}
-                <div className={styles.rowsolar}>
-                  <div className={styles.iconSmall}>
-                    <img src="/icons/bill.png" alt="Savings" />
-                  </div>
-                  <div className={styles.textelectricity}>ค่าไฟที่ลดได้ต่อเดือน</div>
-                  <div className={styles.value}>{results.savingsPerMonth?.toLocaleString()} บาท</div>
+              <div className={styles.rowWhite}>
+                <img src="/icons/coin.png" alt="Bill" className={styles.iconMedium} />
+                <div className={styles.label}>ค่าไฟที่ลดได้ต่อเดือน :</div>
+                <div className={styles.value}>{results.savingsPerMonth?.toLocaleString() || 'XXX'} บาท</div>
+              </div>
+
+              <div className={styles.rowSimple}>
+                <img src="/icons/sun1.png" alt="Day" className={styles.iconMedium} />
+
+                <div className={styles.label}>การใช้ไฟช่วงกลางวัน :</div>
+                <div className={styles.value}>{results.dayUnits?.toFixed(2)} kW ({results.dayUsage}%)</div>
+              </div>
+
+              <div className={styles.rowSimple}>
+                <img src="/icons/night.png" alt="Night" className={styles.iconMedium} />
+                <div className={styles.label}>การใช้ไฟช่วงกลางคืน :</div>
+                <div className={styles.value}> {results.nightUnits?.toFixed(2)} kW ({(100 - results.dayUsage).toFixed(2)}%)</div>
+              </div>
+
+              <div className={styles.section}>
+                <div className={styles.paybackRow}>
+                  <div className={styles.paybackTitle}>ระยะเวลาคืนทุน</div>
+                  <div className={styles.paybackValue}>
+                    {results.paybackPeriod || '-'} ปี</div>
                 </div>
+                <div className={styles.paybackNote}>Solar Rooftop เพื่อลดค่าไฟฟ้าอย่างยั่งยืน</div>
 
-                {/* แถวแยกไอคอนกลางวัน */}
-                <div className={styles.rowSimple}>
-                  <div className={styles.iconSimple}>
-                    <img src="/icons/sun.png" alt="Day usage" />
-                  </div>
-                  <div className={styles.textFull}>
-                    การใช้ไฟช่วงกลางวัน : {results.dayUnits?.toFixed(2)} KW ({results.dayUsage}%)
-                  </div>
-                </div>
+                <ul className={styles.paybackList}>
+                  <li className={styles.record}>
+                    <div
+                      style={{
+                        width: '10px',
+                        height: '3px',
+                        background: 'linear-gradient(to right, #E88534, #f87325ff)',
+                        borderRadius: '4px',
+                        marginRight: '8px', // ← เพิ่มระยะห่างด้านขวา
+                      }}
+                    >
+                    </div>
+                    <div className={styles.labelone}>ค่าไฟที่ลดได้ต่อปี :</div>
+                    <div className={`${styles.valueone} font-500`}>
+                      {results.savingsPerYear?.toLocaleString() || '-'} บาท</div>
 
-                {/* แถวแยกไอคอนกลางคืน */}
-                <div className={styles.rowSimple}>
-                  <div className={styles.iconSimple}>
-                    <img src="/icons/moon.png" alt="Night usage" />
-                  </div>
-                  <div className={styles.textFull}>
-                    การใช้ไฟช่วงกลางคืน : {results.nightUnits?.toFixed(2)} KW ({(100 - results.dayUsage).toFixed(2)}%)
-                  </div>
-                </div>
+                  </li>
+                  <li className={styles.record}>
+                    <div
+                      style={{
+                        width: '10px',
+                        height: '3px',
+                        background: 'linear-gradient(to right, #E88534, #f87325ff)',
+                        borderRadius: '4px',
+                        marginRight: '8px', // ← เพิ่มระยะห่างด้านขวา
+                      }}
+                    ></div>
+                    <div className={styles.labelone}>ค่าไฟที่ประหยัดได้ใน 25 ปี :</div>
+                    <div className={`${styles.valueone} font-500`}>
+                      {results.savingsIn25Years?.toLocaleString() || '-'} บาท</div>
 
-                <h4
-                  style={{
-                    textAlign: 'center',
-                    color: '#F2780C',
-                    fontSize: '24px',
-                    marginBottom: '6px',
-                  }}
-                  className="font-500"
-                >
-                  ระยะเวลาคืนทุน
-                </h4>
+                  </li>
+                  <li className={styles.record}>
 
-                <h5
-                  style={{
-                    textAlign: 'center',
-                    color: '#444',
-                    fontSize: '18px',
-                    marginTop: 0,
-                    marginBottom: '20px',
-                  }}
-                >
-                  Solar Rooftop เพื่อลดค่าไฟฟ้าอย่างยั่งยืน
-                </h5>
+                    <div
+                      style={{
+                        width: '10px',
+                        height: '3px',
+                        background: 'linear-gradient(to right, #E88534, #f87325ff)',
+                        borderRadius: '4px',
+                        marginRight: '8px', // ← เพิ่มระยะห่างด้านขวา
+                      }}
+                    ></div>
 
-                {/* กล่องขาวที่มี 4 บรรทัด */}
-                <div className={styles.cardBox}>
-                  <div className={styles.cardBottom}>
-                    <div className={styles.labelsolarHead}>ระยะเวลาคืนทุน</div>
-                    <div className={styles.valueHighlight}>{results.paybackPeriod || '-'} ปี</div>
+                    <div className={styles.labelone}>การใช้ไฟเฉลี่ยต่อเดือน :</div>
+                    <div className={`${styles.valueone} font-500`}>
+                      {results.usageUnits?.toFixed(2) || '-'} KW</div>
+
+                  </li>
+
+                  <li className={styles.record}>
+                    <div
+                      style={{
+                        width: '10px',
+                        height: '3px',
+                        background: 'linear-gradient(to right, #E88534, #f87325ff)',
+                        borderRadius: '4px',
+                        marginRight: '8px', // ← เพิ่มระยะห่างด้านขวา
+                      }}
+                    ></div>
+                    <div className={styles.labelone}>การใช้ไฟเฉลี่ยต่อวัน :</div>
+                    <div className={`${styles.valueone} font-500`}>
+                      {results.averageDailyUnits?.toFixed(2) || '-'} KW</div>
+
+                  </li>
+                </ul>
+              </div>
+
+              <h4 className={styles.packageTitle}>แพ็กเกจที่เราแนะนำ</h4>
+              <p className={styles.systemType}>
+                ระบบไฟฟ้า {formValues.systemType === 'single' ? '1 เฟส' : '3 เฟส'}
+              </p>
+
+              <div className={styles.productList}>
+                {getRecommendedItems(formValues.systemType).length === 0 && (
+                  <p>ไม่พบสินค้าที่แนะนำสำหรับระบบนี้</p>
+                )}
+                {getRecommendedItems(formValues.systemType).map((item) => (
+                  <div key={item.id} className={styles.productCard}>
+                    <img src={item.mainImage} alt={item.packageName} className={styles.productImage} />
+                    <div className={styles.productInfo}>
+                      <h5>{item.packageName}</h5>
+                      <p><strong>แบรนด์:</strong> {item.brandName}</p>
+                      <p><strong>ขนาด:</strong> {item.size}</p>
+                      <p>{item.price.toLocaleString()} บาท</p>
+                      {/* <p><strong>พื้นที่โดยประมาณ:</strong> {item.area}</p> */}
+                    </div>
                   </div>
-
-                  <div className={styles.cardBottom}>
-                    <div className={styles.labelsolar}>ค่าไฟที่ลดได้ต่อปี</div>
-                    <div className={styles.value}>{results.savingsPerYear?.toLocaleString() || '-'} บาท</div>
-                  </div>
-
-                  <div className={styles.cardBottom}>
-                    <div className={styles.labelsolar}>การใช้ไฟเฉลี่ยต่อเดือน</div>
-                    <div className={styles.value}>{results.usageUnits?.toFixed(2) || '-'} KW</div>
-                  </div>
-
-                  <div className={styles.cardBottom}>
-                    <div className={styles.labelsolar}>การใช้ไฟเฉลี่ยต่อวัน</div>
-                    <div className={styles.value}>{results.averageDailyUnits?.toFixed(2) || '-'} KW</div>
-                  </div>
-                </div>
+                ))}
               </div>
 
               <div className={styles.buttonWrapper}>
@@ -386,6 +468,7 @@ export default function SolarCalculatorForm() {
                   onClick={() => {
                     setResults(null);
                     setAttemptedRoofInput(false);
+                    document.querySelector(`.${styles.formWrapper}`)?.scrollIntoView({ behavior: 'smooth' });
                   }}
                 >
                   คำนวณใหม่
@@ -394,7 +477,9 @@ export default function SolarCalculatorForm() {
             </div>
           </>
         )}
+
       </div>
-    </div>
+    </div >
   );
 }
+

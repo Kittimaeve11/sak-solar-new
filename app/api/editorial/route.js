@@ -72,13 +72,13 @@ export async function GET() {
       content: `การติดตั้งโซลาร์เซลล์บนหลังคาอาคารพาณิชย์สามารถลดค่าไฟฟ้าของธุรกิจได้อย่างมีนัยสำคัญ การวางแผนโครงสร้างหลังคาและระบบไฟฟ้าอย่างเหมาะสม รวมถึงเลือกใช้อุปกรณ์ที่มีคุณภาพ จะช่วยให้การลงทุนคุ้มค่าในระยะยาว`,
       gallery: ["/editorial/commercial-1.jpg", "/editorial/commercial-2.jpg"]
     },
-    {
+        {
       id: 10,
-      title: "แนวทางการขออนุญาตติดตั้งโซลาร์เซลล์ในประเทศไทย",
+      title: "การติดตั้งโซลาร์เซลล์บนหลังคาเชิงพาณิชย์",
       date: "1 กรกฎาคม 2568",
-      mainImage: "/editorial/aerial-view-private-house-with-solar-panels-roof_7_11zon.jpg",
-      content: `ผู้ที่ต้องการติดตั้งโซลาร์เซลล์ในประเทศไทยจำเป็นต้องยื่นขออนุญาตกับหน่วยงานที่เกี่ยวข้อง เช่น การไฟฟ้า และองค์กรปกครองส่วนท้องถิ่น พร้อมแนบเอกสารสำคัญ เช่น แบบแปลน ขนาดระบบ สำเนาบัตรประชาชน และเอกสารสิทธิ์ในที่ดิน` ,
-      gallery: ["/editorial/permit-1.jpg", "/editorial/permit-2.jpg"]
+      mainImage: "/editorial/modern-solar-power-station-generates-sustainable-electricity-outdoors-generated-by-ai_14_11zon.jpg",
+      content: `การติดตั้งโซลาร์เซลล์บนหลังคาอาคารพาณิชย์สามารถลดค่าไฟฟ้าของธุรกิจได้อย่างมีนัยสำคัญ การวางแผนโครงสร้างหลังคาและระบบไฟฟ้าอย่างเหมาะสม รวมถึงเลือกใช้อุปกรณ์ที่มีคุณภาพ จะช่วยให้การลงทุนคุ้มค่าในระยะยาว`,
+      gallery: ["/editorial/commercial-1.jpg", "/editorial/commercial-2.jpg"]
     }
   ];
 
