@@ -229,6 +229,177 @@
     margin-top: 1.5rem;
   }
   
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/components/FloatingContactButton.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************/
+/* FloatingContactButton.module.css */
+
+@keyframes FloatingContactButton_fadeIn__XWKG8 {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes FloatingContactButton_fadeOut__pExZM {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+.FloatingContactButton_buttonContact__U37PN {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background-color: #f97316;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: white;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    /* ไอคอนกึ่งกลาง */
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+/* hover เฉพาะตอนปิดปุ่ม (class closed) */
+.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover {
+    width: auto;
+    border-radius: 999px;
+    padding: 0 20px;
+    justify-content: flex-start;
+    /* ไอคอนชิดซ้าย */
+    gap: 10px;
+}
+
+.FloatingContactButton_iconLabelWrapper__UHPmV {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    /* ไอคอนกึ่งกลางปกติ */
+    transition: justify-content 0.3s ease;
+}
+
+/* ตอน hover (ปุ่มปิด) เลื่อนไอคอนชิดซ้าย */
+.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover .FloatingContactButton_iconLabelWrapper__UHPmV {
+    justify-content: flex-start;
+}
+
+.FloatingContactButton_iconText__vNT7O {
+    font-size: 16px;
+    color: white;
+    white-space: nowrap;
+    pointer-events: none;
+
+    display: none;
+    /* ซ่อนโดยไม่กินพื้นที่ */
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* แสดงข้อความตอน hover */
+.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover .FloatingContactButton_iconText__vNT7O {
+    display: inline;
+    /* แสดง และกินพื้นที่ */
+    opacity: 1;
+    max-width: 100px;
+}
+
+
+.FloatingContactButton_speechBubble__4tp14 {
+    position: fixed;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 260px;
+    padding: 8px 20px;
+    margin: 5px;
+    z-index: 2000;
+    bottom: 100px;
+    right: 9px;
+}
+
+.FloatingContactButton_speechBubble__4tp14::before {
+    content: "";
+    position: absolute;
+    bottom: -12px;
+    right: 24px;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 15px solid #fff;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+    z-index: 1000;
+}
+
+.FloatingContactButton_speechBubble__4tp14.FloatingContactButton_fadeIn__XWKG8 {
+    animation: FloatingContactButton_fadeIn__XWKG8 0.3s ease-in-out forwards;
+}
+
+.FloatingContactButton_speechBubble__4tp14.FloatingContactButton_fadeOut__pExZM {
+    animation: FloatingContactButton_fadeOut__pExZM 0.3s ease-in-out forwards;
+}
+
+.FloatingContactButton_title__tIwp_ {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #243865;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.FloatingContactButton_socialList__D4W_d {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.FloatingContactButton_socialList__D4W_d a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    text-decoration: none;
+}
+
+.FloatingContactButton_phoneItem__G9goW {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    color: #1f2937;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    outline: none;
+}
 /*!********************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./styles/Footer.module.css ***!
   \********************************************************************************************************************************************************************************************************************************************************************/
@@ -2712,8 +2883,8 @@ h6 {
 
 
 .circle-shadow {
-  width: 50px;
-  height: 50px;
+  width: 55px;
+  height: 55px;
   border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);

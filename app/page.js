@@ -1,7 +1,6 @@
-// app/page.jsx
 'use client';
 
-import SlideEditorial from './components/Home/SlideEditorial';  // ปรับ path ตามโฟลเดอร์จริงของคุณ
+import SlideEditorial from './components/Home/SlideEditorial';
 import BannerSlider from './components/BannerSlider';
 import FreeServices from './components/Home/FreeServices';
 import SolarCalculatorForm from './components/Home/SolarCalculatorForm';
@@ -12,19 +11,46 @@ import { useLocale } from './Context/LocaleContext';
 import { useEffect, useState } from 'react';
 import SlidePortfolio from './components/Home/SlidePortfolio';
 import SlideReview from './components/Home/SlideReview';
+import { useSearchParams } from 'next/navigation';
+import SolarFormnew from './components/Home/SolarFormnew';
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
 export default function HomePage() {
-  const [contacts, setContacts] = useState([]);
+  const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(true);
   const { locale } = useLocale();
   const [productOptions, setProductOptions] = useState([]);
   const [provinces, setProvinces] = useState([]);
   const [amphures, setAmphures] = useState([]);
   const [tambons, setTambons] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const searchParams = useSearchParams();
+  const productFromUrl = searchParams.get('product') || '';
 
   useEffect(() => {
-    fetch('/api/home-page')
-      .then((res) => res.json())
-      .then((data) => setContacts(data.contacts));
+    async function fetchServices() {
+      try {
+        const res = await fetch(`${baseUrl}/api/serviceapi`, {
+          headers: {
+            'X-API-KEY': apiKey
+          }
+        });
+        const data = await res.json();
+        if (data.status && data.result) {
+          setServices(data.result);
+        } else {
+          setServices([]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch services:', error);
+        setServices([]);
+      } finally {
+        setLoadingServices(false);
+      }
+    }
+    fetchServices();
   }, []);
 
   useEffect(() => {
@@ -45,7 +71,16 @@ export default function HomePage() {
     setProductOptions(products);
   }, []);
 
-  // ตัวอย่างเตรียมข้อมูลสินค้าสำหรับ ProductCarousel
+  useEffect(() => {
+    if (productFromUrl) {
+      const el = document.getElementById('contact');
+      if (el) {
+        el.scrollIntoView({ behavior: 'instant' });
+      }
+    }
+  }, [productFromUrl]);
+
+  // เตรียมสินค้าเหมือนเดิม
   const solarRooftopItems =
     products
       .find((p) => p.slug === 'solar-rooftop')
@@ -74,13 +109,12 @@ export default function HomePage() {
     <>
       <BannerSlider />
 
-
       <h5 className="headline">
         ติดตั้งโซลาร์เซลล์กับทีมช่างที่ได้มารฐาน <br />
         และได้รับการรับรองจากการไฟฟ้า (PEA)
       </h5>
 
-      <FreeServices contacts={contacts} locale={locale} />
+      <FreeServices contacts={services} locale={locale} loading={loadingServices} baseUrl={baseUrl} />
 
       <div>
         <ProductCarousel
@@ -96,13 +130,17 @@ export default function HomePage() {
       </div>
 
       <SolarCalculatorForm />
+      {/* <SolarFormnew /> */}
 
-      <ContactForm
-        productOptions={productOptions}
-        provinces={provinces}
-        amphures={amphures}
-        tambons={tambons}
-      />
+      <div id="contact">
+        <ContactForm
+          productOptions={productOptions}
+          provinces={provinces}
+          amphures={amphures}
+          tambons={tambons}
+          initialProduct={productFromUrl}
+        />
+      </div>
       <SlideEditorial />
       <SlidePortfolio />
       <SlideReview />

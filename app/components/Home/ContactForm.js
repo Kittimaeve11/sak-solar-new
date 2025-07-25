@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import styles from '../../Home.module.css';
+import { useSearchParams } from 'next/navigation';
 
 export default function ContactForm({
   provinces = [],
@@ -10,6 +11,7 @@ export default function ContactForm({
   tambons = [],
   productOptions = [],
 }) {
+  const searchParams = useSearchParams();
   const wrapperRef = useRef(null);
 
   const [formData, setFormData] = useState({
@@ -156,6 +158,45 @@ export default function ContactForm({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    // อ่าน query param product แล้วตั้งค่า formData.product
+    const productFromUrl = searchParams.get('product');
+    if (productFromUrl) {
+      setFormData((prev) => ({
+        ...prev,
+        product: productFromUrl,
+      }));
+      // ลบ error ของ product ถ้ามี (optional)
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors.product;
+        return newErrors;
+      });
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    const productFromUrl = searchParams.get('product');
+    if (productFromUrl) {
+      setFormData((prev) => ({
+        ...prev,
+        product: productFromUrl,
+      }));
+      setErrors((prevErrors) => {
+        const newErrors = { ...prevErrors };
+        delete newErrors.product;
+        return newErrors;
+      });
+
+      // ✅ Scroll ไปยัง form โดยใช้ ID
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [searchParams]);
+
 
   return (
     <div className={styles.containersolar}>

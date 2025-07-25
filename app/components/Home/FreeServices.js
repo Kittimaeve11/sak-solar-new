@@ -2,11 +2,12 @@
 
 import React from 'react';
 import styles from './FreeServices.module.css';
+import Image from 'next/image';
 
-export default function FreeServices({ contacts = [], locale }) {
+export default function FreeServices({ contacts = [], locale, loading, baseUrl }) {
+  if (loading) return <p>Loading services...</p>;
   if (!contacts || contacts.length === 0) return null;
 
-  // แบ่ง contacts ออกเป็นสองส่วน
   const count = contacts.length;
   let topContacts = [];
   let bottomContacts = [];
@@ -23,24 +24,34 @@ export default function FreeServices({ contacts = [], locale }) {
   }
 
   const renderCards = (items) =>
-    items.map(
-      (item) =>
-        item?.image && (item.SubjectTH || item.SubjectENG) && (
-          <div key={item.id} className={styles.cardfree }>
-            <img
-              src={item.image}
-              alt={item.SubjectENG || 'Free Service'}
-              className={styles.icon}
-              loading="lazy"
-            />
-            <p className={styles.textfree }>{locale === 'th' ? item.SubjectTH : item.SubjectENG}</p>
-          </div>
-        )
-    );
+    items.map((item) => (
+      <div key={item.sevice_ID} className={styles.cardfree}>
+        <Image
+          src={`http://localhost:8080/${item.picture}`}
+          alt={locale === 'th' ? item.titleTH : (item.titleEN || 'Service')}
+          width={70}
+          height={70}
+          className={styles.icon}
+        />
+        <p className={styles.titlefree}>{locale === 'th' ? item.titleTH : item.titleEN}</p>
+        <p className={styles.subtitlefree}>{locale === 'th' ? item.subtitleTH : item.subtitleEN}</p>
+        <ul className={styles.listfree}>
+          {(locale === 'th' ? item.detailTH : item.detailEN)
+            .split('/')
+            .map((text, index) => (
+              <li key={index} className={styles.textfree}>
+                {text.trim()}
+              </li>
+            ))}
+        </ul>
+
+
+      </div>
+    ));
 
   return (
     <div>
-       <h1 className={styles.headersolar}>ข้อมูลบริการฟรี</h1>
+      <h1 className={styles.headersolar}>ข้อมูลบริการฟรี</h1>
       <h4
         style={{
           textAlign: 'center',

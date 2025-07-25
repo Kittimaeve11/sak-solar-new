@@ -73,15 +73,15 @@ export default function EditorialDetailPage() {
             <Image
               src={editorial.mainImage}
               alt={editorial.title}
-              width={800}
-              height={400}
+              width={200}
+              height={100}
               className={styles.mainImage}
               priority
             />
           )}
           <section className={styles.content}>{editorial.content}</section>
           {showGallery && (
-            <section className={styles.gallery}>
+            <section >
               <h2>แกลเลอรี</h2>
               <div className={styles.galleryGrid}>
                 {editorial.gallery.slice(0, 3).map((img, i) => {

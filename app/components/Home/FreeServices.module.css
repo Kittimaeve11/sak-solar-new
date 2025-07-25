@@ -28,8 +28,8 @@
   align-items: center;
   margin: 0 auto;
   width: 100%;
-  max-width: 260px; 
-  height: 280px;
+  max-width: 350px; 
+  height: 400px;
   box-sizing: border-box;
 }
 
@@ -42,24 +42,44 @@
 
 /* ไอคอน */
 .icon {
-  width: 56px;
-  height: 56px;
+  width: 70px;
+  height: 70px;
   margin-bottom: 1rem;
   object-fit: contain;
 }
 
 /* ป้ายข้อความ */
-.textfree {
+.titlefree {
   color: #264798;
-  font-size: 17px;
+  font-size: 16px;
   white-space: pre-wrap;
   text-align: center;
+}
+
+.subtitlefree {
+  color: #264798;
+  font-size: 14px;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+/* ใน FreeServices.module.css */
+.listfree {
+  padding-left: 1rem;
+  margin: 0;
+  text-align: left;
+  font-size: 14px;
+}
+
+.textfree {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  list-style-type: disc; /* หรือเปลี่ยนเป็น 'none' ถ้าไม่ต้องการจุดหน้า */
 }
 
 .headersolar {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-weight: 400;
   /* ใช้ Thin */
   text-align: center;
   color: #F2780C;

@@ -1,0 +1,121 @@
+/* พื้นหลังฟอร์ม */
+.containersolar {
+  background-color: #FAFBFF;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.formWrapper {
+  margin: 0 auto;
+  font-family: sans-serif;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.formWrapperInitial {
+  max-width: 670px;
+}
+
+.formWrapperResult {
+  max-width: 1200px;
+}
+
+/* หัวข้อ */
+.headersolar {
+  margin: 1rem 0;
+  font-weight: 400;
+  text-align: center;
+  color: #F2780C;
+  margin-bottom: -1rem;
+}
+
+/* คำแนะนำ */
+.instructions {
+  margin: 0.5rem 0;
+  color: #0d0d0e;
+}
+
+.instructions1 {
+  margin-left: 3.5rem;
+  margin-bottom: 0.5rem;
+  color: #264798;
+}
+
+.instructions2 {
+  margin-bottom: 1rem;
+  color: #F2780C;
+}
+
+/* ฟอร์มคำนวณ */
+.solar-form {
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  /* ชิดขวาทั้งหมด */
+  margin-top: 1.5rem;
+}
+
+
+/* slider */
+.rangeControl {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 9px;
+  border-radius: 5px;
+  background: #ffffff;
+  outline: none;
+  border: 1px solid #ccc;
+}
+
+.rangeControl::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #F2780C;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.rangeControl::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #F2780C;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.rangeControl::-moz-range-track {
+  height: 6px;
+  background: #f2f2f2;
+  border-radius: 3px;
+}
+
+/* ช่วงเวลา */
+.usageSplit {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+/* อนิเมชัน */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

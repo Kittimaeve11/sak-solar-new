@@ -553,8 +553,8 @@
   align-items: center;
   margin: 0 auto;
   width: 100%;
-  max-width: 260px; 
-  height: 280px;
+  max-width: 350px; 
+  height: 400px;
   box-sizing: border-box;
 }
 
@@ -567,24 +567,44 @@
 
 /* ไอคอน */
 .FreeServices_icon__JqN5v {
-  width: 56px;
-  height: 56px;
+  width: 70px;
+  height: 70px;
   margin-bottom: 1rem;
   object-fit: contain;
 }
 
 /* ป้ายข้อความ */
-.FreeServices_textfree__FBFbD {
+.FreeServices_titlefree__bZVOi {
   color: #264798;
-  font-size: 17px;
+  font-size: 16px;
   white-space: pre-wrap;
   text-align: center;
+}
+
+.FreeServices_subtitlefree__06avE {
+  color: #264798;
+  font-size: 14px;
+  white-space: pre-wrap;
+  text-align: center;
+}
+
+/* ใน FreeServices.module.css */
+.FreeServices_listfree__iPfku {
+  padding-left: 1rem;
+  margin: 0;
+  text-align: left;
+  font-size: 14px;
+}
+
+.FreeServices_textfree__FBFbD {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  list-style-type: disc; /* หรือเปลี่ยนเป็น 'none' ถ้าไม่ต้องการจุดหน้า */
 }
 
 .FreeServices_headersolar__ZkF_a {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  font-weight: 400;
   /* ใช้ Thin */
   text-align: center;
   color: #F2780C;
@@ -1617,5 +1637,130 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
   padding: 0 16px;
+}
+
+/*!***************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/components/Home/SolarFormnew.module.css ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************/
+/* พื้นหลังฟอร์ม */
+.SolarFormnew_containersolar__x1KMy {
+  background-color: #FAFBFF;
+  padding: 1rem 0;
+  width: 100%;
+}
+
+.SolarFormnew_formWrapper__H2cEF {
+  margin: 0 auto;
+  font-family: sans-serif;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.SolarFormnew_formWrapperInitial__0MGyd {
+  max-width: 670px;
+}
+
+.SolarFormnew_formWrapperResult__JKc57 {
+  max-width: 1200px;
+}
+
+/* หัวข้อ */
+.SolarFormnew_headersolar__sbls5 {
+  margin: 1rem 0;
+  font-weight: 400;
+  text-align: center;
+  color: #F2780C;
+  margin-bottom: -1rem;
+}
+
+/* คำแนะนำ */
+.SolarFormnew_instructions__97nUL {
+  margin: 0.5rem 0;
+  color: #0d0d0e;
+}
+
+.SolarFormnew_instructions1__tOzzj {
+  margin-left: 3.5rem;
+  margin-bottom: 0.5rem;
+  color: #264798;
+}
+
+.SolarFormnew_instructions2__M6LAk {
+  margin-bottom: 1rem;
+  color: #F2780C;
+}
+
+/* ฟอร์มคำนวณ */
+.SolarFormnew_solar-form__UNQO_ {
+  max-width: 700px;
+  margin: 0 auto;
+  border-radius: 10px;
+}
+
+.SolarFormnew_buttonGroup__3uU_0 {
+  display: flex;
+  justify-content: flex-end;
+  /* ชิดขวาทั้งหมด */
+  margin-top: 1.5rem;
+}
+
+
+/* slider */
+.SolarFormnew_rangeControl__njbvS {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 9px;
+  border-radius: 5px;
+  background: #ffffff;
+  outline: none;
+  border: 1px solid #ccc;
+}
+
+.SolarFormnew_rangeControl__njbvS::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #F2780C;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.SolarFormnew_rangeControl__njbvS::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #F2780C;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+
+.SolarFormnew_rangeControl__njbvS::-moz-range-track {
+  height: 6px;
+  background: #f2f2f2;
+  border-radius: 3px;
+}
+
+/* ช่วงเวลา */
+.SolarFormnew_usageSplit__xU8Y2 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: 400;
+  margin-bottom: 1.5rem;
+}
+
+/* อนิเมชัน */
+@keyframes SolarFormnew_fadeInUp__YtKOn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 

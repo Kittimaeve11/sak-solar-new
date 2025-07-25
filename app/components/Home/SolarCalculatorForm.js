@@ -332,7 +332,7 @@ export default function SolarCalculatorForm() {
 
         {results && (
           <>
-            <h4 style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <h4 style={{ textAlign: 'center', marginTop: '-10px' ,marginBottom: '20px' }}>
               แพ็กเกจที่ออกแบบมาให้เหมาะกับพื้นที่หลังคาและรูปแบบการใช้พลังงานของคุณ
             </h4>
             <div className={styles.recommendCard}>

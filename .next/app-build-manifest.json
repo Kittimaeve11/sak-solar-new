@@ -22,30 +22,20 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/editorial/route.js"
     ],
-    "/api/review/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/review/route.js"
-    ],
     "/api/portfolio/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/portfolio/route.js"
     ],
-    "/api/home-page/route": [
+    "/api/review/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/home-page/route.js"
+      "static/chunks/app/api/review/route.js"
     ],
     "/api/data/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/data/route.js"
-    ],
-    "/portfolio/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/portfolio/[id]/page.js"
     ]
   }
 }

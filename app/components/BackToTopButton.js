@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 export default function BackToTopButton() {
@@ -34,7 +35,7 @@ export default function BackToTopButton() {
       aria-label="กลับขึ้นบน"
       style={{
         position: 'fixed',
-        bottom: '142px',
+        bottom: '96px',
         right: '20px',
         background: 'none',
         border: 'none',
@@ -55,13 +56,12 @@ export default function BackToTopButton() {
       }}
     >
       <div className="circle-shadow hover-wiggle">
-        <img
+        <Image
           src="/images/icons/top.png"
           alt="กลับขึ้นบน"
-          style={{
-            width: '50px',
-            height: '50px',
-          }}
+          width={55}
+          height={55}
+          priority
         />
       </div>
     </button>

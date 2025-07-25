@@ -1,11 +1,10 @@
 'use client';
 import React from 'react';
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useLocale } from '../Context/LocaleContext';
 import { FaLine } from "react-icons/fa6";
 import { AiFillTikTok } from "react-icons/ai";
 import { FaFacebookSquare, FaYoutube, FaInstagramSquare } from "react-icons/fa";
-import { IoIosMail } from "react-icons/io";
 import { IoChevronBackOutline } from "react-icons/io5";
 import '../../styles/contact.css';
 import Link from "next/link";
@@ -179,14 +178,14 @@ export default function Page() {
   //     default: return null;
   //   }
   // };
-  const iconComponentByKey = [
-    <FaFacebookSquare key="facebook" style={{ color: "#1877f2", fontSize: 36 }} />,
-    <FaLine key="line" style={{ color: "#00c300", fontSize: 35 }} />,
-    <FaInstagramSquare key="instagram" style={{ color: "#F5058D", fontSize: 36 }} />,
-    <FaYoutube key="youtube" style={{ color: "#FF0033", fontSize: 36 }} />,
-    <AiFillTikTok key="tiktok" style={{ color: "#101010", fontSize: 36 }} />,
+  const socialIconMap = {
+    facebook: <FaFacebookSquare style={{ color: "#1877f2", fontSize: 36 }} />,
+    line: <FaLine style={{ color: "#00c300", fontSize: 35 }} />,
+    instagram: <FaInstagramSquare style={{ color: "#F5058D", fontSize: 36 }} />,
+    youtube: <FaYoutube style={{ color: "#FF0033", fontSize: 36 }} />,
+    tiktok: <AiFillTikTok style={{ color: "#101010", fontSize: 36 }} />,
+  };
 
-  ]
   const getIcon = [
     <Image key="building" src="/images/icons/building.png" alt="Building" width={28} height={28} />,
     <Image key="phone" src="/images/icons/phone.png" alt="Phone" width={25} height={25} />,
@@ -293,12 +292,12 @@ export default function Page() {
               ];
 
               const socialValues = [
-                { link: item.facebook, name: messages.contacts.socialmedia.facebook },
-                { link: item.line, name: messages.contacts.socialmedia.line },
-                { link: item.instagram, name: messages.contacts.socialmedia.ig },
-                { link: item.youtube, name: messages.contacts.socialmedia.youtube },
-                { link: item.tiktok, name: messages.contacts.socialmedia.tiktok },
-              ].filter((data) => data.link && data.link.trim() !== '');
+                { link: item.facebook, name: messages.contacts.socialmedia.facebook, key: 'facebook' },
+                { link: item.line, name: messages.contacts.socialmedia.line, key: 'line' },
+                { link: item.instagram, name: messages.contacts.socialmedia.ig, key: 'instagram' },
+                { link: item.youtube, name: messages.contacts.socialmedia.youtube, key: 'youtube' },
+                { link: item.tiktok, name: messages.contacts.socialmedia.tiktok, key: 'tiktok' },
+              ].filter(data => data.link && typeof data.link === 'string' && data.link.trim() !== '');
 
               return (
                 <React.Fragment key={item.id}>
@@ -338,25 +337,24 @@ export default function Page() {
                   <div className="gridItem socialSection">
                     <h1 className="communicationName">{messages.communication}</h1>
                     <div className="socialLinks">
-                      {socialValues.map((data, index) => (
+                      {socialValues.map(({ link, name, key }) => (
                         <div
-                          key={index}
+                          key={key}
                           className="socialItem"
                           style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}
                         >
-                          <span className="iconFL">{iconComponentByKey[index]}</span>
+                          <span className="iconFL">{socialIconMap[key]}</span>
                           <Link
-                            href={data.link}
+                            href={link}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="label"
                             style={{ textDecoration: 'none', color: 'inherit' }}
                           >
-                            {data.name}
+                            {name}
                           </Link>
                         </div>
-                      ))}
-                    </div>
+                      ))}                    </div>
                   </div>
                 </React.Fragment>
               );
