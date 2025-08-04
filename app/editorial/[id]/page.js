@@ -5,8 +5,6 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import styles from "./EditorialDetailPage.module.css";
 import Link from "next/link";
-import {  MdKeyboardDoubleArrowRight } from 'react-icons/md';
-
 
 async function getEditorialById(id) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -64,28 +62,26 @@ export default function EditorialDetailPage() {
     <main className={styles.wrapper}>
       <div className={styles.contentWrapper}>
         <article className={styles.article}>
-          <div className={styles.headerportfolio}>
           <h1 className={styles.title}>{editorial.title}</h1>
           <div className={styles.breadcrumb}>
-            <Link href="/" className={styles.link}>หน้าหลัก <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} /></Link> 
-            <Link href="/editorial" className={styles.link}>ย้อนกลับ <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} /></Link> 
+            <Link href="/" className={styles.link}>หน้าหลัก</Link> &gt;&gt;{" "}
+            <Link href="/editorial" className={styles.link}>ย้อนกลับ</Link> &gt;&gt;{" "}
             {editorial.title}
           </div>
           <time className={styles.date}>วันที่โพสต์ : {editorial.date}</time>
-          </div>
           {editorial.mainImage && (
             <Image
               src={editorial.mainImage}
               alt={editorial.title}
-              width={200}
-              height={100}
+              width={800}
+              height={400}
               className={styles.mainImage}
               priority
             />
           )}
           <section className={styles.content}>{editorial.content}</section>
           {showGallery && (
-            <section >
+            <section className={styles.gallery}>
               <h2>แกลเลอรี</h2>
               <div className={styles.galleryGrid}>
                 {editorial.gallery.slice(0, 3).map((img, i) => {
