@@ -26,15 +26,24 @@ export default function FreeServices({ contacts = [], locale, loading, baseUrl }
   const renderCards = (items) =>
     items.map((item) => (
       <div key={item.sevice_ID} className={styles.cardfree}>
-        <Image
-          src={`http://localhost:8080/${item.picture}`}
-          alt={locale === 'th' ? item.titleTH : (item.titleEN || 'Service')}
-          width={70}
-          height={70}
-          className={styles.icon}
-        />
-        <p className={styles.titlefree}>{locale === 'th' ? item.titleTH : item.titleEN}</p>
-        <p className={styles.subtitlefree}>{locale === 'th' ? item.subtitleTH : item.subtitleEN}</p>
+        <div className={styles.iconWrapper}>
+          <Image
+            src={`http://localhost:8080/${item.picture}`}
+            alt={locale === 'th' ? item.titleTH : (item.titleEN || 'Service')}
+            width={90}
+            height={90}
+            className={styles.icon}
+          />
+        </div>
+
+        <p className={styles.titlefree}>
+          {locale === 'th' ? item.titleTH : item.titleEN}
+        </p>
+
+        <p className={styles.subtitlefree}>
+          {locale === 'th' ? item.subtitleTH : item.subtitleEN}
+        </p>
+
         <ul className={styles.listfree}>
           {(locale === 'th' ? item.detailTH : item.detailEN)
             .split('/')
@@ -44,20 +53,20 @@ export default function FreeServices({ contacts = [], locale, loading, baseUrl }
               </li>
             ))}
         </ul>
-
-
       </div>
+
     ));
 
   return (
-    <div>
-      <h1 className={styles.headersolar}>ข้อมูลบริการฟรี</h1>
+    <div className={styles.serviceSection}>
+      <h1 className="headtitle">ข้อมูลบริการฟรี</h1>
       <h4
         style={{
           textAlign: 'center',
           marginTop: -10,
           marginBottom: 20,
-          fontWeight: 400,
+          fontWeight: 600,
+          color: '#243865'
         }}
       >
         บริการครบครันตั้งแต่การปรึกษา ติดตั้งฟรี จนถึงการดูแลหลังการขาย

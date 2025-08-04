@@ -10,7 +10,7 @@ import { products } from '../data/products';
 import '../../styles/tabmenu.css';
 
 export default function TabMenu() {
-  const { messages } = useLocale();
+  const { messages, locale } = useLocale(); // เพิ่ม locale
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [serviceOpen, setServiceOpen] = useState(false);
@@ -140,7 +140,8 @@ export default function TabMenu() {
                           }
                         }}
                       >
-                        {product.name}
+                        {/* แสดงชื่อ product ตาม locale */}
+                        {typeof product.name === 'object' ? product.name[locale] ?? product.name.en : product.name}
                         {isMobile && (isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />)}
                       </Link>
 
@@ -157,6 +158,7 @@ export default function TabMenu() {
                                 }
                                 onClick={handleLinkClick}
                               >
+                                {/* แสดงชื่อแบรนด์ตรง ๆ (string) */}
                                 {brand.name}
                               </Link>
                             </li>

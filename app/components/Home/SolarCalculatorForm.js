@@ -269,7 +269,7 @@ export default function SolarCalculatorForm() {
               onChange={(e) => setFormValues((prev) => ({ ...prev, dayUsage: Number(e.target.value) }))}
               className={styles.rangeControl}
               style={{
-                background: `linear-gradient(to right, #F2780C ${formValues.dayUsage}%, #F2F2F2 ${formValues.dayUsage}%)`,
+                background: `linear-gradient(to right, #E88534 ${formValues.dayUsage}%, #F2F2F2 ${formValues.dayUsage}%)`,
               }}
             />
             <div className={styles.usageSplit}>

@@ -20,7 +20,7 @@ export default function FloatingContactButton() {
   const [iconIndex, setIconIndex] = useState(0);
   const [contact, setContact] = useState(null);
   const [dynamicIcons, setDynamicIcons] = useState([]);
-  const iconNames = ['facebook', 'line', 'instagram', 'youtube', 'tiktok', 'phone'];
+  // const iconNames = ['facebook', 'line', 'instagram', 'youtube', 'tiktok', 'phone'];
   const [isHovered, setIsHovered] = useState(false);
 
   const iconLabelMap = {

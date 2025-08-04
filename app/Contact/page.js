@@ -412,6 +412,7 @@ export default function Page() {
               </label>
               <input
                 type="text"
+                id='name'
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
@@ -428,12 +429,13 @@ export default function Page() {
               </label>
               <input
                 type="tel"
+                id='phone'
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
                 onBlur={() => setTouched((prev) => ({ ...prev, phone: true }))}
                 placeholder={`${messages.onlyphone} (0912345678)**`}
-                className={`${getClassName(formData.name, "form-field")} ${touched.phone && errors.phone ? 'error-border' : ''}`} inputMode="numeric"
+                className={`${getClassName(formData.phone, "form-field")} ${touched.phone && errors.phone ? 'error-border' : ''}`} inputMode="numeric"
                 maxLength={10}
               />
               {touched.phone && errors.phone && <p className="error-text">*{errors.phone}</p>}
@@ -445,6 +447,7 @@ export default function Page() {
               <label className="form-label">อีเมล์ (ถ้ามี)</label>
               <input
                 type="email"
+                id='email'
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
@@ -461,6 +464,7 @@ export default function Page() {
                 ฝากข้อความ <span className="required-asterisk">*</span>
               </label>
               <textarea
+                id='message'
                 name="message"
                 rows={4}
                 value={formData.message}
@@ -495,6 +499,3 @@ export default function Page() {
     </div >
   );
 }
-
-
-

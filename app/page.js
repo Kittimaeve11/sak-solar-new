@@ -88,7 +88,7 @@ export default function HomePage() {
         brand.packages?.flatMap((pkg) =>
           pkg.items.map((item) => ({
             ...item,
-            name: `${item.inverter_model} (${brand.name})`,
+            name: `${item.inverter_model} `,
             image: item.mainImage,
           }))
         )
@@ -100,7 +100,7 @@ export default function HomePage() {
       ?.brands.flatMap((brand) =>
         brand.items?.map((item) => ({
           ...item,
-          name: `${item.model} (${brand.name})`,
+          name: `${item.model} `,
           image: item.mainImage,
         }))
       ) || [];
@@ -117,20 +117,43 @@ export default function HomePage() {
       <FreeServices contacts={services} locale={locale} loading={loadingServices} baseUrl={baseUrl} />
 
       <div>
-        <ProductCarousel
-          title="Solar Rooftop"
-          items={solarRooftopItems}
-          link="/products/solar-rooftop"
-        />
-        <ProductCarousel
-          title="Solar Air"
-          items={solarAirItems}
-          link="/products/solar-air"
-        />
+        {products.map((product) => {
+          const items =
+            product.brands?.flatMap((brand) => {
+              // กรณีมี packages (แบบ Solar Rooftop)
+              if (brand.packages) {
+                return brand.packages.flatMap((pkg) =>
+                  pkg.items.map((item) => ({
+                    ...item,
+                    name: item.inverter_model || item.model || '', // ใช้อะไรเป็นชื่อก็ได้
+                    image: item.mainImage,
+                  }))
+                );
+              }
+              // กรณีไม่มี packages (แบบ Solar Air)
+              if (brand.items) {
+                return brand.items.map((item) => ({
+                  ...item,
+                  name: item.model || item.inverter_model || '',
+                  image: item.mainImage,
+                }));
+              }
+              return [];
+            }) || [];
+
+          return (
+            <ProductCarousel
+              key={product.id}
+              title={product.name[locale] || product.name.en}
+              items={items}
+              link={`/products/${product.slug}`}
+            />
+          );
+        })}
       </div>
 
-      <SolarCalculatorForm />
-      {/* <SolarFormnew /> */}
+      {/* <SolarCalculatorForm /> */}
+      <SolarFormnew />
 
       <div id="contact">
         <ContactForm

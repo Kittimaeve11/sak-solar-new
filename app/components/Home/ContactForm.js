@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import styles from '../../Home.module.css';
 import { useSearchParams } from 'next/navigation';
+import { useLocale } from '@/app/Context/LocaleContext';
 
 export default function ContactForm({
   provinces = [],
@@ -11,6 +12,7 @@ export default function ContactForm({
   tambons = [],
   productOptions = [],
 }) {
+  const { locale } = useLocale();
   const searchParams = useSearchParams();
   const wrapperRef = useRef(null);
 
@@ -220,19 +222,23 @@ export default function ContactForm({
           <div>
             <label className="form-label">สินค้าหรือบริการที่สนใจ :</label>
             <div className={`radio-group ${errors.product ? 'error-border' : ''}`}>
-              {productOptions.map((product) => (
-                <label key={product.slug} className="form-radio">
-                  <input
-                    type="radio"
-                    name="product"
-                    value={product.slug}
-                    checked={formData.product === product.slug}
-                    onChange={handleChange}
-                    className="radio-input"
-                  />
-                  {product.name}
-                </label>
-              ))}
+              {productOptions.map((product) => {
+                const productName = typeof product.name === 'string' ? product.name : product.name[locale] || product.name.th || product.name.en || '';
+                return (
+                  <label key={product.slug} className="form-radio">
+                    <input
+                      id={`product-${product.slug}`}
+                      type="radio"
+                      name="product"
+                      value={product.slug}
+                      checked={formData.product === product.slug}
+                      onChange={handleChange}
+                      className="radio-input"
+                    />
+                    {productName}
+                  </label>
+                );
+              })}
             </div>
             {errors.product && <div className="error-text">{errors.product}</div>}
           </div>
@@ -242,6 +248,7 @@ export default function ContactForm({
             <label className="form-label">ราคาที่ยอมรับได้ :</label>
             <div className="custom-select-container" style={{ position: 'relative' }}>
               <select
+                id='package'
                 name="package"
                 value={formData.package}
                 onChange={handleChange}
@@ -264,6 +271,7 @@ export default function ContactForm({
             <div className={`radio-group ${errors.usageTime ? 'error-border' : ''}`}>
               <label className="form-radio">
                 <input
+                  id="usageTimeDay"
                   type="radio"
                   name="usageTime"
                   value="day"
@@ -275,6 +283,7 @@ export default function ContactForm({
               </label>
               <label className="form-radio">
                 <input
+                  id="usageTimeNight"
                   type="radio"
                   name="usageTime"
                   value="night"
@@ -292,6 +301,7 @@ export default function ContactForm({
           <div>
             <label className="form-label">ชื่อจริง-นามสกุลจริง :</label>
             <input
+              id='fullName'
               type="text"
               name="fullName"
               value={formData.fullName}
@@ -305,6 +315,7 @@ export default function ContactForm({
           <div>
             <label className="form-label">หมายเลขโทรศัพท์มือถือ :</label>
             <input
+              id='contact-phone'
               type="tel"
               name="phone"
               value={formData.phone}
@@ -315,10 +326,11 @@ export default function ContactForm({
             {errors.phone && <div className="error-text">{errors.phone}</div>}
           </div>
 
-          {/* 🔆 ค้นหาที่อยู่ */}
+          {/*  ค้นหาที่อยู่ */}
           <div ref={wrapperRef} style={{ position: 'relative' }}>
-            <label className="form-label">ค้นหาที่อยู่ :</label>
+            <label htmlFor="addressQuery" className="form-label">ค้นหาที่อยู่ :</label>
             <input
+              id="addressQuery"
               type="text"
               value={query}
               onChange={handleQueryChange}
@@ -337,7 +349,7 @@ export default function ContactForm({
             {errors.province && <div className="error-text">{errors.province}</div>}
           </div>
 
-          {/* 🔆 เวลาติดต่อกลับ */}
+          {/*  เวลาติดต่อกลับ */}
           <div className="form-select-wrapper">
             <label className="form-label">ช่วงเวลาที่สะดวกให้ติดต่อกลับ :</label>
             <div className="custom-select-container" style={{ position: 'relative' }}>

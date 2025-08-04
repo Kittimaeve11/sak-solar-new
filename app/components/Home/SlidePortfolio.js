@@ -74,7 +74,7 @@ export default function SlidePortfolio() {
 
 const settings = {
   dots: true,
-  infinite: true,           // เปลี่ยนจาก false เป็น true
+  infinite: true,          
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 1,
@@ -93,7 +93,7 @@ const settings = {
   return (
     <div className="portfolio-wrapperslide">
       <br />
-      <h1 className="headersolarslide">ผลงานติดตั้ง</h1>
+      <h1 className="headersolarslide">ผลงานของเรา</h1>
       <div className="portfolio-headerslide">
         <Link href="/portfolio" className="view-all flex items-center gap-2">
           <HiPlusSm className="icon-view" />

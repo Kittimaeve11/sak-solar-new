@@ -118,3 +118,31 @@
   }
 }
 
+@media (max-width: 640px) {
+  .video-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0 1rem;
+  }
+
+  .skeleton-image {
+    height: 180px;
+  }
+
+  .skeleton-title {
+    width: 80%;
+  }
+
+  .skeleton-line {
+    width: 100%;
+  }
+
+  .title {
+    font-size: 16px;
+  }
+
+  .date {
+    font-size: 13px;
+  }
+}
+

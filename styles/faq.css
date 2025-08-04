@@ -66,13 +66,18 @@
     padding 0.3s ease;
   word-break: break-word;
   white-space: normal;
+
+  /* เพิ่มสำหรับกระจายข้อความภาษาไทย */
+  text-align: justify;           /* จัดย่อหน้าให้กระจายเต็มบรรทัด */
+  text-justify: distribute;      /* วิธีกระจายข้อความแบบไทย */
+  hyphens: none;                 /* ปิดการตัดคำอัตโนมัติ */
+  word-break: break-word;        /* ตัดคำตามที่จำเป็น */
+  padding-left: 2.5rem;
+  padding-right: 5.5rem;
 }
 
 .faq-answer.open {
-  padding-top: 0rem;
-  padding-bottom: 0.6rem;
-  max-height: 500px;
-  /* ให้มากพอสำหรับข้อความยาว */
+  /* พวก padding-top/bottom จะถูกเซ็ตผ่าน JavaScript */
 }
 
 .faq-answer p {

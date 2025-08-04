@@ -1,22 +1,20 @@
 .footer {
   width: 100%;
-  background-image: url("/images/footer-2.jpg");
+  background-image: url("/images/footerbackgrund.jpg");
   background-size: cover;
-  background-position: center calc(50px); /* หรือ center bottom */
+  background-position: center center; /* ✅ กึ่งกลางทั้งแนวนอนและแนวตั้ง */
   background-repeat: no-repeat;
   color: white;
   font-size: 14px;
-  padding: 3rem 0 2rem 0;
+  padding: 1.5rem 0 2.2rem 0;
   box-sizing: border-box;
-  min-height: 520px; /* ปรับตามความสูงรวมของ footer */
+  min-height: 310px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   position: relative;
-  padding-bottom: 30px; /* ✅ เว้นพื้นที่ให้รูป overlay ด้านล่าง */
   z-index: 0;
   overflow: hidden;
-  
 }
 
 .footerContent {
@@ -26,7 +24,8 @@
   gap: 30px;
   margin: 0 auto;
   padding: 0 5rem;
-  /* ✅ เพิ่มระยะห่างซ้ายขวา */
+  max-width: 1200px; /* ✅ กำหนดความกว้างสูงสุด */
+  width: 100%;       /* ✅ ให้เต็มพื้นที่เท่าที่ได้ */
 }
 
 .column {
@@ -35,7 +34,8 @@
 }
 
 .column h4 {
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 2px;
   color: #ffffff;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .column ul li {
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 }
 
 .column p {
@@ -68,13 +68,14 @@
   justify-content: center;
   z-index: 1; /* ต้องน้อยกว่า pseudo-element */
 }
+/* ขอบด้านล่าง */
 .footerBottomImage {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 18%; /* ปรับตามขนาดรูป */
-  background-image: url("/images/footerbottom-1.png");
+  height: 23%; /* ปรับตามขนาดรูป */
+  background-image: url("/images/footerbottom-2.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -104,13 +105,13 @@
   /* เว้นขอบซ้ายขวานิดหน่อย */
 }
 
-.footerBottomContainer {
+/* .footerBottomContainer {
   width: 100%;
   background-color: rgb(32, 31, 39);
   border-top: 2px solid #444444;
   padding: 0;
   /* เฉพาะแนวตั้ง */
-}
+
 
 .column ul li a {
   color: #ffffff;
@@ -165,7 +166,7 @@
   }
 
   .column {
-    padding-bottom: 10px;
+    padding-bottom: 0.5px;
   }
 
   .column:last-child {

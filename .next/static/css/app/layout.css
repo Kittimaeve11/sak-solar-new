@@ -1,600 +1,3 @@
-/*!**************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./styles/CookieBanner.module.css ***!
-  \**************************************************************************************************************************************************************************************************************************************************************************/
-
-.CookieBanner_banner__dO24M {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #f9f9f9;
-    border-top: 1px solid #ccc;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem 2rem;
-    font-family: "Kanit", sans-serif, Arial, sans-serif;
-    color: #333;
-    z-index: 1200;
-  }
-  
-  .CookieBanner_content__QPB2P {
-    max-width: 960px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  
-  .CookieBanner_title__AZ2_B {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0;
-    flex: 1 1 100%;
-  }
-  
-  .CookieBanner_description__WO5ZI {
-    font-size: 1rem;
-    line-height: 1.5;
-    flex: 1 1 60%;
-    margin: 0;
-  }
-  
-  .CookieBanner_link__47dg7 {
-    color: #1a73e8;
-    text-decoration: underline;
-  }
-  
-  .CookieBanner_link__47dg7:hover,
-  .CookieBanner_link__47dg7:focus {
-    color: #155ab6;
-    outline: none;
-  }
-  
-  .CookieBanner_actions__pGYey {
-    display: flex;
-    gap: 1rem;
-    flex: 1 1 35%;
-    justify-content: flex-end;
-  }
-  
-  .CookieBanner_btnPrimary__Aw_EX {
-    background-color: #0b5ed7;
-    color: white;
-    border: none;
-    padding: 0.5rem 1.5rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .CookieBanner_btnPrimary__Aw_EX:hover,
-  .CookieBanner_btnPrimary__Aw_EX:focus {
-    background-color: #084cbc;
-    outline: none;
-  }
-  
-  .CookieBanner_btnSecondary__ZEY6v {
-    background-color: transparent;
-    border: 2px solid #0b5ed7;
-    color: #0b5ed7;
-    padding: 0.5rem 1.5rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .CookieBanner_btnSecondary__ZEY6v:hover,
-  .CookieBanner_btnSecondary__ZEY6v:focus {
-    background-color: #0b5ed7;
-    color: white;
-    outline: none;
-  }
-  /* เพิ่มส่วนของ modal overlay และ modal box */
-  .CookieBanner_modalOverlay__KfNqi {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1300;
-    padding: 1rem;
-  }
-  
-  .CookieBanner_modal__pO1XE {
-    background: white;
-    max-width: 480px;
-    width: 100%;
-    border-radius: 8px;
-    padding: 2rem;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    color: #333;
-  }
-  
-  .CookieBanner_fieldset__l3GwZ {
-    border: none;
-    margin-bottom: 1.25rem;
-  }
-  
-  .CookieBanner_checkboxLabel__jAXu7 {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1rem;
-    cursor: pointer;
-    user-select: none;
-    color: #222;
-  }
-  
-  .CookieBanner_checkboxLabel__jAXu7 input[type="checkbox"] {
-    width: 1.15rem;
-    height: 1.15rem;
-    cursor: pointer;
-  }
-  
-  .CookieBanner_actions__pGYey {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  
-  /* ปุ่มเหมือนเดิม */
-  .CookieBanner_btnPrimary__Aw_EX {
-    background-color: #0b5ed7;
-    color: white;
-    border: none;
-    padding: 0.5rem 1.5rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .CookieBanner_btnPrimary__Aw_EX:hover,
-  .CookieBanner_btnPrimary__Aw_EX:focus {
-    background-color: #084cbc;
-    outline: none;
-  }
-  
-  .CookieBanner_btnSecondary__ZEY6v {
-    background-color: transparent;
-    border: 2px solid #0b5ed7;
-    color: #0b5ed7;
-    padding: 0.5rem 1.5rem;
-    font-weight: 600;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  
-  .CookieBanner_btnSecondary__ZEY6v:hover,
-  .CookieBanner_btnSecondary__ZEY6v:focus {
-    background-color: #0b5ed7;
-    color: white;
-    outline: none;
-  }
-.CookieBanner_cookieRow__GJk7r {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #f5f7fa;
-    padding: 1rem;
-    border-radius: 6px;
-    margin-bottom: 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .CookieBanner_cookieRow__GJk7r:hover {
-    background-color: #e9eff5;
-  }
-  
-  .CookieBanner_cookieLabel__mmNEd {
-    font-size: 1rem;
-    font-weight: 500;
-    color: #222;
-    flex: 1;
-    padding-right: 1rem;
-  }
-  
-  .CookieBanner_cookieToggle___S7GT {
-    flex-shrink: 0;
-  }
-  
-  /* สำหรับ modal หัวข้อและข้อความ */
-  .CookieBanner_modal__pO1XE h2 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-  }
-  
-  .CookieBanner_modal__pO1XE p {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-    color: #444;
-  }
-  
-  /* ปุ่มด้านล่างของ modal */
-  .CookieBanner_modal__pO1XE .CookieBanner_actions__pGYey {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-  }
-  
-/*!*******************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/components/FloatingContactButton.module.css ***!
-  \*******************************************************************************************************************************************************************************************************************************************************************************************/
-/* FloatingContactButton.module.css */
-
-@keyframes FloatingContactButton_fadeIn__XWKG8 {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes FloatingContactButton_fadeOut__pExZM {
-    from {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    to {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-}
-
-.FloatingContactButton_buttonContact__U37PN {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    height: 60px;
-    width: 60px;
-    border-radius: 50%;
-    background-color: #f97316;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    color: white;
-    cursor: pointer;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    /* ไอคอนกึ่งกลาง */
-    align-items: center;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    padding: 0;
-}
-
-/* hover เฉพาะตอนปิดปุ่ม (class closed) */
-.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover {
-    width: auto;
-    border-radius: 999px;
-    padding: 0 20px;
-    justify-content: flex-start;
-    /* ไอคอนชิดซ้าย */
-    gap: 10px;
-}
-
-.FloatingContactButton_iconLabelWrapper__UHPmV {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    justify-content: center;
-    /* ไอคอนกึ่งกลางปกติ */
-    transition: justify-content 0.3s ease;
-}
-
-/* ตอน hover (ปุ่มปิด) เลื่อนไอคอนชิดซ้าย */
-.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover .FloatingContactButton_iconLabelWrapper__UHPmV {
-    justify-content: flex-start;
-}
-
-.FloatingContactButton_iconText__vNT7O {
-    font-size: 16px;
-    color: white;
-    white-space: nowrap;
-    pointer-events: none;
-
-    display: none;
-    /* ซ่อนโดยไม่กินพื้นที่ */
-    opacity: 0;
-    max-width: 0;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-/* แสดงข้อความตอน hover */
-.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover .FloatingContactButton_iconText__vNT7O {
-    display: inline;
-    /* แสดง และกินพื้นที่ */
-    opacity: 1;
-    max-width: 100px;
-}
-
-
-.FloatingContactButton_speechBubble__4tp14 {
-    position: fixed;
-    border-radius: 12px;
-    background-color: #fff;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    width: 260px;
-    padding: 8px 20px;
-    margin: 5px;
-    z-index: 2000;
-    bottom: 100px;
-    right: 9px;
-}
-
-.FloatingContactButton_speechBubble__4tp14::before {
-    content: "";
-    position: absolute;
-    bottom: -12px;
-    right: 24px;
-    width: 0;
-    height: 0;
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-top: 15px solid #fff;
-    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
-    z-index: 1000;
-}
-
-.FloatingContactButton_speechBubble__4tp14.FloatingContactButton_fadeIn__XWKG8 {
-    animation: FloatingContactButton_fadeIn__XWKG8 0.3s ease-in-out forwards;
-}
-
-.FloatingContactButton_speechBubble__4tp14.FloatingContactButton_fadeOut__pExZM {
-    animation: FloatingContactButton_fadeOut__pExZM 0.3s ease-in-out forwards;
-}
-
-.FloatingContactButton_title__tIwp_ {
-    font-size: 18px;
-    margin-bottom: 12px;
-    color: #243865;
-    font-weight: 600;
-    line-height: 1.4;
-}
-
-.FloatingContactButton_socialList__D4W_d {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-}
-
-.FloatingContactButton_socialList__D4W_d a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    text-decoration: none;
-}
-
-.FloatingContactButton_phoneItem__G9goW {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 12px;
-    margin-bottom: 8px;
-    border-radius: 8px;
-    color: #1f2937;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-    outline: none;
-}
-/*!********************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./styles/Footer.module.css ***!
-  \********************************************************************************************************************************************************************************************************************************************************************/
-.Footer_footer__yl3k1 {
-  width: 100%;
-  background-image: url("/images/footer-2.jpg");
-  background-size: cover;
-  background-position: center calc(50px); /* หรือ center bottom */
-  background-repeat: no-repeat;
-  color: white;
-  font-size: 14px;
-  padding: 3rem 0 2rem 0;
-  box-sizing: border-box;
-  min-height: 520px; /* ปรับตามความสูงรวมของ footer */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: relative;
-  padding-bottom: 30px; /* ✅ เว้นพื้นที่ให้รูป overlay ด้านล่าง */
-  z-index: 0;
-  overflow: hidden;
-  
-}
-
-.Footer_footerContent__B4teV {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 30px;
-  margin: 0 auto;
-  padding: 0 5rem;
-  /* ✅ เพิ่มระยะห่างซ้ายขวา */
-}
-
-.Footer_column__CWfrO {
-  flex: 1 1 200px;
-  min-width: 200px;
-}
-
-.Footer_column__CWfrO h4 {
-  margin-bottom: 15px;
-  color: #ffffff;
-}
-
-.Footer_column__CWfrO ul {
-  list-style: none;
-  padding: 5;
-  margin: 10;
-}
-
-.Footer_column__CWfrO ul li {
-  margin-bottom: 8px;
-}
-
-.Footer_column__CWfrO p {
-  margin: 5px 0;
-}
-
-.Footer_socialIcons__xzsqq {
-  margin-top: 10px;
-  display: flex;
-  gap: 10px;
-}
-
-
-/* ไม่ใส่พื้นหลังซ้ำ ให้ background ของ footer เห็นได้ต่อเนื่อง */
-.Footer_footerBottomWrapper__Ipvgi {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1; /* ต้องน้อยกว่า pseudo-element */
-}
-.Footer_footerBottomImage__H3enH {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 18%; /* ปรับตามขนาดรูป */
-  background-image: url("/images/footerbottom-1.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  z-index: 1;
-  pointer-events: none; /* ✅ ป้องกันไม่ให้คลิกโดน */
-}
-/* เพื่อความชัดเจนและอ่านง่าย */
-.Footer_footerBottom__5n19l {
-  max-width: 1200px;
-  width: 100%;
-  padding: 0.8rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  color: #243865;
-  z-index: 1;
-}
-
-.Footer_footerContent__B4teV {
-  max-width: 1200px;
-  margin: 0 auto;
-  /* กึ่งกลาง */
-  width: 100%;
-  /* เต็มความกว้างบนหน้าจอเล็ก */
-  padding: 0 1rem;
-  /* เว้นขอบซ้ายขวานิดหน่อย */
-}
-
-.Footer_footerBottomContainer__qqZN6 {
-  width: 100%;
-  background-color: rgb(32, 31, 39);
-  border-top: 2px solid #444444;
-  padding: 0;
-  /* เฉพาะแนวตั้ง */
-}
-
-.Footer_column__CWfrO ul li a {
-  color: #ffffff;
-  /* ตัวหนังสือสีขาว */
-  text-decoration: none;
-  transition: color 0.2s ease-in-out;
-}
-
-.Footer_column__CWfrO ul li a:hover {
-  color: #cccccc;
-  /* สีตอน hover เป็นเทาอ่อน */
-}
-
-.Footer_logoGroup__8LRp2 {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-items: center; /* จัดกึ่งกลางแนวตั้ง */
-  height: auto;
-  width: auto;
-}
-
-.Footer_logoGroup__8LRp2 img {
-  width: 45px;
-  /* ปรับขนาดตามที่ต้องการ */
-  height: auto;
-}
-
-.Footer_contactSection__wztYB {
-  margin-top: 1.5rem;
-  /* ✅ ระยะห่างจากรายการด้านบน */
-}
-
-@media (max-width: 600px) {
-  .Footer_footerBottom__5n19l {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    /* ✅ ลด padding ให้พอดี */
-    text-align: center;
-  }
-
-  .Footer_footerContent__B4teV {
-    flex-direction: column;
-    gap: 0px;
-    /* ✅ ช่องว่างแต่ละคอลัมน์เล็กลง */
-    padding: 0rem 3rem;
-    /* ✅ ลด padding ด้านบน/ล่าง และซ้าย/ขวา */
-    align-items: flex-start;
-  }
-
-  .Footer_column__CWfrO {
-    padding-bottom: 10px;
-  }
-
-  .Footer_column__CWfrO:last-child {
-    order: 4;
-  }
-
-  .Footer_contactSection__wztYB {
-    margin-top: 3rem;
-    /* ✅ บนมือถือ ลดช่องว่างลง */
-  }
-
-  .Footer_logoGroup__8LRp2 {
-    justify-content: center;
-    width: 100%;
-    margin-top: 0.5rem;
-    /* ✅ ลดระยะห่างด้านบน */
-  }
-
-  .Footer_logoGroup__8LRp2 img {
-    width: 40px;
-    height: auto;
-  }
-}
-
 /*!********************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./styles/Navbar.module.css ***!
   \********************************************************************************************************************************************************************************************************************************************************************/
@@ -608,13 +11,14 @@
   /* margin: 0 auto; กึ่งกลาง */
   /* padding: 0.5rem 5rem; เว้นขอบซ้าย-ขวาให้ห่างขึ้น */
   /* max-width: 1200px;       กำหนดความกว้างสูงสุดของ navbar */
-  margin: 0 auto; /* ทำให้อยู่กึ่งกลางจอ */
+  margin: 0 auto;
+  /* ทำให้อยู่กึ่งกลางจอ */
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: white;
-padding: 10px 100px 10px 200px;
-/*     top   right  bottom  left */
+  padding: 10px 80px 10px 200px;
+  /*     top   right  bottom  left */
   position: relative;
   z-index: 2;
 }
@@ -672,9 +76,11 @@ padding: 10px 100px 10px 200px;
   position: absolute;
   right: 0;
   top: 0;
-  width: 480.5px; /* คงที่หรือ responsive ได้ */
+  width: 420.5px;
+  /* คงที่หรือ responsive ได้ */
   height: 100%;
-  background-color: #f87f0b;
+  background-color: #E88534;
+  /* background-color: #f87f0b; */
   clip-path: polygon(100px 0, 100% 0%, 100% 100%, 0% 100%);
   z-index: 1;
 }
@@ -687,22 +93,26 @@ padding: 10px 100px 10px 200px;
   left: 0;
   height: 9.5px;
   width: 100%;
-  background-color: #f87f0b;
+  background-color: #E88534;
   z-index: 3;
 }
+
 .Navbar_leftSection__mzVce {
   display: flex;
-  align-items: center; /* ✅ กึ่งกลางแนวตั้ง */
+  align-items: center;
+  /* ✅ กึ่งกลางแนวตั้ง */
   gap: 16px;
 }
 
 .Navbar_logoContainer__OcSOc {
   position: relative;
   width: 450px;
-  height: 90px;
+  height: 100px;
   display: flex;
-  align-items: center; /* ✅ กึ่งกลางแนวตั้งใน logoContainer */
-  justify-content: center; /* เฉพาะถ้าคุณต้องการให้รูปภาพอยู่กลาง container */
+  align-items: center;
+  /* ✅ กึ่งกลางแนวตั้งใน logoContainer */
+  justify-content: center;
+  /* เฉพาะถ้าคุณต้องการให้รูปภาพอยู่กลาง container */
 }
 
 .Navbar_logoImage__oC6bF {
@@ -712,30 +122,38 @@ padding: 10px 100px 10px 200px;
   object-fit: contain;
   display: block;
 }
+
 /* กลุ่มปุ่มภาษา + เกี่ยวกับเรา + ติดต่อเรา */
 .Navbar_localeContactGroup__ZQsRf {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* กึ่งกลางแนวนอน */
-  justify-content: flex-end; /* กึ่งกลางแนวตั้ง */
-  /* gap: 0.5rem; */
+  align-items: flex-end;
+  /* กึ่งกลางแนวนอน */
+  justify-content: flex-end;
+  /* กึ่งกลางแนวตั้ง */
   text-align: center;
 }
 
 /* ปุ่มภาษา */
 .Navbar_localeButtons__uWi1h {
   display: flex;
-  justify-content: flex-end; /* เปลี่ยนจาก center เป็นขวา */
-  gap: 0px; /* หรือ margin ตามต้องการ */
+  justify-content: flex-end;
+  /* เปลี่ยนจาก center เป็นขวา */
+  gap: 0px;
+  /* หรือ margin ตามต้องการ */
+  margin-bottom: -0.5rem;
 }
+
 .Navbar_localeItem__fL0Lv {
   cursor: pointer;
 }
 
 .Navbar_localeDivider__DhFqi {
-  margin: 0 5px; /* เพิ่มช่องว่างซ้าย-ขวา */
+  margin: 0 5px;
+  /* เพิ่มช่องว่างซ้าย-ขวา */
 }
-.Navbar_localeButtons__uWi1h > * {
+
+.Navbar_localeButtons__uWi1h>* {
   position: relative;
   display: inline-block;
   color: #ffffffbb;
@@ -743,7 +161,7 @@ padding: 10px 100px 10px 200px;
   transition: all 0.3s ease;
 }
 
-.Navbar_localeButtons__uWi1h > *:hover {
+.Navbar_localeButtons__uWi1h>*:hover {
   background-image: linear-gradient(120deg, #ffffff, #243865, #ffffff);
   background-size: 200% auto;
   background-clip: text;
@@ -756,6 +174,7 @@ padding: 10px 100px 10px 200px;
   0% {
     background-position: -200% center;
   }
+
   100% {
     background-position: 200% center;
   }
@@ -764,7 +183,8 @@ padding: 10px 100px 10px 200px;
 .Navbar_localeItem__fL0Lv {
   cursor: pointer;
   transition: opacity 0.2s ease;
-  font-weight: 400 !important; /* ใช้ Thin */
+  font-weight: 400 !important;
+  /* ใช้ Thin */
 }
 
 .Navbar_localeItem__fL0Lv.Navbar_disabled__9ZQt3 {
@@ -775,6 +195,7 @@ padding: 10px 100px 10px 200px;
 .Navbar_separator__vUmbD {
   width: 0rem;
 }
+
 .Navbar_separatorone__Q63Db {
   width: 0rem;
 }
@@ -795,22 +216,29 @@ padding: 10px 100px 10px 200px;
 .Navbar_contactActions__jGoPz {
   display: flex;
   flex-direction: column;
-  align-items: flex-end; /* 🔹 จัดกึ่งกลางแนวนอน */
-  justify-content: center; /* 🔹 จัดกึ่งกลางแนวตั้ง (หาก container สูง) */
+  align-items: flex-end;
+  /* 🔹 จัดกึ่งกลางแนวนอน */
+  justify-content: center;
+  /* 🔹 จัดกึ่งกลางแนวตั้ง (หาก container สูง) */
   text-align: center;
 }
+
 .Navbar_callLink__IINig {
   display: flex;
   align-items: center;
   text-decoration: none;
   color: #243865;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 26px;
+  justify-items: center;
+  margin-bottom: -0.5rem;
+
 }
 
 .Navbar_phoneIcon__sDZeS {
   margin-right: 6px;
-  font-size: 24px;
+  margin-bottom: -0.5rem;
+  font-size: 20px;
 }
 
 .Navbar_phoneNumber__j_L3L {
@@ -823,7 +251,7 @@ padding: 10px 100px 10px 200px;
   text-decoration: none;
   color: white;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   user-select: none;
   cursor: pointer;
   padding-bottom: 0px;
@@ -849,7 +277,7 @@ padding: 10px 100px 10px 200px;
   }
 } */
 
-.Navbar_contact__Y66rf:hover { 
+.Navbar_contact__Y66rf:hover {
   /* background-color: #11377c;*/
   color: #11377c;
 }
@@ -860,24 +288,30 @@ padding: 10px 100px 10px 200px;
   color: #11377c;
   /* border-bottom: 2px solid white; */
 }
+
 @media (max-width: 1200px) {
   .Navbar_navbar__zhZYq {
-    padding: 10px 80px; /* ลดระยะห่างด้านข้างลง */
+    padding: 10px 80px;
+    /* ลดระยะห่างด้านข้างลง */
   }
 
 
   .Navbar_logoContainer__OcSOc {
-    width: 450px; /* ปรับขนาดโลโก้เล็กลงตามจอ */
+    width: 450px;
+    /* ปรับขนาดโลโก้เล็กลงตามจอ */
   }
 }
+
 .Navbar_contactLinkGroup___RGrN {
   display: flex;
   flex-direction: row;
   gap: 12px;
 }
+
 @media (max-width: 991px) {
   .Navbar_navbar__zhZYq {
-    padding: 0px 0px 47px 90px; /* เพิ่ม padding-bottom ให้สูงพอ */
+    padding: 0px 0px 47px 90px;
+    /* เพิ่ม padding-bottom ให้สูงพอ */
     position: relative;
     z-index: 2;
   }
@@ -896,7 +330,7 @@ padding: 10px 100px 10px 200px;
     left: 0;
     height: 50px;
     width: 100%;
-    background-color: #f87f0b;
+    background-color: #E88534;
     z-index: 0;
   }
 
@@ -906,20 +340,26 @@ padding: 10px 100px 10px 200px;
     clip-path: polygon(100px 0, 100% 0%, 100% 100%, 0% 100%);
     transition: width 0.3s ease, clip-path 0.3s ease;
   }
+
   .Navbar_logoContainer__OcSOc {
     position: relative;
-    width: 450px; /* ขนาดเริ่มต้น */
+    width: 450px;
+    /* ขนาดเริ่มต้น */
     height: 90px;
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* ชิดซ้าย */
-    padding-left: 20px; /* เว้นช่องว่างซ้ายไว้ */
-    z-index: 3; /* เหนือเส้น */
+    justify-content: flex-start;
+    /* ชิดซ้าย */
+    padding-left: 20px;
+    /* เว้นช่องว่างซ้ายไว้ */
+    z-index: 3;
+    /* เหนือเส้น */
     transition: width 0.3s ease, padding-left 0.3s ease;
   }
 
   .Navbar_logoImage__oC6bF {
-    max-height: 80px; /* ไม่เลยเส้นสีส้ม */
+    max-height: 80px;
+    /* ไม่เลยเส้นสีส้ม */
     width: auto;
     height: auto;
     max-width: 100%;
@@ -977,7 +417,8 @@ padding: 10px 100px 10px 200px;
 
 /* ย่อขนาดและเลื่อนตำแหน่งตามจอเล็กลง */
 
-/* <= 800px */@media (max-width: 800px) {
+/* <= 800px */
+@media (max-width: 800px) {
   .Navbar_logoContainer__OcSOc {
     width: clamp(250px, 60vw, 500px);
     padding-left: clamp(0px, 3vw, 20px);
@@ -1012,6 +453,7 @@ padding: 10px 100px 10px 200px;
     clip-path: polygon(90px 0, 100% 0%, 100% 100%, 0% 100%);
   }
 }
+
 @media (max-width: 518px) {
   .Navbar_logoContainer__OcSOc {
     width: clamp(180px, 90vw, 380px);
@@ -1023,6 +465,7 @@ padding: 10px 100px 10px 200px;
     clip-path: polygon(90px 0, 100% 0%, 100% 100%, 0% 100%);
   }
 }
+
 @media (max-width: 495px) {
   .Navbar_logoContainer__OcSOc {
     width: clamp(160px, 85vw, 350px);
@@ -1055,7 +498,8 @@ padding: 10px 100px 10px 200px;
 
 @media (max-width: 400px) {
   .Navbar_navbar__zhZYq {
-    padding: 10px clamp(5px, 2vw, 20px) 47px clamp(0px, 1vw, 15px); /* เพิ่ม padding-top ให้ลงมา */
+    padding: 10px clamp(5px, 2vw, 20px) 47px clamp(0px, 1vw, 15px);
+    /* เพิ่ม padding-top ให้ลงมา */
     transition: padding 0.4s ease;
     display: flex;
     align-items: center;
@@ -1068,7 +512,8 @@ padding: 10px 100px 10px 200px;
     display: flex;
     align-items: center;
     /* ถ้าต้องการเลื่อนลงอีก */
-    margin-top: 10px;  /* ปรับเพิ่ม-ลดได้ตามชอบ */
+    margin-top: 10px;
+    /* ปรับเพิ่ม-ลดได้ตามชอบ */
     transition: margin-top 0.4s ease;
   }
 
@@ -1078,7 +523,7 @@ padding: 10px 100px 10px 200px;
     object-fit: contain;
     display: block;
   }
-  
+
   .Navbar_navWrapper__uiFgw::after {
     width: clamp(100px, 22vw, 130px);
     clip-path: polygon(80px 0, 100% 0%, 100% 100%, 0% 100%);
@@ -1089,14 +534,16 @@ padding: 10px 100px 10px 200px;
   .Navbar_navbar__zhZYq {
     display: flex;
     align-items: center;
-    padding-top: 10px; /* เพิ่ม padding-top เล็กน้อย */
+    padding-top: 10px;
+    /* เพิ่ม padding-top เล็กน้อย */
   }
 
   .Navbar_logoContainer__OcSOc {
     width: clamp(10px, 90vw, 350px);
     display: flex;
     align-items: center;
-    margin-top: 10px; /* เพิ่ม margin-top */
+    margin-top: 10px;
+    /* เพิ่ม margin-top */
     transition: margin-top 0.4s ease;
   }
 
@@ -1110,8 +557,6 @@ padding: 10px 100px 10px 200px;
     clip-path: polygon(70px 0, 100% 0%, 100% 100%, 0% 100%);
   }
 }
-
-
 /*!****************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./styles/tabmenu.css ***!
   \****************************************************************************************************************************************************************************************************************************************************************/
@@ -1497,6 +942,373 @@ ul {
   }
 }
 
+/*!********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./styles/Footer.module.css ***!
+  \********************************************************************************************************************************************************************************************************************************************************************/
+.Footer_footer__yl3k1 {
+  width: 100%;
+  background-image: url("/images/footerbackgrund.jpg");
+  background-size: cover;
+  background-position: center center; /* ✅ กึ่งกลางทั้งแนวนอนและแนวตั้ง */
+  background-repeat: no-repeat;
+  color: white;
+  font-size: 14px;
+  padding: 1.5rem 0 2.2rem 0;
+  box-sizing: border-box;
+  min-height: 310px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.Footer_footerContent__B4teV {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 30px;
+  margin: 0 auto;
+  padding: 0 5rem;
+  max-width: 1200px; /* ✅ กำหนดความกว้างสูงสุด */
+  width: 100%;       /* ✅ ให้เต็มพื้นที่เท่าที่ได้ */
+}
+
+.Footer_column__CWfrO {
+  flex: 1 1 200px;
+  min-width: 200px;
+}
+
+.Footer_column__CWfrO h4 {
+  margin-top: 10px;
+  margin-bottom: 2px;
+  color: #ffffff;
+}
+
+.Footer_column__CWfrO ul {
+  list-style: none;
+  padding: 5;
+  margin: 10;
+}
+
+.Footer_column__CWfrO ul li {
+  margin-bottom: 2px;
+}
+
+.Footer_column__CWfrO p {
+  margin: 5px 0;
+}
+
+.Footer_socialIcons__xzsqq {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+
+/* ไม่ใส่พื้นหลังซ้ำ ให้ background ของ footer เห็นได้ต่อเนื่อง */
+.Footer_footerBottomWrapper__Ipvgi {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1; /* ต้องน้อยกว่า pseudo-element */
+}
+/* ขอบด้านล่าง */
+.Footer_footerBottomImage__H3enH {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 23%; /* ปรับตามขนาดรูป */
+  background-image: url("/images/footerbottom-2.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+  pointer-events: none; /* ✅ ป้องกันไม่ให้คลิกโดน */
+}
+/* เพื่อความชัดเจนและอ่านง่าย */
+.Footer_footerBottom__5n19l {
+  max-width: 1200px;
+  width: 100%;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  color: #243865;
+  z-index: 1;
+}
+
+.Footer_footerContent__B4teV {
+  max-width: 1200px;
+  margin: 0 auto;
+  /* กึ่งกลาง */
+  width: 100%;
+  /* เต็มความกว้างบนหน้าจอเล็ก */
+  padding: 0 1rem;
+  /* เว้นขอบซ้ายขวานิดหน่อย */
+}
+
+/* .footerBottomContainer {
+  width: 100%;
+  background-color: rgb(32, 31, 39);
+  border-top: 2px solid #444444;
+  padding: 0;
+  /* เฉพาะแนวตั้ง */
+
+
+.Footer_column__CWfrO ul li a {
+  color: #ffffff;
+  /* ตัวหนังสือสีขาว */
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.Footer_column__CWfrO ul li a:hover {
+  color: #cccccc;
+  /* สีตอน hover เป็นเทาอ่อน */
+}
+
+.Footer_logoGroup__8LRp2 {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center; /* จัดกึ่งกลางแนวตั้ง */
+  height: auto;
+  width: auto;
+}
+
+.Footer_logoGroup__8LRp2 img {
+  width: 45px;
+  /* ปรับขนาดตามที่ต้องการ */
+  height: auto;
+}
+
+.Footer_contactSection__wztYB {
+  margin-top: 1.5rem;
+  /* ✅ ระยะห่างจากรายการด้านบน */
+}
+
+@media (max-width: 600px) {
+  .Footer_footerBottom__5n19l {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    /* ✅ ลด padding ให้พอดี */
+    text-align: center;
+  }
+
+  .Footer_footerContent__B4teV {
+    flex-direction: column;
+    gap: 0px;
+    /* ✅ ช่องว่างแต่ละคอลัมน์เล็กลง */
+    padding: 0rem 3rem;
+    /* ✅ ลด padding ด้านบน/ล่าง และซ้าย/ขวา */
+    align-items: flex-start;
+  }
+
+  .Footer_column__CWfrO {
+    padding-bottom: 0.5px;
+  }
+
+  .Footer_column__CWfrO:last-child {
+    order: 4;
+  }
+
+  .Footer_contactSection__wztYB {
+    margin-top: 3rem;
+    /* ✅ บนมือถือ ลดช่องว่างลง */
+  }
+
+  .Footer_logoGroup__8LRp2 {
+    justify-content: center;
+    width: 100%;
+    margin-top: 0.5rem;
+    /* ✅ ลดระยะห่างด้านบน */
+  }
+
+  .Footer_logoGroup__8LRp2 img {
+    width: 40px;
+    height: auto;
+  }
+}
+
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[5].use[3]!./app/components/FloatingContactButton.module.css ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************/
+/* FloatingContactButton.module.css */
+
+@keyframes FloatingContactButton_fadeIn__XWKG8 {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes FloatingContactButton_fadeOut__pExZM {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+.FloatingContactButton_buttonContact__U37PN {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    background-color: #E88534;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    color: white;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    /* ไอคอนกึ่งกลาง */
+    align-items: center;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+/* hover เฉพาะตอนปิดปุ่ม (class closed) */
+.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover {
+    width: auto;
+    border-radius: 999px;
+    padding: 0 20px;
+    justify-content: flex-start;
+    /* ไอคอนชิดซ้าย */
+    gap: 10px;
+}
+
+.FloatingContactButton_iconLabelWrapper__UHPmV {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    /* ไอคอนกึ่งกลางปกติ */
+    transition: justify-content 0.3s ease;
+}
+
+/* ตอน hover (ปุ่มปิด) เลื่อนไอคอนชิดซ้าย */
+.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover .FloatingContactButton_iconLabelWrapper__UHPmV {
+    justify-content: flex-start;
+}
+
+.FloatingContactButton_iconText__vNT7O {
+    font-size: 16px;
+    color: white;
+    white-space: nowrap;
+    pointer-events: none;
+
+    display: none;
+    /* ซ่อนโดยไม่กินพื้นที่ */
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* แสดงข้อความตอน hover */
+.FloatingContactButton_buttonContact__U37PN.FloatingContactButton_closed__PwtHY:hover .FloatingContactButton_iconText__vNT7O {
+    display: inline;
+    /* แสดง และกินพื้นที่ */
+    opacity: 1;
+    max-width: 100px;
+}
+
+
+.FloatingContactButton_speechBubble__4tp14 {
+    position: fixed;
+    border-radius: 12px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 260px;
+    padding: 8px 20px;
+    margin: 5px;
+    z-index: 2000;
+    bottom: 100px;
+    right: 9px;
+}
+
+.FloatingContactButton_speechBubble__4tp14::before {
+    content: "";
+    position: absolute;
+    bottom: -12px;
+    right: 24px;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 15px solid #fff;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+    z-index: 1000;
+}
+
+.FloatingContactButton_speechBubble__4tp14.FloatingContactButton_fadeIn__XWKG8 {
+    animation: FloatingContactButton_fadeIn__XWKG8 0.3s ease-in-out forwards;
+}
+
+.FloatingContactButton_speechBubble__4tp14.FloatingContactButton_fadeOut__pExZM {
+    animation: FloatingContactButton_fadeOut__pExZM 0.3s ease-in-out forwards;
+}
+
+.FloatingContactButton_title__tIwp_ {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #243865;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.FloatingContactButton_socialList__D4W_d {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.FloatingContactButton_socialList__D4W_d a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    text-decoration: none;
+}
+
+.FloatingContactButton_phoneItem__G9goW {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    color: #1f2937;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    outline: none;
+}
 /*!************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[10].use[3]!./node_modules/react-toastify/dist/ReactToastify.css ***!
   \************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -2405,13 +2217,11 @@ h2 {
 h3 {
   font-size: 20px;
   color: #243865;
-
 }
 
 h4 {
   font-size: 18px;
   color: #243865;
-
 }
 
 h5 {

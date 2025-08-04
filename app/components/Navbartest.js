@@ -4,7 +4,7 @@ import React from 'react';
 import { useLocale } from '../Context/LocaleContext';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { FaPhone } from "react-icons/fa6"; 
+import { FaPhone } from "react-icons/fa6";
 import Link from 'next/link';
 import styles from '../../styles/Navbar.module.css';
 
@@ -27,7 +27,12 @@ export default function Navbar() {
                             fill
                             style={{ objectFit: 'contain' }}
                             sizes="470px"
-                        />                    </div>
+                            priority 
+                        />
+
+
+
+                    </div>
                 </div>
 
                 <div className={styles.localeContactGroup}>

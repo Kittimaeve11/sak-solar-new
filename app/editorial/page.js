@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import '../../styles/editorial.css';
-import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { IoIosArrowBack, IoIosArrowForward, IoIosArrowDown } from 'react-icons/io';
 import { FaArrowRightLong } from "react-icons/fa6";
 
 export default function EditorialListPage() {
@@ -12,8 +12,9 @@ export default function EditorialListPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(15);
   const [isFading, setIsFading] = useState(false);
+  const [filter, setFilter] = useState('ทั้งหมด'); // ✅ filter type
   const router = useRouter();
-  const topRef = useRef(null); // ✅ ใช้สำหรับ scroll
+  const topRef = useRef(null);
 
   useEffect(() => {
     fetch('/api/editorial')
@@ -28,17 +29,21 @@ export default function EditorialListPage() {
       });
   }, []);
 
-  const totalPages = Math.ceil(articles.length / itemsPerPage);
+  const filteredArticles = filter === 'ทั้งหมด'
+    ? articles
+    : articles.filter((item) => item?.type === filter);
+
+  const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
+  const paginatedArticles = filteredArticles.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handlePageChange = (page) => {
     if (page === currentPage) return;
-
     setLoading(true);
     setIsFading(false);
-
-    // ✅ Scroll ทันทีแบบไม่ให้เห็นภาพเคลื่อนไหว
     topRef.current?.scrollIntoView({ behavior: 'auto' });
-
     setTimeout(() => {
       setCurrentPage(page);
       setTimeout(() => {
@@ -48,11 +53,6 @@ export default function EditorialListPage() {
       }, 100);
     }, 50);
   };
-
-  const paginatedArticles = articles.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
   const renderPagination = () => {
     const pages = [];
@@ -121,10 +121,52 @@ export default function EditorialListPage() {
     <div className="layout-container" ref={topRef}>
       <h1 className="headtitle">บทความ</h1>
 
-      <main
-        className={`editorial-grid fade-in ${isFading ? 'active' : ''}`}
-        key={`page-${currentPage}`}
-      >
+      {/* ✅ Filter Type */}
+      {/* <div className="editorial-filter">
+        <label htmlFor="filter-select">เลือกประเภทบทความ :</label>
+        <div className="filter-dropdown-wrapper">
+          <select
+            id="type-filter"
+            value={filter}
+            onChange={(e) => {
+              setFilter(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="filter-dropdown"
+          >
+            <option value="ทั้งหมด">บทความทั้งหมด</option>
+            {[...new Set(articles.map((a) => a?.type))].map((type) =>
+              type ? <option key={type} value={type}>{type}</option> : null
+            )}
+          </select>
+          <IoIosArrowDown className="dropdown-icon" />
+        </div>
+      </div> */}
+
+      <div className="portfolio-filters">
+        <label htmlFor="filter-select" className="filter-label">เลือกประเภทบทความ :</label>
+        <div className="filter-row">
+          <div className="select-wrapper">
+            <select
+              id="filter-select"
+              value={filter}
+              onChange={(e) => {
+                setFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="filter-dropdown"
+            >
+              <option value="ทั้งหมด">บทความทั้งหมด</option>
+            {[...new Set(articles.map((a) => a?.type))].map((type) =>
+              type ? <option key={type} value={type}>{type}</option> : null
+            )}
+            </select>
+            <IoIosArrowDown className="dropdown-icon" />
+          </div>
+        </div>
+      </div>
+
+      <main className={`editorial-grid fade-in ${isFading ? 'active' : ''}`} key={`page-${currentPage}`}>
         {loading
           ? Array.from({ length: itemsPerPage }).map((_, idx) => (
             <div className="skeleton-card" key={idx}>

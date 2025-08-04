@@ -11,6 +11,17 @@
       "static/chunks/main-app.js",
       "static/chunks/app/not-found.js"
     ],
+    "/products/[productSlug]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/products/[productSlug]/page.css",
+      "static/chunks/app/products/[productSlug]/page.js"
+    ],
+    "/api/data/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/data/route.js"
+    ],
     "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -27,15 +38,17 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/portfolio/route.js"
     ],
-    "/api/review/route": [
+    "/products/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/review/route.js"
+      "static/css/app/products/page.css",
+      "static/chunks/app/products/page.js"
     ],
-    "/api/data/route": [
+    "/review/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/data/route.js"
+      "static/css/app/review/page.css",
+      "static/chunks/app/review/page.js"
     ]
   }
 }

@@ -1,75 +1,106 @@
 "use client";
+
 import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import styles from "../../styles/Footer.module.css";
-import { menuItems } from "../config/footer";
+import styles from "../../styles/Footer.module.css"; // ✅ ปรับ path ตามโปรเจกต์คุณ
+import { menuItems } from "../config/footer"; // ✅ ต้องมีไฟล์นี้
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
 export default function Footer() {
   const [socials, setSocials] = useState([]);
+  const [policies, setPolicies] = useState([]);
 
   useEffect(() => {
+    // โหลด social media จาก local API
     fetch("/api/data")
       .then((res) => res.json())
       .then((data) => setSocials(data.socials || []))
       .catch(() => setSocials([]));
+
+    // โหลดนโยบายจาก API
+    const fetchPolicies = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/api/policyapi`, {
+          headers: {
+            'X-API-KEY': `${apiKey}`,
+          },
+        });
+        const data = await res.json();
+
+        if (data.status && Array.isArray(data.result)) {
+          setPolicies(data.result);
+        } else {
+          setPolicies([]);
+        }
+      } catch (error) {
+        console.error("Error fetching policies:", error);
+        setPolicies([]);
+      }
+    };
+
+    fetchPolicies();
   }, []);
+  const iconPath = useMemo(() => ({
+    facebook: "/images/facebook.png",
+    instagram: "/images/instagram.png",
+    tiktok: "/images/tiktok.png",
+    line: "/images/line.png",
+    youtube: "/images/youtube.png",
+  }), []);
 
-  const iconPath = useMemo(
-    () => ({
-      facebook: "/images/facebook.png",
-      instagram: "/images/instagram.png",
-      tiktok: "/images/tiktok.png",
-      line: "/images/line.png",
-      youtube: "/images/youtube.png",
-    }),
-    []
-  );
-
-  // เอาแค่ 2 หมวดแรก (บริการสินเชื่อ, เกี่ยวกับบริษัท)
   const firstTwoMenus = menuItems.slice(0, 2);
-
-  // หาหมวด นโยบาย
-  const policyMenu = menuItems.find((item) => item.title === "นโยบาย");
-
-  // หาหมวด ติดต่อเรา
   const contactMenu = menuItems.find((item) => item.title === "ติดต่อเรา");
 
   return (
     <div>
       <footer className={styles.footer}>
         <div className={styles.footerContent}>
-          {/* แสดง 2 คอลัมน์แรก */}
-          {firstTwoMenus.map(({ title, items }) => (
-            <div key={title} className={styles.column}>
-              <h4>{title}</h4>
-              <ul>
-                {items.map(({ label, href }, i) => (
-                  <li key={href || label + i}>
-                    {href ? <Link href={href}>{label}</Link> : <span>{label}</span>}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-
-          {/* คอลัมน์ที่ 3 รวม นโยบาย + ติดต่อเรา */}
+          {/* คอลัมน์แรก */}
           <div className={styles.column}>
-            {/* นโยบาย */}
-            {policyMenu && (
+            <h4>{firstTwoMenus[0].title}</h4>
+            <ul>
+              {firstTwoMenus[0].items.map(({ label, href }, i) => (
+                <li key={href || label + i}>
+                  {href ? <Link href={href}>{label}</Link> : <span>{label}</span>}
+                </li>
+              ))}
+            </ul>
+
+            {/* แสดงนโยบายจาก API */}
+            {policies.length > 0 && (
               <>
-                <h4>{policyMenu.title}</h4>
+                <h4>นโยบาย</h4>
                 <ul>
-                  {policyMenu.items.map(({ label, href }, i) => (
-                    <li key={href || label + i}>
-                      {href ? <Link href={href}>{label}</Link> : <span>{label}</span>}
+                  {policies.map((policy) => (
+                    <li key={policy.policyID}>
+                      <Link href={`/policy/${policy.policy_Num}`}>
+                        {policy.policy_nameTH}
+                      </Link>
                     </li>
                   ))}
                 </ul>
               </>
             )}
 
-            {/* ติดต่อเรา */}
+          </div>
+
+          {/* คอลัมน์ที่สอง */}
+          <div className={styles.column}>
+            <h4>{firstTwoMenus[1].title}</h4>
+            <ul>
+              {firstTwoMenus[1].items.map(({ label, href }, i) => (
+                <li key={href || label + i}>
+                  {href ? <Link href={href}>{label}</Link> : <span>{label}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* คอลัมน์ที่สาม: ติดต่อเรา + social icons */}
+          <div className={styles.column}>
             {contactMenu && (
               <>
                 <h4>{contactMenu.title}</h4>
@@ -103,9 +134,12 @@ export default function Footer() {
             )}
           </div>
         </div>
+
+        {/* รูปตกแต่งด้านล่าง */}
         <div className={styles.footerBottomImage}></div>
       </footer>
 
+      {/* ส่วนลิขสิทธิ์ + โลโก้ */}
       <div className={styles.footerBottomWrapper}>
         <div className={styles.footerBottom}>
           © 2025 Copyright: Saksiam Leasing Public Company Limited. All Rights Reserved.
@@ -116,8 +150,6 @@ export default function Footer() {
               width={100}
               height={40}
             />
-
-            {/* ใช้ Link + legacyBehavior + a ครอบ Image เพื่อเปิด PDF */}
             <Link
               href="/file/Inverter.pdf"
               target="_blank"
@@ -131,7 +163,6 @@ export default function Footer() {
                 height={40}
               />
             </Link>
-
             <Image
               src="/images/ERCNewLogo.png"
               alt="โลโก้กกพ"

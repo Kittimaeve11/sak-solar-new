@@ -38,6 +38,9 @@
   color: #243865;
 }
 
+
+/* dropdown */
+
 .filter-label {
   margin-bottom: 0rem;
   /* ระยะห่างระหว่าง label กับ dropdown */
@@ -115,15 +118,17 @@
   display: inline-block;
 }
 
+/*---------------------------*/
+
 /* Portfolio Grid - 3 fixed width columns, centered */
 .portfolio-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  /* fix 3 คอลัมน์ เท่ากัน */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
   margin: 0 auto;
   padding: 0 12px;
 }
+
 
 /* ลดเป็น 2 คอลัมน์บน tablet */
 @media (max-width: 1024px) {
@@ -157,7 +162,7 @@
 .portfolio-image-wrapper {
   position: relative;
   width: 100%;
-  height: 200px;
+  height: 180px;
   overflow: hidden;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
@@ -358,7 +363,7 @@
 
 .skeleton-image {
   width: 100%;
-  height: 180px;
+  height: 180px;  
 }
 
 .skeleton-title {
@@ -393,7 +398,7 @@
 /* Skeleton Banner */
 .skeleton-banner {
   width: 100%;
-  aspect-ratio: 3.23 / 1;
+  aspect-ratio: 3.16 / 1;
   background-color: #e0e0e0;
   border-radius: 4px;
   animation: pulse 1.5s infinite ease-in-out;
@@ -413,7 +418,7 @@
   }
 
   .filter-dropdown {
-    width: 100% !important;
+    width: 100% ;
   }
 
   .select-wrapper {
@@ -429,7 +434,7 @@
   }
 
   .portfolio-card {
-    width: 100% !important;
+    width: 100% ;
     min-height: auto;
   }
 
@@ -442,3 +447,4 @@
     /* for mobile view */
   }
 }
+

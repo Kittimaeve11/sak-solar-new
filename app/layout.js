@@ -1,16 +1,15 @@
-// app/layout.js
 import { LocaleProvider } from './Context/LocaleContext';
 import Navbartest from './components/Navbartest';
 import TabMenu from './components/TabMenu';
 import Footer from './components/Footer';
 import BackToTopButton from './components/BackToTopButton';
 import './globals.css';
-import ContactChannels from './components/ContactChannels';
-import CookieBanner from './components/CookieBanner';
 import FloatingButtons from './components/FloatingButtons';
-import RouteLoadingOverlay from './components/RouteLoadingOverlay';
-import localFont from 'next/font/local';
 import ToastProvider from './components/ToastProvider';
+import ClientConditionalLayout from './components/ClientConditionalLayout'; // <-- ใส่ไว้
+
+import localFont from 'next/font/local';
+
 const sukhumvitTadmai = localFont({
   src: [
     { path: '../public/fonts/SukhumvitTadmai-UltraLight.otf', weight: '200', style: 'normal' },
@@ -32,20 +31,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="th">
-      <body>
-        {/* <RouteLoadingOverlay /> */}
+    <html lang="th" className={sukhumvitTadmai.variable}>
+      <body className="font-sukhumvit">
         <LocaleProvider>
-          <Navbartest />
-          <TabMenu />
-          <main>{children}</main>
-          <ToastProvider />
-          <FloatingButtons />
-          <BackToTopButton />
-          {/* <ContactChannels /> */}
-          {/* <CookieBanner /> */}
-
-          <Footer />
+          {/* component นี้จะใช้ client side hook แยกออกไป */}
+          <ClientConditionalLayout>{children}</ClientConditionalLayout>
         </LocaleProvider>
       </body>
     </html>

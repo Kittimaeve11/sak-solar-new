@@ -90,7 +90,6 @@ export default function SlideEditorial() {
         <div className="skeleton-title skeleton" />
         <div className="skeleton-line skeleton" />
         <div className="skeleton-line skeleton" />
-        <div className="skeleton-line skeleton" />
       </div>
     </div>
   );
