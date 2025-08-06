@@ -66,9 +66,12 @@ const nextConfig = {
         port: '8080',
         pathname: '/policyIDapi/POL202507298',
       },
-
-
-
+            {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8080',
+        pathname: '/Misstion/**',
+      },
     ],
   },
 };
