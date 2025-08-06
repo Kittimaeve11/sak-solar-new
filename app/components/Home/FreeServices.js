@@ -28,7 +28,7 @@ export default function FreeServices({ contacts = [], locale, loading, baseUrl }
       <div key={item.sevice_ID} className={styles.cardfree}>
         <div className={styles.iconWrapper}>
           <Image
-            src={`http://localhost:8080/${item.picture}`}
+            src={`${baseUrl}/${item.picture}`}
             alt={locale === 'th' ? item.titleTH : (item.titleEN || 'Service')}
             width={90}
             height={90}

@@ -6,6 +6,7 @@ import { products } from '@/app/data/products';
 import '@/styles/products.css';
 import { MdOutlineElectricBolt } from "react-icons/md";
 import { useLocale } from '@/app/Context/LocaleContext';
+import Link from 'next/link';
 
 export default function ProductsPage({
     preSelectedCategoryId = null,
@@ -109,6 +110,21 @@ export default function ProductsPage({
         return matchCategory && matchBrand;
     });
 
+    // ฟิลเตอร์แบรนด์ให้แสดงเฉพาะของหมวดหมู่ที่เลือก
+    const filteredBrandsByCategory = selectedCategories.length === 0
+        ? [] // ถ้ายังไม่เลือกหมวดหมู่ ไม่แสดงแบรนด์
+        : products
+            .filter((cat) => selectedCategories.includes(cat.id))
+            .flatMap((cat) => cat.brands)
+            .filter((b, i, arr) =>
+                arr.findIndex(x => getLocalizedString(x.name) === getLocalizedString(b.name)) === i
+            )
+            .map((b) => ({
+                ...b,
+                name: getLocalizedString(b.name),
+            }));
+
+
     return (
         <main className="products-container">
             <aside className="products-sidebar">
@@ -129,21 +145,23 @@ export default function ProductsPage({
                     </div>
                 </section>
                 <hr className="divider" />
-                <section>
-                    <h3>ยี่ห้อ</h3>
-                    <div className="filter-box">
-                        {allBrands.map((brand) => (
-                            <label key={brand.name} className="checkbox-item">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedBrands.includes(brand.name)}
-                                    onChange={() => toggleBrand(brand.name)}
-                                />
-                                {brand.name}
-                            </label>
-                        ))}
-                    </div>
-                </section>
+                {selectedCategories.length > 0 && filteredItems.length > 0 && (
+                    <section>
+                        <h3>ยี่ห้อ</h3>
+                        <div className="filter-box">
+                            {filteredBrandsByCategory.map((brand) => (
+                                <label key={brand.name} className="checkbox-item">
+                                    <input
+                                        type="checkbox"
+                                        checked={selectedBrands.includes(brand.name)}
+                                        onChange={() => toggleBrand(brand.name)}
+                                    />
+                                    {brand.name}
+                                </label>
+                            ))}
+                        </div>
+                    </section>
+                )}
                 <hr className="divider" />
                 {(selectedCategories.length > 0 || selectedBrands.length > 0) && (
                     <button
@@ -154,7 +172,7 @@ export default function ProductsPage({
                             setSelectedBrands([]);
                         }}
                     >
-                        ลบการกรองสินค้าที่เลือก
+                        รีเซ็ตการกรองสินค้า
                     </button>
                 )}
             </aside>
@@ -199,22 +217,23 @@ export default function ProductsPage({
                 ) : (
                     <div className="products-grid">
                         {filteredItems.map((item) => (
-                            <div key={item.id} className="product-card">
+                            // เปลี่ยน div.product-card เป็น Link ไปหน้ารายละเอียด
+                            <Link
+                                key={item.id}
+                                href={`/products/${encodeURIComponent(item.categoryId)}/${encodeURIComponent(item.brand)}/${encodeURIComponent(item.id)}`}
+                                className="product-card"
+                                passHref
+                            >
                                 {item.mainImage && (
-                                    <div className="product-image-wrapper" style={{ position: 'relative', width: '100%', height: '200px' }}>
-                                        <Image
-                                            src={item.mainImage}
-                                            alt={item.name}
-                                            fill
-                                            style={{ objectFit: 'cover' }}
-                                        />
+                                    <div
+                                        className="product-image-wrapper"
+                                        style={{ position: 'relative', width: '100%', height: '200px' }}
+                                    >
+                                        <Image src={item.mainImage} alt={item.name} fill style={{ objectFit: 'cover' }} />
                                     </div>
                                 )}
                                 <div className="product-info">
                                     <h3 className="product-name">{item.name}</h3>
-                                    {/* <p className="product-price">
-                    {item.price ? `฿ ${item.price.toLocaleString()}` : 'ราคา'}
-                  </p> */}
                                     <p className="product-size">
                                         {item.size ? (
                                             <span
@@ -222,16 +241,16 @@ export default function ProductsPage({
                                                     display: 'inline-flex',
                                                     alignItems: 'center',
                                                     gap: '2px',
-                                                    fontWeight: 600,  // <-- เพิ่มตรงนี้
+                                                    fontWeight: 600,
                                                 }}
                                             >
-                                                <MdOutlineElectricBolt sive={25} />
+                                                <MdOutlineElectricBolt size={25} />
                                                 {item.size.toLocaleString()}
                                             </span>
                                         ) : null}
                                     </p>
                                 </div>
-                            </div>
+                            </Link>
                         ))}
                     </div>
                 )}

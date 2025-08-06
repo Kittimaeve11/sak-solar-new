@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import '../../styles/faq.css';
 import { MdOutlineArrowForwardIos } from 'react-icons/md';
+import Image from 'next/image';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
 const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
@@ -84,10 +85,12 @@ const cleanHtml = (str) => {
             srcSet="/banner/FAQ-Page/Mobile-FAQ1.jpg"
             media="(max-width: 768px)"
           />
-          <img
+          <Image
             src="/banner/FAQ-Page/PC-FAQ1.jpg"
             alt="Contact Banner"
             className="banner-image"
+            width={1530}
+            height={800}
           />
         </picture>
       </div>

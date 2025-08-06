@@ -10,7 +10,7 @@ import { products } from '../data/products';
 import '../../styles/tabmenu.css';
 
 export default function TabMenu() {
-  const { messages, locale } = useLocale(); // เพิ่ม locale
+  const { messages, locale } = useLocale();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [serviceOpen, setServiceOpen] = useState(false);
@@ -111,7 +111,9 @@ export default function TabMenu() {
             {serviceOpen && (
               <ul className="dropdown-menu level-1">
                 {products.map((product) => {
-                  const isCurrent = pathname.startsWith(`/products/${product.slug}`);
+                  const isCurrent =
+                    pathname === `/products/${product.slug}` ||
+                    pathname.startsWith(`/products/${product.slug}/`);
                   const isOpen = activeProductSlug === product.slug;
 
                   return (
@@ -140,15 +142,14 @@ export default function TabMenu() {
                           }
                         }}
                       >
-                        {/* แสดงชื่อ product ตาม locale */}
                         {typeof product.name === 'object' ? product.name[locale] ?? product.name.en : product.name}
                         {isMobile && (isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />)}
                       </Link>
 
                       {isOpen && (
                         <ul className="brand-submenu">
-                          {product.brands.map((brand) => (
-                            <li key={brand.slug}>
+                          {product.brands.map((brand, index) => (
+                            <li key={`${product.slug}-${brand.slug}-${index}`}>
                               <Link
                                 href={`/products/${product.slug}/${brand.slug}`}
                                 className={
@@ -158,7 +159,6 @@ export default function TabMenu() {
                                 }
                                 onClick={handleLinkClick}
                               >
-                                {/* แสดงชื่อแบรนด์ตรง ๆ (string) */}
                                 {brand.name}
                               </Link>
                             </li>

@@ -11,8 +11,8 @@ export default function EditorialListPage() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(15);
-  const [isFading, setIsFading] = useState(false);
-  const [filter, setFilter] = useState('ทั้งหมด'); // ✅ filter type
+  const [filter, setFilter] = useState('ทั้งหมด');
+  const [shouldAnimate, setShouldAnimate] = useState(false);
   const router = useRouter();
   const topRef = useRef(null);
 
@@ -21,38 +21,42 @@ export default function EditorialListPage() {
       .then((res) => res.json())
       .then((data) => {
         setArticles(data.editorial || []);
-        setTimeout(() => {
-          setLoading(false);
-          setIsFading(true);
-          setTimeout(() => setIsFading(false), 200);
-        }, 100);
+        setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      const timeout = setTimeout(() => {
+        setShouldAnimate(true);
+      }, 50);
+      return () => clearTimeout(timeout);
+    }
+  }, [loading]);
+
+  const handlePageChange = (page) => {
+    if (page === currentPage) return;
+    setLoading(true);
+    setShouldAnimate(false);
+    topRef.current?.scrollIntoView({ behavior: 'auto' });
+
+    setTimeout(() => {
+      setCurrentPage(page);
+      setLoading(false);
+      setTimeout(() => setShouldAnimate(true), 50);
+    }, 100);
+  };
 
   const filteredArticles = filter === 'ทั้งหมด'
     ? articles
     : articles.filter((item) => item?.type === filter);
 
-  const totalPages = Math.ceil(filteredArticles.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredArticles.length / itemsPerPage) || 1;
+
   const paginatedArticles = filteredArticles.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  const handlePageChange = (page) => {
-    if (page === currentPage) return;
-    setLoading(true);
-    setIsFading(false);
-    topRef.current?.scrollIntoView({ behavior: 'auto' });
-    setTimeout(() => {
-      setCurrentPage(page);
-      setTimeout(() => {
-        setLoading(false);
-        setIsFading(true);
-        setTimeout(() => setIsFading(false), 200);
-      }, 100);
-    }, 50);
-  };
 
   const renderPagination = () => {
     const pages = [];
@@ -121,28 +125,7 @@ export default function EditorialListPage() {
     <div className="layout-container" ref={topRef}>
       <h1 className="headtitle">บทความ</h1>
 
-      {/* ✅ Filter Type */}
-      {/* <div className="editorial-filter">
-        <label htmlFor="filter-select">เลือกประเภทบทความ :</label>
-        <div className="filter-dropdown-wrapper">
-          <select
-            id="type-filter"
-            value={filter}
-            onChange={(e) => {
-              setFilter(e.target.value);
-              setCurrentPage(1);
-            }}
-            className="filter-dropdown"
-          >
-            <option value="ทั้งหมด">บทความทั้งหมด</option>
-            {[...new Set(articles.map((a) => a?.type))].map((type) =>
-              type ? <option key={type} value={type}>{type}</option> : null
-            )}
-          </select>
-          <IoIosArrowDown className="dropdown-icon" />
-        </div>
-      </div> */}
-
+      {/* Filter */}
       <div className="portfolio-filters">
         <label htmlFor="filter-select" className="filter-label">เลือกประเภทบทความ :</label>
         <div className="filter-row">
@@ -157,47 +140,63 @@ export default function EditorialListPage() {
               className="filter-dropdown"
             >
               <option value="ทั้งหมด">บทความทั้งหมด</option>
-            {[...new Set(articles.map((a) => a?.type))].map((type) =>
-              type ? <option key={type} value={type}>{type}</option> : null
-            )}
+              {[...new Set(articles.map((a) => a?.type))].map((type) =>
+                type ? <option key={type} value={type}>{type}</option> : null
+              )}
             </select>
             <IoIosArrowDown className="dropdown-icon" />
           </div>
         </div>
       </div>
 
-      <main className={`editorial-grid fade-in ${isFading ? 'active' : ''}`} key={`page-${currentPage}`}>
-        {loading
-          ? Array.from({ length: itemsPerPage }).map((_, idx) => (
+      {/* Main Grid */}
+      {loading ? (
+        <div className="editorial-grid">
+          {Array.from({ length: itemsPerPage }).map((_, idx) => (
             <div className="skeleton-card" key={idx}>
               <div className="skeleton skeleton-image" />
               <div className="skeleton skeleton-title" />
               <span className="skeleton skeleton-line" />
               <span className="skeleton skeleton-line" />
             </div>
-          ))
-          : paginatedArticles.map((item) => (
-            <div
-              key={item.id}
-              className="editorial-card"
-              onClick={() => router.push(`/editorial/${item.id}`)}
-            >
-              <Image
-                src={item.mainImage}
-                alt={item.title}
-                width={400}
-                height={200}
-                className="card-image"
-              />
-              <div className="card-content">
-                <h3 className="card-title">{item.title}</h3>
-                <p className="editorial-date">{item.date}</p>
-                <p className="card-snippet">{item.content?.split('\n')[0]}</p>
-                <p className="read-more">อ่านเพิ่มเติม <FaArrowRightLong /></p>
-              </div>
-            </div>
           ))}
-      </main>
+        </div>
+      ) : (
+        <main
+          className={`editorial-grid fade-in${shouldAnimate ? ' active' : ''}`}
+          key={`page-${currentPage}`}
+        >
+          {paginatedArticles.map((item) => {
+            const fullText = Array.isArray(item.content)
+              ? item.content.map(block => (typeof block.text === 'string' ? block.text : '')).join(' ')
+              : (typeof item.content === 'string' ? item.content : '');
+
+            const snippet = fullText.split(' ').slice(0, 20).join(' ') + '...';
+
+            return (
+              <div
+                key={item.id}
+                className="editorial-card"
+                onClick={() => router.push(`/editorial/${item.id}`)}
+              >
+                <Image
+                  src={item.mainImage}
+                  alt={item.title}
+                  width={400}
+                  height={200}
+                  className="card-image"
+                />
+                <div className="card-content">
+                  <h3 className="card-title">{item.title}</h3>
+                  <p className="editorial-date">{item.date}</p>
+                  <p className="card-snippet">{snippet}</p>
+                  <p className="read-more">อ่านเพิ่มเติม <FaArrowRightLong /></p>
+                </div>
+              </div>
+            );
+          })}
+        </main>
+      )}
 
       {!loading && totalPages > 1 && (
         <div className="pagination-controls">

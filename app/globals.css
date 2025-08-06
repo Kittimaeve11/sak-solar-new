@@ -134,8 +134,8 @@ h6 {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  padding: 0 16px 5px 16px;
-  /* ลด padding-bottom จาก 10px เหลือ 5px */
+  padding: 0 16px 50px 16px;
+  
   gap: 24px;
   /* ช่องไฟระหว่างบล็อก */
 }
@@ -325,7 +325,7 @@ h6 {
 .form-container {
   /* background-color: #FAFBFF; */
   width: 100%;
-  padding: 2rem;
+  /* padding: 2rem; */
   border-radius: 8px;
   max-width: 500px;
   margin: 0 auto;

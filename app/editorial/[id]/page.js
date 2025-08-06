@@ -1,10 +1,14 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import styles from "./EditorialDetailPage.module.css";
 import Link from "next/link";
+import {
+  MdOutlineKeyboardDoubleArrowRight,
+  MdKeyboardDoubleArrowRight,
+} from "react-icons/md";
 
 async function getEditorialById(id) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -14,61 +18,119 @@ async function getEditorialById(id) {
   return data.editorial.find((item) => item.id === Number(id)) || null;
 }
 
-function parseHeadings(content) {
-  if (!content) return [];
-  return content
-    .split("\n")
-    .map((line) => {
-      const m = line.match(/^(#{2,3})\s+(.*)/);
-      if (!m) return null;
-      return {
-        level: m[1].length,
-        text: m[2],
-        id: m[2].toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, ""),
-      };
-    })
-    .filter(Boolean);
+function generateId(text, index) {
+  return (
+    text
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, "") +
+    "-" +
+    index
+  );
 }
+
+function parseHeadings(content) {
+  if (!Array.isArray(content)) return [];
+  return content
+    .map((block, index) => ({ ...block, index }))
+    .filter((block) => /^h[1-2]$/.test(block.type)) // เฉพาะ h1, h2
+    .map((block) => ({
+      level: Number(block.type.replace("h", "")),
+      text: block.text,
+      id: generateId(block.text, block.index),
+      key: `${block.text}-${block.index}`,
+    }));
+}
+
+const HeadingTag = ({ type, id, text }) => {
+  const Tag = type;
+  return <Tag id={id}>{text}</Tag>;
+};
 
 export default function EditorialDetailPage() {
   const params = useParams();
   const id = params?.id;
-
   const [editorial, setEditorial] = useState(null);
-  const [lightboxIndex, setLightboxIndex] = useState(null);
-  const [showThumbs, setShowThumbs] = useState(true);
-  const [zoom, setZoom] = useState(false);
-  const [fullscreen, setFullscreen] = useState(false);
+  const [activeId, setActiveId] = useState(null);
 
-  // โหลดบทความตาม id
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const triggerY = 300; // scroll ถึงตำแหน่งนี้แล้วให้ลอย
+      setIsSticky(window.scrollY >= triggerY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     if (id) getEditorialById(id).then(setEditorial);
   }, [id]);
 
-  // ปิด scroll หน้าเมื่อเปิด lightbox
+  // คำนวณ headings จาก editorial.content
+  const headings = useMemo(() => {
+    if (!editorial) return [];
+    return parseHeadings(editorial.content);
+  }, [editorial]);
+
+  // Scroll spy: ตรวจจับ scroll position แล้วอัปเดต activeId
   useEffect(() => {
-    document.body.style.overflow = lightboxIndex !== null ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [lightboxIndex]);
+    function onScroll() {
+      const offset = 100;
+      let currentId = null;
+      for (const heading of headings) {
+        const el = document.getElementById(heading.id);
+        if (el) {
+          const top = el.getBoundingClientRect().top;
+          if (top < offset) {
+            currentId = heading.id;
+          }
+        }
+      }
+      if (currentId !== activeId) {
+        setActiveId(currentId);
+      }
+    }
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [headings, activeId]);
 
   if (!editorial) return <div className={styles.notFound}>ไม่พบบทความ</div>;
 
-  const headings = parseHeadings(editorial.content);
-  const showGallery = editorial.gallery?.length > 0;
+  function scrollToHeading(id) {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (!el) {
+        console.warn("Element not found for id:", id);
+        return;
+      }
+      const yOffset = -80; // ปรับ offset ถ้ามี header
+      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }, 100);
+  }
 
   return (
     <main className={styles.wrapper}>
-      <div className={styles.contentWrapper}>
+      <div className={styles.contentBox}>
         <article className={styles.article}>
-          <h1 className={styles.title}>{editorial.title}</h1>
-          <div className={styles.breadcrumb}>
-            <Link href="/" className={styles.link}>หน้าหลัก</Link> &gt;&gt;{" "}
-            <Link href="/editorial" className={styles.link}>ย้อนกลับ</Link> &gt;&gt;{" "}
-            {editorial.title}
+          <div className={styles.headerportfolio}>
+            <h1 className={styles.title}>{editorial.title}</h1>
+            <div className={styles.meta}>
+              <Link href="/" className={styles.link}>
+                หน้าหลัก <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
+              </Link>
+              <Link href="/editorial" className={styles.link}>
+                ย้อนกลับ <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
+              </Link>
+              {editorial.title}
+            </div>
           </div>
+
           <time className={styles.date}>วันที่โพสต์ : {editorial.date}</time>
+
           {editorial.mainImage && (
             <Image
               src={editorial.mainImage}
@@ -79,200 +141,65 @@ export default function EditorialDetailPage() {
               priority
             />
           )}
-          <section className={styles.content}>{editorial.content}</section>
-          {showGallery && (
-            <section className={styles.gallery}>
-              <h2>แกลเลอรี</h2>
-              <div className={styles.galleryGrid}>
-                {editorial.gallery.slice(0, 3).map((img, i) => {
-                  const isLast = i === 2 && editorial.gallery.length > 3;
+
+          <section className={styles.content}>
+            {Array.isArray(editorial.content) ? (
+              editorial.content.map((block, index) => {
+                const id = /^h[1-6]$/.test(block.type)
+                  ? generateId(block.text, index)
+                  : null;
+                const key = `${block.type}-${index}-${id || index}`;
+
+                if (/^h[1-6]$/.test(block.type)) {
+                  const level = Number(block.type.replace("h", ""));
+                  const paddingLeft = `${(level - 1) * 1.5}rem`;
                   return (
-                    <div
-                      key={i}
-                      className={styles.galleryImageWrapper}
-                      onClick={() => setLightboxIndex(i)}
-                    >
-                      <Image
-                        src={img}
-                        alt={`gallery-${i + 1}`}
-                        fill
-                        className={styles.galleryImage}
-                        priority={i === 0}
-                      />
-                      {isLast && (
-                        <div className={styles.overlay}>
-                          <div>
-                            ดูเพิ่มเติม<br />
-                            {editorial.gallery.length - 3} ภาพ
-                          </div>
-                        </div>
-                      )}
+                    <div key={key} className={`heading-block level-${level}`}>
+                      <HeadingTag type={block.type} id={id} text={block.text} />
+                    </div>);
+                }
+
+                if (block.type === "paragraph") {
+                  return (
+                    <div key={key} style={{ paddingLeft: "2rem" }}>
+                      <p>{block.text}</p>
                     </div>
                   );
-                })}
-              </div>
-            </section>
-          )}
+                }
+
+                return null;
+              })
+            ) : (
+              <p style={{ paddingLeft: "2rem" }}>{editorial.content}</p>
+            )}
+          </section>
         </article>
       </div>
 
-      <nav className={styles.sidebar} aria-label="สารบัญบทความ">
-        <h2 className={styles.sidebarTitle}>เนื้อหา</h2>
-        <ul className={styles.tocList}>
-          {headings.map(({ id, text, level }) => (
-            <li
-              key={id}
-              className={level === 3 ? styles.tocSubItem : styles.tocItem}
-            >
-              <Link
-                href={`#${id}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  const el = document.getElementById(id);
-                  if (el) el.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                {text}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      {/* แสดง Sidebar เฉพาะเมื่อมีหัวข้อมากกว่า 1 ข้อ */}
+      {headings.length > 1 && (
+        <nav className={`${styles.sidebar} ${isSticky ? styles.sticky : ""}`} aria-label="สารบัญบทความ">
+          <h2 className={styles.tocTitle}>เนื้อหาบทความ</h2>
+          <ul className={styles.tocList}>
+            {headings.map(({ id, text, level, key }, i) => {
+              let linkClass = styles.tocLinkSection;
+              if (i === 0) linkClass = styles.tocLinkMain;
+              else if (level >= 3) linkClass = styles.tocLinkSub;
 
-      {/* Lightbox */}
-      {lightboxIndex !== null && (
-        <div
-          className={styles.lightboxOverlay}
-          onClick={() => {
-            setLightboxIndex(null);
-            setZoom(false);
-            setFullscreen(false);
-          }}
-        >
-          <div
-            className={styles.lightboxContainer}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Top bar: ลำดับรูป + ปุ่มควบคุม */}
-            <div className={styles.lightboxTopBar}>
-              <div className={styles.lightboxInfo}>
-                รูปที่ {lightboxIndex + 1} / {editorial.gallery.length}
-              </div>
-              <div className={styles.lightboxControls}>
-                <button
-                  type="button"
-                  onClick={() => setZoom((z) => !z)}
-                  aria-label={zoom ? "ปิดซูม" : "ซูม"}
-                >
-                  {zoom ? "ไม่ซูม" : "ซูม"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFullscreen((f) => !f)}
-                  aria-label={fullscreen ? "ออกเต็มจอ" : "เต็มจอ"}
-                >
-                  {fullscreen ? "ออกเต็มจอ" : "เต็มจอ"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setLightboxIndex(null);
-                    setZoom(false);
-                    setFullscreen(false);
-                  }}
-                  aria-label="ปิดรูป"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-
-            {/* รูปภาพและปุ่มเลื่อนซ้ายขวา */}
-            <div className={styles.lightboxContent}>
-              <button
-                className={styles.navButton}
-                type="button"
-                onClick={() =>
-                  setLightboxIndex(
-                    (lightboxIndex - 1 + editorial.gallery.length) %
-                      editorial.gallery.length
-                  )
-                }
-                aria-label="รูปก่อนหน้า"
-              >
-                ‹
-              </button>
-
-              <div
-                className={`${styles.lightboxImageWrapper} ${
-                  zoom ? styles.zoomed : ""
-                } ${fullscreen ? styles.fullscreen : ""}`}
-              >
-                <Image
-                  src={editorial.gallery[lightboxIndex]}
-                  alt={`รูปเต็ม ${lightboxIndex + 1}`}
-                  fill
-                  sizes="(max-width: 1000px) 100vw, 1000px"
-                  className={styles.lightboxImage}
-                  priority
-                />
-              </div>
-
-              <button
-                className={styles.navButton}
-                type="button"
-                onClick={() =>
-                  setLightboxIndex((lightboxIndex + 1) % editorial.gallery.length)
-                }
-                aria-label="รูปถัดไป"
-              >
-                ›
-              </button>
-            </div>
-
-            {/* ปุ่มเปิด/ปิด แกลเลอรี่อันเล็กด้านล่าง */}
-            <div className={styles.lightboxThumbToggle}>
-              <button
-                type="button"
-                onClick={() => setShowThumbs((v) => !v)}
-              >
-                {showThumbs ? "ซ่อนแกลเลอรี" : "แสดงแกลเลอรี"}
-              </button>
-            </div>
-
-            {/* แกลเลอรี่ขนาดเล็ก (thumbnail) */}
-            {showThumbs && (
-              <div className={styles.lightboxThumbs}>
-                {editorial.gallery.map((img, i) => (
-                  <div
-                    key={i}
-                    className={`${styles.thumbWrapper} ${
-                      lightboxIndex === i ? styles.activeThumbWrapper : ""
-                    }`}
-                    onClick={() => setLightboxIndex(i)}
-                    tabIndex={0}
-                    role="button"
-                    aria-label={`เลือกรูปที่ ${i + 1}`}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        setLightboxIndex(i);
-                      }
-                    }}
+              return (
+                <li key={key} className={styles.tocItem}>
+                  <button
+                    type="button"
+                    className={`${linkClass} ${activeId === id ? styles.active : ""}`}
+                    onClick={() => scrollToHeading(id)}
                   >
-                    <Image
-                      src={img}
-                      alt={`รูปย่อที่ ${i + 1}`}
-                      width={100}
-                      height={60}
-                      className={styles.thumbImage}
-                      draggable={false}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+                    {text}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
       )}
     </main>
   );

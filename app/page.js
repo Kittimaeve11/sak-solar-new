@@ -164,7 +164,7 @@ export default function HomePage() {
           initialProduct={productFromUrl}
         />
       </div>
-      <SlideEditorial />
+      {/* <SlideEditorial /> */}
       <SlidePortfolio />
       <SlideReview />
     </>

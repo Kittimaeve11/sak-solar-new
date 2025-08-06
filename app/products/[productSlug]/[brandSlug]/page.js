@@ -13,7 +13,7 @@ export default function ProductBrandPage({ params }) {
 
   const brand = product.brands.find((b) => b.slug === brandSlug);
   if (!brand) {
-    return <div>ไม่พบยี่ห้อสินค้า</div>;
+    return <div>ไม่พบสินค้า</div>;
   }
 
   return (

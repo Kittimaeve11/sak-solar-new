@@ -538,9 +538,9 @@ export const products = [
         ],
       },
       {
-        id: 'brand3-hybrid',
-        name: 'DEYE',
-        slug: 'deye',
+        id: 'solar2',
+        name: 'HUAWEI',
+        slug: 'huawei',
         brandImage: '/brands/logo-Huawei.png',
         types: ['Hybrid'],
         packages: [

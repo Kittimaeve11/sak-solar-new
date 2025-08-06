@@ -9,7 +9,7 @@
 }
 
 .carouselWrapper {
-  max-width: 1200px;
+  max-width: 1300px;
   width: 100%;
   margin: 0 auto;
   padding: 0rem;
@@ -29,13 +29,13 @@
 }
 
 .carouselInner {
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .carouselInner .slick-track {
   display: flex !important;
-  gap: 8px;
+  gap: 0px;
   margin: 0 !important;
   padding: 0 !important;
 }
@@ -75,9 +75,9 @@
   padding: 1rem 0;
 }
 
-/* ✅ ใช้ขนาดเดียวกันกับ carouselCard */
+/*  ใช้ขนาดเดียวกันกับ carouselCard */
 .carouselStaticWrapper .carouselCard {
-  width: 250px;
+  width: 275px;
 }
 
 /* Responsive: Tablet (3 ใบต่อแถว) */
@@ -100,7 +100,7 @@
   border-radius: 6px;
   border: 1px solid #ebebeb;
   width: 250px;
-  height: 350px;
+  height: auto;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -125,13 +125,29 @@
   border-top-right-radius: 6px;
 }
 
+/* .carouselCard h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2a3e5e;
+  margin: 0.75rem 1rem 0rem;
+  min-height: 2.6em;
+} */
+
 .carouselCard h3 {
   font-size: 18px;
   font-weight: 600;
   color: #2a3e5e;
   margin: 0.75rem 1rem 0rem;
   min-height: 2.6em;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  max-width: calc(100% - 2rem); /* ลบ margin ซ้ายขวา 1rem ออก */
+  /* หรือกำหนด width: auto; */
 }
+
 
 .carouselCard p {
   font-size: 16px;
