@@ -26,27 +26,37 @@ export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loading, setLoading] = useState(true);
   const [topics, setTopics] = useState([]);
+  const [brander, setBrander] = useState([]);
+console.log("Brander:", brander); 
+  
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const [contactsRes, branderRes] = await Promise.all([
+        fetch(`${baseUrl}/api/contactapi`, {
+          headers: { 'X-API-KEY': `${apiKey}` },
+        }),
+        fetch(`${baseUrl}/api/branderIDapi/8`, {
+          headers: { 'X-API-KEY': `${apiKey}` },
+        }),
+      ]);
+
+      const contactsData = await contactsRes.json();
+      const branderData = await branderRes.json();
+
+      setContacts(contactsData.result || []);
+      setBrander(branderData.data ? [branderData.data] : []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchData();
+}, []);
 
 
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const res = await fetch(`${baseUrl}/api/contactapi`, {
-          headers: {
-            'X-API-KEY': `${apiKey}`
-          }
-        });
-        const data = await res.json();
-        setContacts(data.result || []);
-      } catch (error) {
-        console.error('Error fetching contacts:', error);
-      } finally {
-        setLoading(false); // ✅ โหลดเสร็จแล้ว
-      }
-    };
-
-    fetchContacts();
-  }, []);
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -217,18 +227,24 @@ export default function Page() {
         }}
       /> */}
       {/* Skeleton Banner */}
-      {loading ? (
-        <div className="skeleton-banner"></div>
-      ) : (
-        contacts.map((item) => (
-          <div className="banner-container fade-in" key={item.id}>
-            <picture>
-              <source srcSet={`${baseUrl}/${item.pictureMoblie}`} media="(max-width: 768px)" />
-              <Image src={`${baseUrl}/${item.picturePC}`} alt="Contact Banner" width={1530} height={800} className="banner-image" />
-            </picture>
-          </div>
-        ))
-      )}
+       {loading ? (
+  <div className="skeleton-banner"></div>
+) : (
+  brander.map((item) => (
+    <div className="banner-container fade-in" key={item.brander_ID}>
+      <picture>
+        <source srcSet={`${baseUrl}/${item.brander_pictureMoblie}`} media="(max-width: 768px)" />
+        <Image
+          src={`${baseUrl}/${item.brander_picturePC}`}
+          alt="Contact Banner"
+          width={1530}
+          height={800}
+          className="banner-image"
+        />
+      </picture>
+    </div>
+  ))
+)}
 
       <main className="layout-container">
         <h1 className="headtitle">{messages.contact}</h1>
