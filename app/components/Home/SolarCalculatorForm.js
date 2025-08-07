@@ -6,6 +6,47 @@ import { products } from '@/app/data/products';
 import { BsDash } from "react-icons/bs";
 import Image from 'next/image';
 import { MdOutlineElectricBolt } from 'react-icons/md';
+import html2canvas from 'html2canvas';
+
+const handlePrintScreenshot = () => {
+  const element = document.querySelector(`.${styles.resultGrid}`);
+  if (!element) return;
+
+  html2canvas(element, { scale: 2 }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>ปริ้นภาพผลลัพธ์</title>
+          <style>
+            @page { size: landscape; }
+            body {
+              margin: 0;
+              padding: 0;
+              text-align: center;
+            }
+            img {
+              max-width: 100%;
+              height: auto;
+            }
+          </style>
+        </head>
+        <body>
+          <img src="${imgData}" />
+          <script>
+            window.onload = function() {
+              window.print();
+              window.onafterprint = function() { window.close(); }
+            };
+          </script>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+  });
+};
 
 
 const calculateSolarSize = (electricityCost, dayUsage, installationCost = 0) => {
@@ -525,7 +566,7 @@ export default function SolarCalculatorForm() {
             </div>
 
             {/* ปุ่มคำนวณใหม่ (อยู่นอก grid) */}
-            <div className={styles.buttonWrapper}>
+            <div className={styles.buttonWrapper} style={{ display: 'flex', gap: '10px' }}>
               <button
                 className="buttonSecondaryonebule"
                 onClick={() => {
@@ -536,7 +577,15 @@ export default function SolarCalculatorForm() {
               >
                 คำนวณใหม่
               </button>
+
+              <button
+                className="buttonSecondaryonebule"
+                onClick={handlePrintScreenshot}
+              >
+                ปริ้นภาพผลลัพธ์
+              </button>
             </div>
+
 
 
           </>
