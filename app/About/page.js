@@ -28,6 +28,8 @@ export default function AboutPage() {
   const pathname = usePathname();
 
 
+  const [fadeInActive, setFadeInActive] = useState(false);
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -112,25 +114,34 @@ export default function AboutPage() {
     return () => observer.disconnect();
   }, [loading, selectedMenu]);
 
-useEffect(() => {
-  if (pendingScrollId) {
-    const el = document.getElementById(pendingScrollId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      setPendingScrollId(null);
-    } else {
-      const retryScroll = setTimeout(() => {
-        const elRetry = document.getElementById(pendingScrollId);
-        if (elRetry) {
-          elRetry.scrollIntoView({ behavior: 'smooth' });
-          setPendingScrollId(null);
-        }
-      }, 100); // ลองปรับเพิ่มเป็น 200 ถ้า 100 ยังเร็วไป
+  useEffect(() => {
+    if (pendingScrollId) {
+      setFadeInActive(false); // ซ่อนก่อน scroll
 
-      return () => clearTimeout(retryScroll);
+      const el = document.getElementById(pendingScrollId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+
+        setTimeout(() => {
+          setFadeInActive(true); // ค่อยแสดงหลัง scroll
+          setPendingScrollId(null);
+        }, 500); // รอ scroll เสร็จก่อนค่อย fade-in
+      } else {
+        const retryScroll = setTimeout(() => {
+          const elRetry = document.getElementById(pendingScrollId);
+          if (elRetry) {
+            elRetry.scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+              setFadeInActive(true);
+              setPendingScrollId(null);
+            }, 500);
+          }
+        }, 150);
+
+        return () => clearTimeout(retryScroll);
+      }
     }
-  }
-}, [pendingScrollId, loading]);
+  }, [pendingScrollId, loading]);
 
   useEffect(() => {
     // ตรวจสอบว่า URL มี hash หรือไม่
@@ -174,7 +185,7 @@ useEffect(() => {
           <li>
             <Link
               href="#history"
-              className={selectedMenu === 'history' ? 'active' : ''}
+className={`fade-in ${selectedMenu === 'history' && 'active'}`}
               onClick={(e) => handleMenuClick(e, 'history')}
               scroll={false}
             >
