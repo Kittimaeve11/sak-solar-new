@@ -175,6 +175,144 @@
     /* ปรับขนาดได้ตามต้องการ */
 }
 
+/* Gallery */
+.galleryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.galleryImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    /*คงอัตราส่วนรูปภาพให้เท่ากัน */
+    overflow: hidden;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.galleryImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* ตัดภาพให้พอดีกับกรอบ โดยไม่เสียสัดส่วน */
+    transition: transform 0.3s ease;
+    border-radius: 6px;
+}
+
+.galleryImageWrapper:hover .galleryImage {
+    transform: scale(1.1);
+    /* ขยายเฉพาะภาพ แต่ไม่หลุดกรอบ */
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    border-radius: 10px;
+    pointer-events: none;
+    white-space: pre-line;
+    /* ทำให้ขึ้นบรรทัดใหม่ */
+}
+
+/* Overlay คลุมทั้งหน้าเป็นสีดำโปร่งแสง */
+.lightboxOverlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.lightboxTopBar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    color: white;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* กล่องภาพใหญ่ */
+.lightboxContent {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 1rem;
+}
+
+.lightboxImageWrapper {
+    position: relative;
+    /* <--- สำคัญ */
+    width: 100%;
+    max-width: 1000px;
+    aspect-ratio: 16 / 9;
+}
+
+.fullscreen {
+    position: fixed;
+    inset: 0;
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10000;
+    aspect-ratio: unset;
+}
+
+.lightboxImageWrapper.zoomed .lightboxImage {
+    object-fit: contain;
+}
+
+.lightboxImageWrapper.fullscreen {
+    max-width: 100vw;
+    max-height: 100vh;
+}
+
+/* ภาพใหญ่ใน lightbox */
+.lightboxImage {
+    object-fit: contain;
+}
+
+/* ปุ่มปิดมุมบนขวา */
+/* .closeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  z-index: 1100;
+  padding: 0 6px;
+  line-height: 1;
+} */
+
+/* ปุ่มเลื่อนภาพ ซ้ายและขวา */
+
+/* PortfolioGallery.module.css */
+.topicportfolio {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ตัวอย่างสไตล์ galleryGrid, overlay, lightbox... */
+/* ย้ายจาก PortfolioDetail.module.css หรือปรับแก้ตามต้องการ */
+
 
 .navButton {
     font-size: 2rem;
@@ -260,14 +398,14 @@
 
 .labelsd {
     font-weight: 500;
-    color: #264798;
+    color: #6A6A6A;
     text-align: left;
     width: 30%;
 }
 
 .valuesd {
     text-align: right;
-    color: #6A6A6A;
+    color: #264798;
     width: 70%;
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
@@ -276,14 +414,14 @@
 
 .labelsds {
     font-weight: 500;
-    color: #264798;
+    color: #6A6A6A;
     text-align: left;
     width: 40%;
 }
 
 .valuesds {
     text-align: right;
-    color: #6A6A6A;
+    color: #264798;
     width: 60%;
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;

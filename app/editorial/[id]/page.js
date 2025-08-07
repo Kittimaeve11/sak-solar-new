@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import {
   MdOutlineKeyboardDoubleArrowRight,
   MdKeyboardDoubleArrowRight,
 } from "react-icons/md";
+import Gallery from '../gallery';
 
 async function getEditorialById(id) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
@@ -154,9 +155,14 @@ export default function EditorialDetailPage() {
                   const level = Number(block.type.replace("h", ""));
                   const paddingLeft = `${(level - 1) * 1.5}rem`;
                   return (
-                    <div key={key} className={`heading-block level-${level}`}>
+                    <div
+                      key={key}
+                      className={`heading-block level-${level}`}
+                      style={{ paddingLeft }}
+                    >
                       <HeadingTag type={block.type} id={id} text={block.text} />
-                    </div>);
+                    </div>
+                  );
                 }
 
                 if (block.type === "paragraph") {
@@ -173,12 +179,20 @@ export default function EditorialDetailPage() {
               <p style={{ paddingLeft: "2rem" }}>{editorial.content}</p>
             )}
           </section>
-        </article>
-      </div>
+
+          {/* Gallery  */}
+          <h1> แกลเลอรี่</h1>
+          {editorial.gallery?.length > 1 && (
+            <Gallery images={editorial.gallery} />
+          )}
+        </article>      </div>
 
       {/* แสดง Sidebar เฉพาะเมื่อมีหัวข้อมากกว่า 1 ข้อ */}
       {headings.length > 1 && (
-        <nav className={`${styles.sidebar} ${isSticky ? styles.sticky : ""}`} aria-label="สารบัญบทความ">
+        <nav
+          className={`${styles.sidebar} ${isSticky ? styles.sticky : ""}`}
+          aria-label="สารบัญบทความ"
+        >
           <h2 className={styles.tocTitle}>เนื้อหาบทความ</h2>
           <ul className={styles.tocList}>
             {headings.map(({ id, text, level, key }, i) => {
@@ -190,7 +204,8 @@ export default function EditorialDetailPage() {
                 <li key={key} className={styles.tocItem}>
                   <button
                     type="button"
-                    className={`${linkClass} ${activeId === id ? styles.active : ""}`}
+                    className={`${linkClass} ${activeId === id ? styles.active : ""
+                      }`}
                     onClick={() => scrollToHeading(id)}
                   >
                     {text}
@@ -201,6 +216,6 @@ export default function EditorialDetailPage() {
           </ul>
         </nav>
       )}
-    </main>
+      </main>
   );
 }

@@ -27,62 +27,49 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [topics, setTopics] = useState([]);
   const [brander, setBrander] = useState([]);
-console.log("Brander:", brander); 
-  
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const [contactsRes, branderRes] = await Promise.all([
-        fetch(`${baseUrl}/api/contactapi`, {
-          headers: { 'X-API-KEY': `${apiKey}` },
-        }),
-        fetch(`${baseUrl}/api/branderIDapi/8`, {
-          headers: { 'X-API-KEY': `${apiKey}` },
-        }),
-      ]);
-
-      const contactsData = await contactsRes.json();
-      const branderData = await branderRes.json();
-
-      setContacts(contactsData.result || []);
-      setBrander(branderData.data ? [branderData.data] : []);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchData();
-}, []);
-
-
+  console.log("Brander:", brander);
 
   useEffect(() => {
-    const fetchTopics = async () => {
+    const fetchAllData = async () => {
       try {
-        const res = await fetch(`${baseUrl}/api/topicsapi`, {
-          headers: {
-            'X-API-KEY': `${apiKey}`
-          }
-        });
+        // ดึง contacts และ brander พร้อมกัน
+        const [contactsRes, branderRes, topicsRes] = await Promise.all([
+          fetch(`${baseUrl}/api/contactapi`, {
+            headers: { 'X-API-KEY': `${apiKey}` },
+          }),
+          fetch(`${baseUrl}/api/branderIDapi/8`, {
+            headers: { 'X-API-KEY': `${apiKey}` },
+          }),
+          fetch(`${baseUrl}/api/topicsapi`, {
+            headers: { 'X-API-KEY': `${apiKey}` },
+          }),
+        ]);
 
-        const data = await res.json();
+        // แปลง response เป็น json พร้อมกัน
+        const [contactsData, branderData, topicsData] = await Promise.all([
+          contactsRes.json(),
+          branderRes.json(),
+          topicsRes.json(),
+        ]);
 
-        if (data.status && Array.isArray(data.result)) {
-          setTopics(data.result);
+        setContacts(contactsData.result || []);
+        setBrander(branderData.data ? [branderData.data] : []);
+        if (topicsData.status && Array.isArray(topicsData.result)) {
+          setTopics(topicsData.result);
         } else {
           console.error("No topic data");
         }
       } catch (error) {
-        console.error("Error fetching topics:", error);
+        console.error('Error fetching data:', error);
       } finally {
-        setLoading(false); // ✅ โหลดเสร็จแล้ว
+        setLoading(false);
       }
     };
 
-    fetchTopics();
+    fetchAllData();
   }, []);
+
+
   // useEffect(() => {
   //   const fetchContacts = async () => {
   //     try {
@@ -227,24 +214,24 @@ useEffect(() => {
         }}
       /> */}
       {/* Skeleton Banner */}
-       {loading ? (
-  <div className="skeleton-banner"></div>
-) : (
-  brander.map((item) => (
-    <div className="banner-container fade-in" key={item.brander_ID}>
-      <picture>
-        <source srcSet={`${baseUrl}/${item.brander_pictureMoblie}`} media="(max-width: 768px)" />
-        <Image
-          src={`${baseUrl}/${item.brander_picturePC}`}
-          alt="Contact Banner"
-          width={1530}
-          height={800}
-          className="banner-image"
-        />
-      </picture>
-    </div>
-  ))
-)}
+      {loading ? (
+        <div className="skeleton-banner"></div>
+      ) : (
+        brander.map((item) => (
+          <div className="banner-container fade-in" key={item.brander_ID}>
+            <picture>
+              <source srcSet={`${baseUrl}/${item.brander_pictureMoblie}`} media="(max-width: 768px)" />
+              <Image
+                src={`${baseUrl}/${item.brander_picturePC}`}
+                alt="Contact Banner"
+                width={1530}
+                height={800}
+                className="banner-image"
+              />
+            </picture>
+          </div>
+        ))
+      )}
 
       <main className="layout-container">
         <h1 className="headtitle">{messages.contact}</h1>
@@ -313,7 +300,15 @@ useEffect(() => {
                 { link: item.instagram, name: messages.contacts.socialmedia.ig, key: 'instagram' },
                 { link: item.youtube, name: messages.contacts.socialmedia.youtube, key: 'youtube' },
                 { link: item.tiktok, name: messages.contacts.socialmedia.tiktok, key: 'tiktok' },
-              ].filter(data => data.link && typeof data.link === 'string' && data.link.trim() !== '');
+              ].filter(data =>
+                data.link !== null &&
+                data.link !== undefined &&
+                data.link !== 'null' &&
+                data.link !== 'undefined' &&
+                typeof data.link === 'string' &&
+                data.link.trim() !== ''
+              );
+
 
               return (
                 <React.Fragment key={item.id}>
@@ -370,7 +365,8 @@ useEffect(() => {
                             {name}
                           </Link>
                         </div>
-                      ))}                    </div>
+                      ))}
+                    </div>
                   </div>
                 </React.Fragment>
               );

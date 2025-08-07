@@ -8,7 +8,7 @@ import { products } from '@/app/data/products';
 import { MdOutlineKeyboardDoubleArrowRight, MdKeyboardDoubleArrowRight } from 'react-icons/md';
 import { BsCalendarCheck } from 'react-icons/bs';
 import { FaSolarPanel } from 'react-icons/fa';
-import Gallery from '../gallery';
+
 function findMatchingProduct(project) {
   const { productType, size, panelCount } = project || {};
   if (!productType) return null;
@@ -239,7 +239,7 @@ export default function PortfolioDetailPage(props) {
             {project.gallery?.length > 0 && (
               <>
                 <h2 className={styles.topicportfolio}>แกลเลอรี่รูปภาพ</h2>
-                {/* <div className={styles.galleryGrid}>
+                <div className={styles.galleryGrid}>
                   {project.gallery.slice(0, 3).map((img, i) => {
                     const isLast = i === 2 && project.gallery.length > 3;
                     return (
@@ -267,20 +267,86 @@ export default function PortfolioDetailPage(props) {
                       </div>
                     );
                   })}
-                </div> */}
+                </div>
               </>
             )}
-            {project.gallery?.length > 1 && (
-              <Gallery
-                img2={project.gallery[1]}
-                img3={project.gallery[2]}
-                img4={project.gallery[3]}
-                img5={project.gallery[4]}
-                img6={project.gallery[5]}
-                img7={project.gallery[6]}
-                img8={project.gallery[7]}
-                img9={project.gallery[8]}
-              />
+
+            {lightboxIndex !== null && (
+              <div
+                className={styles.lightboxOverlay}
+                onClick={() => {
+                  setLightboxIndex(null);
+                  setZoom(false);
+                  setFullscreen(false);
+                }}
+              >
+                <div className={styles.lightboxContainer} onClick={(e) => e.stopPropagation()}>
+                  <div className={styles.lightboxTopBar}>
+                    <div>
+                      รูปที่ {lightboxIndex + 1} / {project.gallery.length}
+                    </div>
+                    <div>
+                      <button onClick={() => setZoom((z) => !z)}>{zoom ? 'ไม่ซูม' : 'ซูม'}</button>
+                      <button onClick={() => setFullscreen((f) => !f)}>{fullscreen ? 'ออกเต็มจอ' : 'เต็มจอ'}</button>
+                      <button
+                        onClick={() => {
+                          setLightboxIndex(null);
+                          setZoom(false);
+                          setFullscreen(false);
+                        }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className={styles.lightboxContent}>
+                    <button
+                      onClick={() =>
+                        setLightboxIndex((lightboxIndex - 1 + project.gallery.length) % project.gallery.length)
+                      }
+                    >
+                      ‹
+                    </button>
+
+                    <div
+                      className={`${styles.lightboxImageWrapper} ${zoom ? styles.zoomed : ''} ${fullscreen ? styles.fullscreen : ''
+                        }`}
+                    >
+                      <Image
+                        src={project.gallery[lightboxIndex]}
+                        alt={`รูปเต็ม ${lightboxIndex + 1}`}
+                        fill
+                        sizes="(max-width: 1000px) 100vw, 1000px"
+                        className={styles.lightboxImage}
+                        priority
+                      />
+                    </div>
+
+                    <button onClick={() => setLightboxIndex((lightboxIndex + 1) % project.gallery.length)}>›</button>
+                  </div>
+
+                  <div className={styles.lightboxThumbToggle}>
+                    <button onClick={() => setShowThumbs((v) => !v)}>
+                      {showThumbs ? 'ซ่อนแกลเลอรี' : 'แสดงแกลเลอรี'}
+                    </button>
+                  </div>
+
+                  {showThumbs && (
+                    <div className={styles.lightboxThumbs}>
+                      {project.gallery.map((img, i) => (
+                        <div
+                          key={i}
+                          className={`${styles.thumbWrapper} ${lightboxIndex === i ? styles.activeThumbWrapper : ''}`}
+                          onClick={() => setLightboxIndex(i)}
+                        >
+                          <Image src={img} alt={`thumb-${i + 1}`} width={100} height={60} className={styles.thumbImage} />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -326,13 +392,14 @@ export default function PortfolioDetailPage(props) {
                       <span className={styles.valuesd}>{matchedProduct.item.model || '-'}</span>
                     </div>
                     <div className={styles.detailRow}>
-                      <span className={styles.labelsd}>ขนาด</span>
-                      <span className={styles.valuesd}>{matchedProduct.item.size || '-'}</span>
-                    </div>
-                    <div className={styles.detailRow}>
                       <span className={styles.labelsds}>ประเภทแผง</span>
                       <span className={styles.valuesds}>{matchedProduct.item.panel_type || '-'}</span>
                     </div>
+                    <div className={styles.detailRow}>
+                      <span className={styles.labelsd}>ขนาด</span>
+                      <span className={styles.valuesd}>{matchedProduct.item.size || '-'}</span>
+                    </div>
+
                     <div className={styles.detailRow}>
                       <span className={styles.labelsds}>จำนวนแผงโซลาร์</span>
                       <span className={styles.valuesds}>{matchedProduct.item.panel_count || ''} แผง </span>
@@ -355,6 +422,11 @@ export default function PortfolioDetailPage(props) {
                       <span className={styles.valuesds}>{matchedProduct.item.inverter_model || '-'}</span>
                     </div>
                     <div className={styles.detailRow}>
+                      <span className={styles.labelsds}>ประเภทแผง</span>
+                      <span className={styles.valuesds}>{matchedProduct.item.panel_type || '-'}</span>
+                    </div>
+
+                    <div className={styles.detailRow}>
                       <span className={styles.labelsd}>ขนาด</span>
                       <span className={styles.valuesd}>{matchedProduct.item.size || '-'}</span>
                     </div>
@@ -365,10 +437,6 @@ export default function PortfolioDetailPage(props) {
                     <div className={styles.detailRow}>
                       <span className={styles.labelsds}>จำนวนแผงโซลาร์</span>
                       <span className={styles.valuesds}>{matchedProduct.item.panel_count || ''} แผง </span>
-                    </div>
-                    <div className={styles.detailRow}>
-                      <span className={styles.labelsds}>ประเภทแผง</span>
-                      <span className={styles.valuesds}>{matchedProduct.item.panel_type || '-'}</span>
                     </div>
                     {/* <div className={styles.detailRow}>
                       <span className={styles.labelsd}>ราคา</span>

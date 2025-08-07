@@ -102,6 +102,6 @@ export default function ProductCarousel({ title, items, link }) {
           </div>
         )}
       </div>
-    </div>
+    </div>   
   );
 }
