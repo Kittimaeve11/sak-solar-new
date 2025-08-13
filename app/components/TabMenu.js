@@ -6,8 +6,10 @@ import { usePathname } from 'next/navigation';
 import { useLocale } from '../Context/LocaleContext';
 import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
 import { IoMenu } from 'react-icons/io5';
-import { products } from '../data/products';
 import '../../styles/tabmenu.css';
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
 export default function TabMenu() {
   const { messages, locale } = useLocale();
@@ -16,10 +18,45 @@ export default function TabMenu() {
   const [serviceOpen, setServiceOpen] = useState(false);
   const [activeProductSlug, setActiveProductSlug] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const timeoutRef = useRef(null);
 
   const isActive = (path) => (path === '/' ? pathname === '/' : pathname.startsWith(path));
   const isInProductsSection = pathname.startsWith('/products');
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`${baseUrl}/api/productHeaderapi`, {
+          headers: { 'X-API-KEY': `${apiKey}` },
+        });
+        const data = await res.json();
+
+        if (data.status && Array.isArray(data.result)) {
+          const formatted = data.result.map((item) => ({
+            slug: item.producttypeID,
+            name: {
+              th: item.producttypenameTH.trim(),
+              en: item.producttypenameEN.trim(),
+            },
+            brands: item.Brand?.map((b) => ({
+              slug: b.productbrandID,
+              name: b.productbrandname,
+            })) || [],
+          }));
+          setProducts(formatted);
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -110,64 +147,63 @@ export default function TabMenu() {
 
             {serviceOpen && (
               <ul className="dropdown-menu level-1">
-                {products.map((product) => {
-                  const isCurrent =
-                    pathname === `/products/${product.slug}` ||
-                    pathname.startsWith(`/products/${product.slug}/`);
-                  const isOpen = activeProductSlug === product.slug;
+                {loading ? (
+                  <li style={{ padding: '10px', color: '#ccc', fontStyle: 'italic' }}>
+                    กำลังโหลดข้อมูล...
+                  </li>
+                ) : (
+                  products.map((product) => {
+                    const isCurrent =
+                      pathname === `/products/${product.slug}` ||
+                      pathname.startsWith(`/products/${product.slug}/`);
+                    const isOpen = activeProductSlug === product.slug;
 
-                  return (
-                    <li
-                      key={product.slug}
-                      className={`dropdown-item ${isCurrent ? 'active' : ''}`}
-                      onMouseEnter={() => !isMobile && setActiveProductSlug(product.slug)}
-                      onMouseLeave={() => !isMobile && setActiveProductSlug(null)}
-                    >
-                      <Link
-                        href={`/products/${product.slug}`}
-                        className={`dropdown-toggle ${isOpen ? 'hovered' : ''}`}
-                        style={{
-                          padding: '15px 20px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'flex-start',
-                          gap: '10px',
-                        }}
-                        onClick={(e) => {
-                          if (isMobile) {
-                            e.preventDefault();
-                            toggleBrandSubmenu(product.slug);
-                          } else {
-                            handleLinkClick();
-                          }
-                        }}
+                    return (
+                      <li
+                        key={product.slug}
+                        className={`dropdown-item ${isCurrent ? 'active' : ''}`}
+                        onMouseEnter={() => !isMobile && setActiveProductSlug(product.slug)}
+                        onMouseLeave={() => !isMobile && setActiveProductSlug(null)}
                       >
-                        {typeof product.name === 'object' ? product.name[locale] ?? product.name.en : product.name}
-                        {isMobile && (isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />)}
-                      </Link>
+                        <Link
+                          href={`/products/${product.slug}`}
+                          className={`dropdown-toggle ${isOpen ? 'hovered' : ''}`}
+                          onClick={(e) => {
+                            if (isMobile) {
+                              e.preventDefault();
+                              toggleBrandSubmenu(product.slug);
+                            } else {
+                              handleLinkClick();
+                            }
+                          }}
+                        >
+                          {locale === 'th' ? product.name.th : product.name.en}
+                          {isMobile && (isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />)}
+                        </Link>
 
-                      {isOpen && (
-                        <ul className="brand-submenu">
-                          {product.brands.map((brand, index) => (
-                            <li key={`${product.slug}-${brand.slug}-${index}`}>
-                              <Link
-                                href={`/products/${product.slug}/${brand.slug}`}
-                                className={
-                                  pathname === `/products/${product.slug}/${brand.slug}`
-                                    ? 'active'
-                                    : ''
-                                }
-                                onClick={handleLinkClick}
-                              >
-                                {brand.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </li>
-                  );
-                })}
+                        {isOpen && product.brands.length > 0 && (
+                          <ul className="brand-submenu">
+                            {product.brands.map((brand, index) => (
+                              <li key={`${product.slug}-${brand.slug}-${index}`}>
+                                <Link
+                                  href={`/products/${product.slug}/${brand.slug}`}
+                                  className={
+                                    pathname === `/products/${product.slug}/${brand.slug}`
+                                      ? 'active'
+                                      : ''
+                                  }
+                                  onClick={handleLinkClick}
+                                >
+                                  {brand.name}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    );
+                  })
+                )}
               </ul>
             )}
           </li>
