@@ -1,12 +1,12 @@
 .footer {
   width: 100%;
   background-image: url("/images/footerbackgrund.jpg");
-  background-size: cover;
-  background-position: center center; /* ✅ กึ่งกลางทั้งแนวนอนและแนวตั้ง */
+  background-position: center center; /* กึ่งกลางทั้งแนวนอนและแนวตั้ง */
   background-repeat: no-repeat;
+  background-size: cover; /* ✅ ปรับขนาดตามหน้าจอ */
   color: white;
   font-size: 14px;
-  padding: 1.5rem 0 2.2rem 0;
+  padding: 1.5rem 0 2.5rem 0;
   box-sizing: border-box;
   min-height: 310px;
   display: flex;
@@ -24,8 +24,8 @@
   gap: 30px;
   margin: 0 auto;
   padding: 0 5rem;
-  max-width: 1200px; /* ✅ กำหนดความกว้างสูงสุด */
-  width: 100%;       /* ✅ ให้เต็มพื้นที่เท่าที่ได้ */
+  max-width: 1200px; /*  กำหนดความกว้างสูงสุด */
+  width: 100%;       /*  ให้เต็มพื้นที่เท่าที่ได้ */
 }
 
 .column {
@@ -68,20 +68,20 @@
   justify-content: center;
   z-index: 1; /* ต้องน้อยกว่า pseudo-element */
 }
-/* ขอบด้านล่าง */
 .footerBottomImage {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 23%; /* ปรับตามขนาดรูป */
+  height: 5vw; /* ขนาดสูงตามความกว้างของหน้าจอ */
   background-image: url("/images/footerbottom-2.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   z-index: 1;
-  pointer-events: none; /* ✅ ป้องกันไม่ให้คลิกโดน */
+  pointer-events: none;
 }
+
 /* เพื่อความชัดเจนและอ่านง่าย */
 .footerBottom {
   max-width: 1200px;

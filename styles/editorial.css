@@ -325,7 +325,13 @@
 /* Fade-in animation */
 .fade-in {
   opacity: 0;
-  animation: fadeIn 0.25s ease-in forwards;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.fade-in.active {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 @keyframes fadeIn {

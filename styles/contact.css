@@ -248,12 +248,14 @@
   white-space: normal;
   word-break: break-word;
 }
+
 .contactGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
   margin: 2rem 0;
 }
+
 .gridItem {
   padding: 1rem;
 }
@@ -279,9 +281,11 @@
   0% {
     background-color: #e0e0e0;
   }
+
   50% {
     background-color: #f0f0f0;
   }
+
   100% {
     background-color: #e0e0e0;
   }
@@ -335,12 +339,29 @@
 }
 
 /* ความยาว line ให้สมจริง: */
-.skeleton-line.w90 { width: 90%; }
-.skeleton-line.w85 { width: 85%; }
-.skeleton-line.w80 { width: 80%; }
-.skeleton-line.w75 { width: 75%; }
-.skeleton-line.w70 { width: 70%; }
-.skeleton-line.w60 { width: 60%; }
+.skeleton-line.w90 {
+  width: 90%;
+}
+
+.skeleton-line.w85 {
+  width: 85%;
+}
+
+.skeleton-line.w80 {
+  width: 80%;
+}
+
+.skeleton-line.w75 {
+  width: 75%;
+}
+
+.skeleton-line.w70 {
+  width: 70%;
+}
+
+.skeleton-line.w60 {
+  width: 60%;
+}
 
 /* Image placeholders */
 .skeleton-image--medium,
@@ -401,14 +422,17 @@
 }
 
 
-/* Responsive */
+/* --- Mobile Responsive Styles --- */
 @media (max-width: 600px) {
+
+  /* Grid เปลี่ยนเป็น 1 คอลัมน์ */
   .contactGrid {
     grid-template-columns: 1fr;
-    padding: 1rem 1rem;
+    padding: 1rem;
     row-gap: 1.5rem;
   }
 
+  /* ทุกส่วนให้อยู่คอลัมน์เดียว */
   .companyInfo,
   .companyImageWrapper,
   .googleMapWrapper,
@@ -416,24 +440,27 @@
     grid-column: 1;
   }
 
+  /* รูปบริษัทปรับขนาดเต็มความกว้าง */
   .companyImage {
     max-width: 100%;
     border-radius: 12px;
     margin: 0 auto;
   }
 
+  /* Google Map ปรับขนาดและระยะ */
   .googleMap {
     width: 100%;
     height: 250px;
     margin-top: 1rem;
   }
 
+  /* ฟอร์มเปลี่ยนเป็นคอลัมน์เดียว */
   .form-grid {
     grid-template-columns: 1fr;
-    /* เปลี่ยนจาก 2 คอลัมน์เป็น 1 */
     row-gap: 0.8rem;
   }
 
+  /* ปุ่มจัดกึ่งกลาง */
   .form-submit {
     align-items: center;
   }
@@ -442,20 +469,22 @@
     align-items: center;
   }
 
+  /* Contact container เป็นแนวตั้ง */
   .contact-container {
     flex-direction: column;
     gap: 1rem;
     margin-top: 1rem;
   }
 
+  /* Contact box กว้างเต็ม */
   .contact-box {
     max-width: 100%;
     margin: 0 auto;
   }
 
+  /* ตัวหนังสือหัวข้อขนาดเล็กลง */
   .centeredText {
     font-size: 28px;
-    /* ลดขนาดตัวอักษรให้พอดีกับมือถือ */
   }
 
   .companyName,
@@ -464,22 +493,27 @@
     text-align: center;
   }
 
+  /* Social item ปรับช่องว่างและจัดซ้าย */
   .socialItem {
     display: flex;
     justify-content: flex-start;
     gap: 24px;
   }
-    .skeleton-banner {
-    aspect-ratio: 1.92 / 1;
-    /* for mobile view */
-  }
 
+  /* ปรับ aspect ratio ของ skeleton banner สำหรับมือถือ */
+  .skeleton-banner {
+    aspect-ratio: 1.92 / 1;
+  }
 }
 
 /* แบนเนอร์ */
 .banner-container {
   width: 100%;
+  /* height: 100vh; เพิ่ม */
+  margin: 0;
+  padding: 0;
 }
+
 
 .banner-wrapper {
   width: 100vw;
@@ -491,4 +525,5 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }

@@ -49,22 +49,17 @@ ul {
   height: 2.3px;
   width: 0;
   background-color: transparent;
+  text-decoration: none;
   /* transition: width 0.4s ease-in-out; */
   /* pointer-events: none; */
 }
 
-/* .navmenu .nav-root > li > a:hover::after {
-  width: 1%; /*  เส้นจะขยายจากซ้ายไปขวา */
-
-/* แสดงเส้นเฉพาะเมื่อ hover เท่านั้น */
-/* .navmenu .nav-root > li > a:hover::after {
-  width: 100%;
-}  */
 
 /* สีลิงก์ตอน hover/active */
 .navmenu .nav-root > li > a:hover,
 .navmenu .nav-root > li > a.active {
   color: #ffc300;
+  text-decoration: none;
 
   /* font-weight: 400; ✅ กันไว้ไม่ให้บาง */
 }
