@@ -29,40 +29,72 @@ export default function HomePage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const [serviceRes, provRes, amphRes, tambRes, prodRes] = await Promise.all([
+        // Fetch services + location
+        const [serviceRes, provRes, amphRes, tambRes] = await Promise.all([
           fetch(`${baseUrl}/api/serviceapi`, { headers: { 'X-API-KEY': apiKey } }),
           fetch('/data/thai_provinces.json'),
           fetch('/data/thai_amphures.json'),
-          fetch('/data/thai_tambons.json'),
-          fetch(`http://localhost:8080/api/productmainpageapi`, { headers: { 'X-API-KEY': apiKey } })
+          fetch('/data/thai_tambons.json')
         ]);
-
-        const [serviceData, prov, amph, tamb, prodData] = await Promise.all([
+        const [serviceData, prov, amph, tamb] = await Promise.all([
           serviceRes.json(),
           provRes.json(),
           amphRes.json(),
-          tambRes.json(),
-          prodRes.json()
+          tambRes.json()
         ]);
-
-        // services
-        if (serviceData.status && serviceData.result) {
-          setServices(serviceData.result);
-        } else {
-          setServices([]);
-        }
-
-        // provinces / amphures / tambons
+        setServices(serviceData.status && serviceData.result ? serviceData.result : []);
         setProvinces(prov);
         setAmphures(amph);
         setTambons(tamb);
 
-        // products
-        if (prodData.status && prodData.result) {
-          setProductTypes(prodData.result);
-        } else {
-          setProductTypes([]);
-        }
+        // Fetch product header
+        const headerRes = await fetch(`${baseUrl}/api/productHeaderapi`, { headers: { 'X-API-KEY': apiKey } });
+        const headerData = await headerRes.json();
+        const headers = headerData.status ? headerData.result : [];
+
+        // Fetch main products
+        const prodRes = await fetch(`${baseUrl}/api/productmainpageapi`, { headers: { 'X-API-KEY': apiKey } });
+        const prodData = await prodRes.json();
+        const products = prodData.status ? prodData.result : [];
+
+        // จัดเรียง products ตาม header และเพิ่มชื่อประเภท + แบรนด์
+        // จัดเรียง products ตาม header และเพิ่มชื่อประเภท + แบรนด์
+        const sortedProducts = headers.map(h => {
+          const ptype = products.find(p => p.producttypeID === h.producttypeID);
+          if (!ptype) return null;
+
+          const items = ptype.Products?.map(prod => {
+            const nameClean = prod.modelname
+              ? prod.modelname.replace(/เฟส\s*/gi, '').replace(/Phase\s*/gi, '').trim()
+              : prod.solarpanel?.replace(/เฟส\s*/gi, '').replace(/Phase\s*/gi, '').trim() || 'ไม่พบข้อมูลชื่อสินค้า';
+
+            const wattMatch = prod.solarpanel?.match(/\d+\s*W/i);
+            const displayName = wattMatch ? `${nameClean} (${wattMatch[0]})` : nameClean;
+
+            // หา brand จาก header
+            const brandObj = h.Brand?.find(b => b.productbrandID === prod.productbrandID);
+
+            return {
+              ...prod,
+              name: displayName,
+              size: prod.installationsize || null,
+              image: prod.gallery ? `${baseUrl}/${JSON.parse(prod.gallery)[0]}` : null,
+              producttypeID: h.producttypeID,
+              producttypeNameTH: h.producttypenameTH,
+              producttypeNameEN: h.producttypenameEN,
+              productbrandID: prod.productbrandID,
+              productbrandName: brandObj?.productbrandname || ''
+            };
+          }) || [];
+
+          return {
+            ...ptype,
+            items
+          };
+        }).filter(Boolean);
+
+
+        setProductTypes(sortedProducts);
 
       } catch (error) {
         console.error('Error loading data:', error);
@@ -80,9 +112,7 @@ export default function HomePage() {
   useEffect(() => {
     if (productFromUrl) {
       const el = document.getElementById('contact');
-      if (el) {
-        el.scrollIntoView({ behavior: 'instant' });
-      }
+      if (el) el.scrollIntoView({ behavior: 'instant' });
     }
   }, [productFromUrl]);
 
@@ -98,44 +128,14 @@ export default function HomePage() {
       <FreeServices contacts={services} locale={locale} loading={loadingServices} baseUrl={baseUrl} />
 
       <div>
-        {productTypes.map((ptype) => {
-          const items = ptype.Products?.map((prod) => {
-            let displayName = '';
-
-            // ถ้ามี modelname ใช้อันนี้ก่อน
-            if (prod.modelname && prod.modelname.trim() !== '') {
-              displayName = prod.modelname;
-            }
-            // ถ้าไม่มี modelname แต่มี installationsize + solarpanel → ใช้รวมกัน
-            else if (prod.installationsize && prod.solarpanel) {
-              displayName = `${prod.installationsize} - ${prod.solarpanel}`;
-            }
-            // ถ้าไม่มีทั้งคู่ → fallback แค่ installationsize หรือ solarpanel
-            else if (prod.installationsize) {
-              displayName = prod.installationsize;
-            } else if (prod.solarpanel) {
-              displayName = prod.solarpanel;
-            } else {
-              displayName = 'ไม่พบข้อมูลชื่อสินค้า';
-            }
-
-            return {
-              ...prod,
-              name: displayName,
-              image: prod.gallery ? `${baseUrl}/${JSON.parse(prod.gallery)[0]}` : null,
-            };
-          }) || [];
-
-
-          return (
-            <ProductCarousel
-              key={ptype.producttypeID}
-              title={locale === 'th' ? ptype.producttypenameTH : ptype.producttypenameEN}
-              items={items}
-              link={`/products/${ptype.producttypeID}`}
-            />
-          );
-        })}
+        {productTypes.map(ptype => (
+          <ProductCarousel
+            key={ptype.producttypeID}
+            title={locale === 'th' ? ptype.producttypenameTH : ptype.producttypenameEN}
+            items={ptype.items}
+            link={`/products/${ptype.producttypeID}`}
+          />
+        ))}
       </div>
 
       <SolarFormnew />

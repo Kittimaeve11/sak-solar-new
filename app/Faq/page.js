@@ -13,19 +13,25 @@ export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState(null);
   const answerRefs = useRef([]);
 
+  // ✅ state สำหรับ banner
+  const [brander, setBrander] = useState([]);
+  const [loadingBanner, setLoadingBanner] = useState(true);
+
   useEffect(() => {
-    // เปลี่ยน title และ meta description
-    document.title = 'คำถามที่พบบ่อย | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
+    // ---------- SEO ----------
+    document.title =
+      'คำถามที่พบบ่อย | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
     const metaDescription = document.querySelector("meta[name='description']");
     if (metaDescription) {
-      metaDescription.setAttribute("faq", "คำถามที่พบบ่อย");
+      metaDescription.setAttribute('faq', 'คำถามที่พบบ่อย');
     } else {
       const meta = document.createElement('meta');
       meta.name = 'description';
       meta.content = 'หน้าคำถามที่พบบ่อย';
       document.head.appendChild(meta);
     }
-    // ฟังก์ชัน fetch FAQs
+
+    // ---------- Fetch FAQs ----------
     const fetchFaqs = async () => {
       try {
         const res = await fetch(`${baseUrl}/api/FQAapi`, {
@@ -43,7 +49,34 @@ export default function FAQPage() {
       }
     };
 
-    // ฟังก์ชันปรับความสูงคำตอบ
+    // ---------- Fetch Banner ----------
+    const fetchBanner = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/api/branderIDapi/1`, {
+          method: 'GET',
+          headers: { 'X-API-KEY': apiKey },
+        });
+        const branderData = await res.json();
+
+        const branderArray = Array.isArray(branderData.data)
+          ? branderData.data
+          : branderData.data
+          ? [branderData.data]
+          : [];
+
+        setBrander(branderArray);
+      } catch (error) {
+        console.error('Error fetching banner:', error);
+      } finally {
+        setLoadingBanner(false);
+      }
+    };
+
+    // ---------- Fetch ทั้งหมด ----------
+    fetchFaqs();
+    fetchBanner();
+
+    // ---------- Update Animation ----------
     const updateHeights = () => {
       answerRefs.current.forEach((el, i) => {
         if (!el) return;
@@ -59,22 +92,12 @@ export default function FAQPage() {
       });
     };
 
-    // เรียก fetch FAQs
-    fetchFaqs().finally(() => {
-      // รอ DOM render หลัง fetch เสร็จ
-      const timeout = setTimeout(() => {
-        requestAnimationFrame(updateHeights);
-      }, 30);
-      return () => clearTimeout(timeout);
-    });
-
-    // กรณี openIndex หรือ faqs เปลี่ยนโดยตรง ให้ update heights
     const timeout = setTimeout(() => {
       requestAnimationFrame(updateHeights);
     }, 30);
 
     return () => clearTimeout(timeout);
-  }, [openIndex, faqs]);
+  }, [openIndex, faqs]); // ✅ รวม dependency ไว้ที่นี่
 
   const toggle = (index) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -83,33 +106,40 @@ export default function FAQPage() {
   const cleanHtml = (str) => {
     if (!str || typeof str !== 'string') return '';
     return str
-      .replace(/^"|"$/g, '')              // ลบ " รอบนอก
-      .replace(/\\\//g, '/')              // แก้ \/ เป็น /
-      .replace(/\\"/g, '"')               // แก้ \" เป็น "
-      .replace(/&nbsp;/g, ' ')            // แก้ &nbsp; เป็น space
-      .replace(/\\n/g, '')                // ลบ \n
-      .replace(/ style="[^"]*"/g, '')     // ลบ inline style attribute ทั้งหมด
+      .replace(/^"|"$/g, '')
+      .replace(/\\\//g, '/')
+      .replace(/\\"/g, '"')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/\\n/g, '')
+      .replace(/ style="[^"]*"/g, '')
       .trim();
   };
 
-
   return (
     <div>
-      <div className="banner-container">
-        <picture>
-          <source
-            srcSet="/banner/FAQ-Page/Mobile-FAQ1.jpg"
-            media="(max-width: 768px)"
-          />
-          <Image
-            src="/banner/FAQ-Page/PC-FAQ1.jpg"
-            alt="Contact Banner"
-            className="banner-image"
-            width={1530}
-            height={800}
-          />
-        </picture>
-      </div>
+      {/* ✅ Banner จาก API */}
+      {loadingBanner ? (
+        <div className="skeleton-banner"></div>
+      ) : (
+        brander.map((item) => (
+          <div className="banner-container" key={item.brander_ID}>
+            <picture>
+              <source
+                srcSet={`${baseUrl}/${item.brander_pictureMoblie}`}
+                media="(max-width: 768px)"
+              />
+              <Image
+                src={`${baseUrl}/${item.brander_picturePC}`}
+                alt={item.brander_name || 'FAQ Banner'}
+                className="banner-image"
+                width={1530}
+                height={800}
+                unoptimized
+              />
+            </picture>
+          </div>
+        ))
+      )}
 
       <main className="layout-container">
         <h1 className="headtitle">คำถามที่พบบ่อยเกี่ยวกับโซลาร์เซลล์</h1>
@@ -125,9 +155,7 @@ export default function FAQPage() {
               type="button"
             >
               {cleanHtml(item.fqa_questionTH)}
-              <span
-                className={`faq-icon ${openIndex === index ? 'open' : ''}`}
-              >
+              <span className={`faq-icon ${openIndex === index ? 'open' : ''}`}>
                 <MdOutlineArrowForwardIos />
               </span>
             </button>

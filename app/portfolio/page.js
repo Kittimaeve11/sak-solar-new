@@ -7,6 +7,9 @@ import '../../styles/portfolio.css';
 import { IoIosArrowDown, IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { FaCalendar } from "react-icons/fa";
 
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
+
 export default function PortfolioPage() {
   const [projects, setProjects] = useState([]);
   const [filter, setFilter] = useState('ทั้งหมด');
@@ -15,34 +18,39 @@ export default function PortfolioPage() {
   const [fadeIn, setFadeIn] = useState(false);
   const [isScrollingUp, setIsScrollingUp] = useState(false);
 
+  // ✅ state สำหรับ banner
+  const [brander, setBrander] = useState([]);
+  const [loadingBanner, setLoadingBanner] = useState(true);
+
   const itemsPerPage = 15;
   const router = useRouter();
   const topRef = useRef(null);
 
+  // --------- 1. Setup initial things (title, savedPage, event listener, fetch data) ----------
   useEffect(() => {
-    // เปลี่ยน title และ meta description
     document.title = 'ผลงานของเรา | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
     const metaDescription = document.querySelector("meta[name='description']");
     if (metaDescription) {
-      metaDescription.setAttribute("portfolio", "ผลงานของเรา");
+      metaDescription.setAttribute("content", "ผลงานของเรา");
     } else {
       const meta = document.createElement('meta');
       meta.name = 'description';
       meta.content = 'ผลงานของเรา';
       document.head.appendChild(meta);
     }
-    // --------- 1. Load current page จาก localStorage ----------
+
+    // โหลด currentPage จาก localStorage
     const savedPage = localStorage.getItem('portfolioCurrentPage');
     if (savedPage) setCurrentPage(Number(savedPage));
 
-    // --------- 2. Listener สำหรับ ChunkLoadError ----------
+    // listener error
     const handleChunkError = (e) => {
       if (e?.message?.includes('ChunkLoadError')) window.location.reload();
     };
     window.addEventListener('error', handleChunkError);
 
-    // --------- 3. Fetch portfolio data ----------
-    const fetchData = async () => {
+    // fetch projects
+    const fetchProjects = async () => {
       setIsLoading(true);
       try {
         const res = await fetch('/api/portfolio');
@@ -58,14 +66,49 @@ export default function PortfolioPage() {
       }
     };
 
-    fetchData();
+    // fetch banner (โหลดครั้งเดียว)
+    const fetchBanner = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/api/branderIDapi/10`, {
+          method: 'GET',
+          headers: { 'X-API-KEY': apiKey },
+        });
+        const branderData = await res.json();
 
-    // --------- 4. Cleanup ----------
+        const branderArray = Array.isArray(branderData.data)
+          ? branderData.data
+          : branderData.data
+          ? [branderData.data]
+          : [];
+
+        setBrander(branderArray);
+      } catch (error) {
+        console.error('Error fetching banner:', error);
+      } finally {
+        setLoadingBanner(false);
+      }
+    };
+
+    fetchProjects();
+    fetchBanner();
+
     return () => {
       window.removeEventListener('error', handleChunkError);
-      localStorage.setItem('portfolioCurrentPage', currentPage.toString());
     };
+  }, []);
+
+  // --------- 2. Save currentPage to localStorage ----------
+  useEffect(() => {
+    localStorage.setItem('portfolioCurrentPage', currentPage.toString());
   }, [currentPage]);
+
+  // --------- 3. Smooth scroll to top on page change ----------
+  useEffect(() => {
+    if (isScrollingUp) {
+      const timer = setTimeout(() => setIsScrollingUp(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isScrollingUp]);
 
   const filteredProjects = filter === 'ทั้งหมด'
     ? projects
@@ -82,13 +125,6 @@ export default function PortfolioPage() {
     topRef.current?.scrollIntoView({ behavior: 'auto' });
     setIsScrollingUp(true);
   };
-
-  useEffect(() => {
-    if (isScrollingUp) {
-      const timer = setTimeout(() => setIsScrollingUp(false), 300);
-      return () => clearTimeout(timer);
-    }
-  }, [isScrollingUp]);
 
   function renderPagination() {
     const pages = [];
@@ -157,21 +193,31 @@ export default function PortfolioPage() {
 
   return (
     <div>
-      <div className="banner-container">
-        {isLoading ? (
-          <div className="skeleton-banner" />
-        ) : (
-          <picture className="fade-in">
-            <source srcSet="/banner/Portfolio-Page/Portfolio-mobile1.jpg" media="(max-width: 768px)" />
-            <img
-              src="/banner/Portfolio-Page/Portfolio-pc1.jpg"
-              alt="Contact Banner"
-              className="banner-image"
-            />
-          </picture>
-        )}
-      </div>
+      {/* ---------- Banner Section ---------- */}
+      {loadingBanner ? (
+        <div className="skeleton-banner"></div>
+      ) : (
+        brander.map((item) => (
+          <div className="banner-container fade-in" key={item.brander_ID}>
+            <picture>
+              <source
+                srcSet={`${baseUrl}/${item.brander_pictureMoblie}`}
+                media="(max-width: 768px)"
+              />
+              <Image
+                src={`${baseUrl}/${item.brander_picturePC}`}
+                alt={item.brander_name || 'Banner Image'}
+                width={1530}
+                height={800}
+                className="banner-image"
+                unoptimized
+              />
+            </picture>
+          </div>
+        ))
+      )}
 
+      {/* ---------- Main Content ---------- */}
       <main
         className={`layout-container ${fadeIn ? 'fade-in' : ''}`}
         ref={topRef}
@@ -180,6 +226,7 @@ export default function PortfolioPage() {
         <div className="portfolio-page">
           <h1 className="headtitleone">ผลงานการติดตั้งโซลาร์เซลล์</h1>
 
+          {/* ---------- Filter ---------- */}
           <div className="portfolio-filters">
             <label htmlFor="filter-select" className="filter-label">เลือกประเภทผลงาน :</label>
             <div className="filter-row">
@@ -203,6 +250,7 @@ export default function PortfolioPage() {
             </div>
           </div>
 
+          {/* ---------- Project Grid ---------- */}
           <div className={`portfolio-grid ${!isLoading ? 'fade-in' : ''}`}>
             {isLoading
               ? Array.from({ length: itemsPerPage }).map((_, i) => (
@@ -260,6 +308,7 @@ export default function PortfolioPage() {
               )}
           </div>
 
+          {/* ---------- Pagination ---------- */}
           {!isLoading && totalPages > 1 && (
             <div className="pagination-controls">
               <div className="page-buttons">{renderPagination()}</div>

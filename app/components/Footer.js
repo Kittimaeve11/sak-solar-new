@@ -142,7 +142,7 @@ export default function Footer() {
       {/* ส่วนลิขสิทธิ์ + โลโก้ */}
       <div className={styles.footerBottomWrapper}>
         <div className={styles.footerBottom}>
-          © 2025 Copyright: Saksiam Leasing Public Company Limited. All Rights Reserved.
+          © 2025 Copyright: SAKSIAM SOLAR ENERGY CO., LTD BY SAKSIAM LEASING PUBLIC COMPANY LIMITED. All Rights Reserved.
           <div className={styles.logoGroup}>
             <Image
               src="/images/logo3.8549861c.png"

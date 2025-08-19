@@ -29,7 +29,7 @@
 }
 
 .carouselInner {
-  max-width: 1400px;
+  max-width: 1450px;
   margin: 0 auto;
 }
 
@@ -66,18 +66,19 @@
 .carouselLink:hover {
   color: #F25C05;
 }
+
 /* สินค้าที่มีไม่ถึง 5 */
 .carouselStaticWrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;   
-  gap: 30px !important;              
+  justify-content: center;
+  gap: 38px !important;
   padding: 1rem 0;
 }
 
 /*  ใช้ขนาดเดียวกันกับ carouselCard */
 .carouselStaticWrapper .carouselCard {
-  width: 320px;
+  width: 330px;
 }
 
 /* Responsive: Tablet (3 ใบต่อแถว) */
@@ -99,9 +100,10 @@
   background-color: #ffffff;
   border-radius: 6px;
   border: 1px solid #ebebeb;
-  width: 300px;
+  width: 330px;
   height: auto;
   padding: 0;
+  padding-bottom: 1rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -117,6 +119,22 @@
 
 }
 
+.product-info {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  padding-top: 0rem;
+  padding-bottom: 1rem;
+  /* margin: 0; */
+}
+
+.product-info h3,
+.product-info h6 {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.6; /* ปรับให้ชิดกันมากขึ้น */
+}
+
+
 .carouselCard img {
   width: 100%;
   height: auto;
@@ -126,7 +144,7 @@
 }
 
 /* .carouselCard h3 {
-  font-size: 18px;
+  font-size: px;
   font-weight: 600;
   color: #2a3e5e;
   margin: 0.75rem 1rem 0rem;
@@ -134,25 +152,24 @@
 } */
 
 .carouselCard h3 {
-  font-size: 20px;
+  font-size: 17px;
   font-weight: 600;
-  color: #2a3e5e;
-  margin: 0.75rem 1rem 0rem;
-  min-height: 2.6em;
-
+  color: #2a3e5e; 
+  /* margin: 0.75rem 0rem 0rem 1rem;
+  min-height: 2.0em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 
-  max-width: calc(100% - 2rem); /* ลบ margin ซ้ายขวา 1rem ออก */
-  /* หรือกำหนด width: auto; */
+  max-width: calc(100% - 2rem);
+  /* ลบ margin ซ้ายขวา 1rem ออก */
 }
 
 
 .carouselCard p {
-  font-size: 16px;
-  margin: 0.3rem 1rem 1rem;
-  margin-top: -0.5rem;
+  font-weight: 600;
+  font-size: 20px;
+  color: #000000;
 }
 
 
@@ -192,4 +209,30 @@
 
 .carouselArrow.right {
   right: -20px;
+}
+
+.carouselCard,
+.carouselCard:hover,
+.carouselLink,
+.carouselLink:hover {
+  text-decoration: none !important;
+}
+
+/* สำหรับโปโมชั่น */
+.product-promo-ribbon {
+  position: absolute;
+  top: 10px;
+  right: -35px;
+  /* ปรับตามความยาวของแทป */
+  background: #ee2226;
+  color: #fff;
+  font-weight: 700;
+  padding: 5px 45px;
+  /* ความสูง x ความยาวแทป */
+  text-align: center;
+  transform: rotate(45deg);
+  /* ทำให้เฉียง */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  font-size: 16px;
 }
