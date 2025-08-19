@@ -219,6 +219,21 @@ export default function ProductsByTypeBrandPage() {
             </div>
           </section>
         )}
+        <hr className="divider" />
+
+        {/* Reset Button */}
+        {(selectedCategories.length > 0 || selectedBrands.length > 0) && (
+          <button
+            className="buttonPrimaryorange"
+            style={{ display: 'block', marginLeft: 'auto', marginRight: '16px', marginTop: '16px' }}
+            onClick={() => {
+              setSelectedCategories([]);
+              setSelectedBrands([]);
+            }}
+          >
+            รีเซ็ตการกรองสินค้า
+          </button>
+        )}
       </aside>
 
       <section className="products-list">
@@ -226,43 +241,100 @@ export default function ProductsByTypeBrandPage() {
         {sortedItems.length === 0 ? (
           <p className="no-products">ไม่มีสินค้าในตอนนี้</p>
         ) : (
+          
           <div className="products-grid">
-            {sortedItems.map(item => (
-              <Link
-                key={item.id}
-                href={`/products/${item.categoryId}/${item.brandId}/${item.id}`}
-                className="product-card"
-              >
-                {item.mainImage && (
-                  <div className="product-image-wrapper" style={{ position: 'relative' }}>
-                    <Image
-                      src={getImageUrl(item.mainImage)}
-                      alt={item.model || item.solarpanel}
-                      width={280}
-                      height={300}
-                      unoptimized
-                    />
-                    {item.productpro_ispromotion === '1' && item.productpro_percent && (
-                      <div className="product-promo-ribbon">- {item.productpro_percent}</div>
+            {sortedItems.map(item => {
+              // คำนวณราคาหลังหักส่วนลด
+              let finalPrice = null;
+              if (item.isprice === "1" && item.price) {
+                if (item.productpro_ispromotion === "1" && item.productpro_percent) {
+                  const discountPercent = parseFloat(item.productpro_percent) || 0;
+                  finalPrice = item.price - (item.price * discountPercent / 100);
+                } else {
+                  finalPrice = item.price;
+                }
+              }
+
+              return (
+                <Link
+                  key={item.id}
+                  href={`/products/${item.categoryId}/${item.brandId}/${item.id}`}
+                  className="product-card"
+                >
+                  {/* รูปสินค้า + ป้ายโปรโมชั่น */}
+                  {item.mainImage && (
+                    <div className="product-image-wrapper" style={{ position: 'relative' }}>
+                      <Image
+                        src={getImageUrl(item.mainImage)}
+                        alt={item.model || item.solarpanel}
+                        width={280}
+                        height={300}
+                        unoptimized
+                      />
+                      {item.productpro_ispromotion === "1" && item.productpro_percent && (
+                        <div className="product-promo-ribbon">
+                          -{item.productpro_percent}%
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ข้อมูลสินค้า */}
+                  <div className="product-info">
+                    <h3 className="product-name">{item.model || item.solarpanel}</h3>
+                    {item.battery && (
+                      <h6 className="product-battery">รุ่นแบตเตอรี่ {item.battery} kWh</h6>
+                    )}
+
+                    {item.isprice === "0" && item.size && (
+                      <p style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
+                        <MdOutlineElectricBolt size={25} color='#ffc300'/> {item.size}
+                      </p>
+                    )}
+
+                    {item.isprice === "1" && item.price && (
+                      <div style={{ position: 'relative', display: 'inline-block' }}>
+                        {item.productpro_ispromotion === "1" && item.productpro_percent ? (
+                          <>
+                            {/* ราคาจริงขีดฆ่า */}
+                            <span style={{
+                              marginTop: '0.5rem',
+                              fontSize: '14px',
+                              color: '#888',
+                              textDecoration: 'line-through',
+                              position: 'absolute',
+                              top: '-18px',
+                              right: '0'
+                            }}>
+                              {Number(item.price).toLocaleString()} บาท
+                            </span>
+                            {/* ราคาหลังหักส่วนลด */}
+                            <p style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0px',
+                              fontWeight: 700,
+                              fontSize: '20px',
+                            }}>
+                              <TbCurrencyBaht size={25} color='#4ca146ff'/> {Number(finalPrice).toLocaleString()} บาท
+                            </p>
+                          </>
+                        ) : (
+                          <p style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0px',
+                            fontWeight: 600
+                          }}>
+                            <TbCurrencyBaht size={25} color='#4ca146ff'/> {Number(item.price).toLocaleString()} บาท
+                          </p>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
-                <div className="product-info">
-                  <h3 className="product-name">{item.model || item.solarpanel}</h3>
-                  {item.battery && <h6 className="product-battery">รุ่นแบตเตอรี่ {item.battery} kWh</h6>}
-                  {item.isprice === '0' && item.size && (
-                    <p className="product-size" style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
-                      <MdOutlineElectricBolt size={25} /> {item.size}
-                    </p>
-                  )}
-                  {item.isprice === '1' && item.price && (
-                    <p className="product-size" style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
-                      <TbCurrencyBaht size={25} /> {Number(item.price).toLocaleString()} บาท
-                    </p>
-                  )}
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
       </section>
