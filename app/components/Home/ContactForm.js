@@ -5,6 +5,9 @@ import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import styles from '../../Home.module.css';
 import { useSearchParams } from 'next/navigation';
 import { useLocale } from '@/app/Context/LocaleContext';
+import SliderCaptcha from 'rc-slider-captcha';
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
 export default function ContactForm({
   provinces = [],
@@ -61,16 +64,106 @@ export default function ContactForm({
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!captchaVerified) {
+      alert('กรุณายืนยันตัวตนด้วย captcha ก่อนส่งแบบฟอร์ม');
+      return;
+    }
+
     const validationErrors = validate();
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      console.log('✅ ส่งข้อมูล:', formData);
-      // ทำการส่ง API ได้ที่นี่
+      const address = [formData.subDistrict, formData.district, formData.province].filter(Boolean).join(', ');
+
+      const payload = {
+        producttypeID: formData.product,
+        acceptableprice: formData.package,
+        usagetime: formData.usageTime,
+        fullname: formData.fullName,
+        phonenumber: formData.phone,
+        address: address,
+        contedtime: formData.contactTime,
+        solce: "เว็บไซต์",
+      };
+
+      try {
+        const response = await fetch(`${baseUrl}/api/Inquiriespageapi`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": apiKey
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const result = await response.json();
+        console.log("📩 ผลลัพธ์จาก API:", result);
+
+        // reset form หลังส่งสำเร็จ
+        setFormData({
+          product: '',
+          package: '',
+          usageTime: '',
+          fullName: '',
+          phone: '',
+          district: '',
+          subDistrict: '',
+          province: '',
+          contactTime: '',
+        });
+        setQuery('');
+        setSuggestions([]);
+        setCaptchaVerified(false);
+      } catch (err) {
+        console.error("❌ ส่งข้อมูลล้มเหลว:", err);
+      }
+
+
+
+      console.log('✅ ส่งข้อมูล:', payload);
+
+      try {
+        const response = await fetch(`${baseUrl}/api/Inquiriespageapi`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": apiKey
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("📩 ผลลัพธ์จาก API:", result);
+
+        // ทำ action หลังส่งสำเร็จ เช่น reset form
+        setFormData({
+          product: '',
+          package: '',
+          usageTime: '',
+          fullName: '',
+          phone: '',
+          district: '',
+          subDistrict: '',
+          province: '',
+          contactTime: '',
+        });
+        setQuery('');
+        setSuggestions([]);
+      } catch (err) {
+        console.error("❌ ส่งข้อมูลล้มเหลว:", err);
+      }
     }
   };
+
 
   const handleQueryChange = (e) => {
     const text = e.target.value.trim();
@@ -136,7 +229,10 @@ export default function ContactForm({
     setSuggestions([]);
   };
 
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+
   useEffect(() => {
+    //  1) อัปเดต district และ province เมื่อ subDistrict เปลี่ยน
     const matchedTambon = tambons.find((t) => t.name_th === formData.subDistrict);
     if (matchedTambon) {
       const amphure = amphures.find((a) => a.id === matchedTambon.amphure_id);
@@ -149,36 +245,16 @@ export default function ContactForm({
         }));
       }
     }
-  }, [formData.subDistrict]);
 
-  useEffect(() => {
+    //  2) คลิกนอก suggestion เพื่อปิด
     const handleClickOutside = (e) => {
       if (wrapperRef.current && !wrapperRef.current.contains(e.target)) {
         setSuggestions([]);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
 
-  useEffect(() => {
-    // อ่าน query param product แล้วตั้งค่า formData.product
-    const productFromUrl = searchParams.get('product');
-    if (productFromUrl) {
-      setFormData((prev) => ({
-        ...prev,
-        product: productFromUrl,
-      }));
-      // ลบ error ของ product ถ้ามี (optional)
-      setErrors((prevErrors) => {
-        const newErrors = { ...prevErrors };
-        delete newErrors.product;
-        return newErrors;
-      });
-    }
-  }, [searchParams]);
-
-  useEffect(() => {
+    // 3) อ่าน query param "product" และตั้งค่า + scroll
     const productFromUrl = searchParams.get('product');
     if (productFromUrl) {
       setFormData((prev) => ({
@@ -191,19 +267,22 @@ export default function ContactForm({
         return newErrors;
       });
 
-      // ✅ Scroll ไปยัง form โดยใช้ ID
       const contactSection = document.getElementById('contact');
       if (contactSection) {
         contactSection.scrollIntoView({ behavior: 'smooth' });
       }
     }
-  }, [searchParams]);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [formData.subDistrict, searchParams, tambons, amphures, provinces]);
 
 
   return (
     <div className={styles.containersolar}>
       <div className={styles.formWrapper} style={{ marginTop: '3rem' }}>
-        <h1 className={styles.headersolar}>
+        <h1 className="headtitleone">
           สนใจโซลาร์เซลล์</h1>
         <h4
           style={{
@@ -223,15 +302,14 @@ export default function ContactForm({
             <label className="form-label">สินค้าหรือบริการที่สนใจ :</label>
             <div className={`radio-group ${errors.product ? 'error-border' : ''}`}>
               {productOptions.map((product) => {
-                const productName = typeof product.name === 'string' ? product.name : product.name[locale] || product.name.th || product.name.en || '';
+                const productName = locale === 'th' ? product.producttypenameTH : product.producttypenameEN;
                 return (
-                  <label key={product.slug} className="form-radio">
+                  <label key={product.producttypeID} className="form-radio">
                     <input
-                      id={`product-${product.slug}`}
                       type="radio"
                       name="product"
-                      value={product.slug}
-                      checked={formData.product === product.slug}
+                      value={product.producttypeID}
+                      checked={formData.product === product.producttypeID}
                       onChange={handleChange}
                       className="radio-input"
                     />
@@ -239,6 +317,7 @@ export default function ContactForm({
                   </label>
                 );
               })}
+
             </div>
             {errors.product && <div className="error-text">{errors.product}</div>}
           </div>
@@ -255,10 +334,10 @@ export default function ContactForm({
                 className={`form-select ${formData.package === '' ? 'placeholder' : ''} ${errors.package ? 'input-error' : ''}`}
               >
                 <option value="" disabled hidden>กรุณาเลือกราคาที่ยอมรับได้**</option>
-                <option value="low">ประหยัด (ต่ำกว่า 100,000 บาท)</option>
-                <option value="medium">กลาง (100,000 - 250,000 บาท)</option>
-                <option value="premium">Premium (มากกว่า 250,000 บาท)</option>
-                <option value="unsure">ไม่แน่ใจ ต้องการให้เจ้าหน้าที่แนะนำ</option>
+                <option value="ประหยัด (ต่ำกว่า 100,000 บาท)">ประหยัด (ต่ำกว่า 100,000 บาท)</option>
+                <option value="กลาง (100,000 - 250,000 บาท)">กลาง (100,000 - 250,000 บาท)</option>
+                <option value="Premium (มากกว่า 250,000 บาท)">Premium (มากกว่า 250,000 บาท)</option>
+                <option value="ไม่แน่ใจ ต้องการให้เจ้าหน้าที่แนะนำ">ไม่แน่ใจ ต้องการให้เจ้าหน้าที่แนะนำ</option>
               </select>
               <MdOutlineKeyboardArrowDown className="select-arrow" />
             </div>
@@ -274,8 +353,8 @@ export default function ContactForm({
                   id="usageTimeDay"
                   type="radio"
                   name="usageTime"
-                  value="day"
-                  checked={formData.usageTime === 'day'}
+                  value="กลางวัน"
+                  checked={formData.usageTime === 'กลางวัน'}
                   onChange={handleChange}
                   className="radio-input"
                 />
@@ -286,8 +365,8 @@ export default function ContactForm({
                   id="usageTimeNight"
                   type="radio"
                   name="usageTime"
-                  value="night"
-                  checked={formData.usageTime === 'night'}
+                  value="กลางคืน"
+                  checked={formData.usageTime === 'กลางคืน'}
                   onChange={handleChange}
                   className="radio-input"
                 />
@@ -360,15 +439,37 @@ export default function ContactForm({
                 className={`form-select ${formData.contactTime === '' ? 'placeholder' : ''} ${errors.contactTime ? 'input-error' : ''}`}
               >
                 <option value="" disabled hidden>กรุณาเลือกช่วงเวลาที่สะดวกให้ติดต่อกลับ**</option>
-                <option value="morning">08:30 น. - 12:00 น.</option>
-                <option value="lunch">12:00 น. - 13:00 น.</option>
-                <option value="afternoon">13:00 น. - 15:00 น.</option>
-                <option value="late-afternoon">15:00 น. - 17:30 น.</option>
-                <option value="any">ทุกช่วงเวลา</option>
+                <option value="08:30 น. - 12:00 น.">08:30 น. - 12:00 น.</option>
+                <option value="12:00 น. - 13:00 น">12:00 น. - 13:00 น.</option>
+                <option value="13:00 น. - 15:00 น.">13:00 น. - 15:00 น.</option>
+                <option value="late-15:00 น. - 17:30 น.">15:00 น. - 17:30 น.</option>
+                <option value="ทุกช่วงเวลา">ทุกช่วงเวลา</option>
               </select>
               <MdOutlineKeyboardArrowDown className="select-arrow" />
             </div>
             {errors.contactTime && <div className="error-text">{errors.contactTime}</div>}
+          </div>
+
+          {/* Slider Captcha */}
+          <div style={{ margin: '1.5rem 0' }}>
+            <SliderCaptcha
+              request={async () => {
+                // ✅ ภาพพื้นหลังและชิ้นส่วนจิ๊กซอว์สุ่ม
+                const bgUrl = `https://picsum.photos/400/150?random=${Math.random()}`;
+                const puzzleUrl = `https://picsum.photos/50/50?random=${Math.random()}`;
+                return { bgUrl, puzzleUrl };
+              }}
+              onVerify={async (data) => {
+                return new Promise((resolve) => {
+                  setTimeout(() => {
+                    console.log('Captcha solved:', data);
+                    setCaptchaVerified(true);
+                    resolve(true);
+                  }, 500);
+                });
+              }}
+            />
+
           </div>
 
           {/*  ปุ่มส่ง */}

@@ -11,6 +11,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './ProductCarousel.css';
 
+// Custom Arrow Component
 function Arrow({ onClick, direction }) {
   return (
     <button
@@ -18,13 +19,13 @@ function Arrow({ onClick, direction }) {
       onClick={onClick}
       aria-label={direction === 'left' ? 'Previous' : 'Next'}
     >
-      {direction === 'left' ? <FaChevronLeft size={18} /> : <FaChevronRight size={18} />}
+      {direction === 'left' ? <FaChevronLeft size={25} /> : <FaChevronRight size={25} />}
     </button>
   );
 }
 
 export default function ProductCarousel({ title, items, link }) {
-  const showSlider = items.length > 4;
+  const showSlider = items.length > 4; // แสดง slider ก็ต่อเมื่อมี item มากกว่า 4
 
   const settings = {
     dots: false,
@@ -51,16 +52,18 @@ export default function ProductCarousel({ title, items, link }) {
 
   return (
     <div className="carouselWrapper">
+      {/* Header */}
       <div className="carouselHeader">
         <h2 className="carouselTitle">{title}</h2>
         <Link href={link} className="carouselLink">
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
             <HiPlusCircle />
             ผลิตภัณฑ์ทั้งหมด
           </span>
         </Link>
       </div>
 
+      {/* Slider / Static */}
       <div className="carouselInner">
         {showSlider ? (
           <Slider {...settings}>
@@ -68,16 +71,22 @@ export default function ProductCarousel({ title, items, link }) {
               <div key={i} className="carouselStaticWrapper">
                 <div className="carouselSlide">
                   <div className="carouselCard">
-                    <Image src={item.image} alt={item.name} width={300} height={180} />
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={300}
+                      height={180}
+                      style={{ objectFit: 'cover' }}
+                    />
                     <h3>{item.name}</h3>
-                    <p className="product-size">
-                      {item.size ? (
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
-                      <MdOutlineElectricBolt size ={25}/>
+                    {item.size && (
+                      <p className="product-size">
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
+                          <MdOutlineElectricBolt size={20} />
                           {item.size.toLocaleString()}
                         </span>
-                      ) : null}
-                    </p>
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -87,21 +96,29 @@ export default function ProductCarousel({ title, items, link }) {
           <div className="carouselStaticWrapper">
             {items.map((item, i) => (
               <div key={i} className="carouselCard">
-                <Image src={item.image} alt={item.name} width={300} height={180} />
-                <h3>{item.name}</h3>
-                <p className="product-size">
-                  {item.size ? (
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
-                      <MdOutlineElectricBolt size ={25}/>
+                <Image
+                  src={item.image}
+                  alt={item.name}
+                  width={300}
+                  height={300}
+                  style={{ objectFit: 'cover', }}
+                />
+                <h3 className="product-name">
+                  {item.name ?? item.model ?? item.solarpanel ?? item.title ?? 'ไม่พบข้อมูลชื่อ'}
+                </h3>
+                {item.size && (
+                  <p className="product-size">
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 600 }}>
+                      <MdOutlineElectricBolt size={20} />
                       {item.size.toLocaleString()}
                     </span>
-                  ) : null}
-                </p>
+                  </p>
+                )}
               </div>
             ))}
           </div>
         )}
       </div>
-    </div>   
+    </div>
   );
 }

@@ -19,28 +19,30 @@ export default function PortfolioPage() {
   const router = useRouter();
   const topRef = useRef(null);
 
-  // Restore current page from localStorage
   useEffect(() => {
+    // เปลี่ยน title และ meta description
+    document.title = 'ผลงานของเรา | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
+    const metaDescription = document.querySelector("meta[name='description']");
+    if (metaDescription) {
+      metaDescription.setAttribute("portfolio", "ผลงานของเรา");
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'ผลงานของเรา';
+      document.head.appendChild(meta);
+    }
+    // --------- 1. Load current page จาก localStorage ----------
     const savedPage = localStorage.getItem('portfolioCurrentPage');
     if (savedPage) setCurrentPage(Number(savedPage));
-  }, []);
 
-  useEffect(() => {
-    localStorage.setItem('portfolioCurrentPage', currentPage.toString());
-  }, [currentPage]);
-
-  // Reload on ChunkLoadError
-  useEffect(() => {
+    // --------- 2. Listener สำหรับ ChunkLoadError ----------
     const handleChunkError = (e) => {
       if (e?.message?.includes('ChunkLoadError')) window.location.reload();
     };
     window.addEventListener('error', handleChunkError);
-    return () => window.removeEventListener('error', handleChunkError);
-  }, []);
 
-  // Fetch portfolio data
-  useEffect(() => {
-    async function fetchData() {
+    // --------- 3. Fetch portfolio data ----------
+    const fetchData = async () => {
       setIsLoading(true);
       try {
         const res = await fetch('/api/portfolio');
@@ -52,12 +54,18 @@ export default function PortfolioPage() {
         setTimeout(() => {
           setIsLoading(false);
           setFadeIn(true);
-        }, 300); // Delay for fade-in effect
+        }, 300);
       }
-    }
+    };
 
     fetchData();
-  }, []);
+
+    // --------- 4. Cleanup ----------
+    return () => {
+      window.removeEventListener('error', handleChunkError);
+      localStorage.setItem('portfolioCurrentPage', currentPage.toString());
+    };
+  }, [currentPage]);
 
   const filteredProjects = filter === 'ทั้งหมด'
     ? projects
@@ -198,8 +206,8 @@ export default function PortfolioPage() {
           <div className={`portfolio-grid ${!isLoading ? 'fade-in' : ''}`}>
             {isLoading
               ? Array.from({ length: itemsPerPage }).map((_, i) => (
-                  <SkeletonCard key={`skeleton-${i}`} />
-                ))
+                <SkeletonCard key={`skeleton-${i}`} />
+              ))
               : paginatedProjects.length === 0 ? (
                 <p className="no-data-text">ไม่พบข้อมูลผลงาน</p>
               ) : (

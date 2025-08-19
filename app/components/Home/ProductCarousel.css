@@ -9,7 +9,7 @@
 }
 
 .carouselWrapper {
-  max-width: 1300px;
+  max-width: 1500px;
   width: 100%;
   margin: 0 auto;
   padding: 0rem;
@@ -29,7 +29,7 @@
 }
 
 .carouselInner {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -66,18 +66,18 @@
 .carouselLink:hover {
   color: #F25C05;
 }
-
+/* สินค้าที่มีไม่ถึง 5 */
 .carouselStaticWrapper {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;   /* ✅ จัดกึ่งกลาง */
-  gap: 25px !important;               /* ✅ ระยะห่างระหว่างการ์ด */
+  justify-content: center;   
+  gap: 30px !important;              
   padding: 1rem 0;
 }
 
 /*  ใช้ขนาดเดียวกันกับ carouselCard */
 .carouselStaticWrapper .carouselCard {
-  width: 275px;
+  width: 320px;
 }
 
 /* Responsive: Tablet (3 ใบต่อแถว) */
@@ -99,7 +99,7 @@
   background-color: #ffffff;
   border-radius: 6px;
   border: 1px solid #ebebeb;
-  width: 250px;
+  width: 300px;
   height: auto;
   padding: 0;
   display: flex;
@@ -134,7 +134,7 @@
 } */
 
 .carouselCard h3 {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
   color: #2a3e5e;
   margin: 0.75rem 1rem 0rem;
@@ -160,19 +160,18 @@
 .product-size {
   font-weight: 600 !important;
   font-size: 18px;
-  color: #ff0000;
 }
 
-/* ✅ Arrows */
+/* Arrows */
 .carouselArrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: #004bad;
+  background-color: #004bade5;
   color: white;
   border-radius: 50%;
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,7 +183,7 @@
 }
 
 .carouselArrow:hover {
-  background-color: #003080;
+  background-color: #002f80e3;
 }
 
 .carouselArrow.left {

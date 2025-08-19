@@ -60,7 +60,7 @@ export default function SlideEditorial() {
 
   const settings = {
     dots: true,
-    infinite: true,   // <-- เปลี่ยนจาก false เป็น true
+    infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
@@ -109,44 +109,51 @@ export default function SlideEditorial() {
         {loading
           ? Array(3).fill(0).map((_, i) => <SkeletonCard key={i} />)
           : editorials.map((item, index) => {
-            const currentGroupStart = activeSlide * 3;
-            const currentGroupEnd = currentGroupStart + 3;
-            const visibleItems = editorials.slice(currentGroupStart, currentGroupEnd);
-            const middleIndexInGroup = Math.floor(visibleItems.length / 2);
-            const globalMiddleIndex = currentGroupStart + middleIndexInGroup;
-            const isMiddle = index === globalMiddleIndex;
+              const currentGroupStart = activeSlide * 3;
+              const currentGroupEnd = currentGroupStart + 3;
+              const visibleItems = editorials.slice(currentGroupStart, currentGroupEnd);
+              const middleIndexInGroup = Math.floor(visibleItems.length / 2);
+              const globalMiddleIndex = currentGroupStart + middleIndexInGroup;
+              const isMiddle = index === globalMiddleIndex;
 
-            return (
-              <div key={item.id} className="slide-item">
-                <div
-                  className={`editorial-cardslide ${isMiddle ? 'highlight' : ''}`}
-                  onClick={() => {
-                    if (!dragging) {
-                      router.push(`/editorial/${item.id}`);
-                    }
-                  }}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <div className="card-imageslide">
-                    <Image
-                      src={item.mainImage}
-                      alt={item.title}
-                      width={400}
-                      height={200}
-                      className="card-img"
-                    />
-                  </div>
-                  <div className="card-contentslide">
-                    <h3 className="card-titleslide">{item.title}</h3>
-                    <p className="editorial-dateslide">{item.date}</p>
-                    <p className="card-snippetslide">{item.content?.split('\n')[0]}</p>
-                    <p className="read-more">
-                      อ่านเพิ่มเติม <FaArrowRightLong />
-                    </p>
+              // ตรวจสอบ content ก่อนใช้ split
+              const snippet = typeof item.content === 'string'
+                ? item.content.split('\n')[0]
+                : typeof item.content === 'object' && item.content !== null
+                  ? JSON.stringify(item.content).slice(0, 100) // แปลง object เป็น string สั้นๆ แสดงแทน
+                  : '';
+
+              return (
+                <div key={item.id} className="slide-item">
+                  <div
+                    className={`editorial-cardslide ${isMiddle ? 'highlight' : ''}`}
+                    onClick={() => {
+                      if (!dragging) {
+                        router.push(`/editorial/${item.id}`);
+                      }
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <div className="card-imageslide">
+                      <Image
+                        src={item.mainImage}
+                        alt={item.title}
+                        width={400}
+                        height={200}
+                        className="card-img"
+                      />
+                    </div>
+                    <div className="card-contentslide">
+                      <h3 className="card-titleslide">{item.title}</h3>
+                      <p className="editorial-dateslide">{item.date}</p>
+                      <p className="card-snippetslide">{snippet}</p>
+                      <p className="read-more">
+                        อ่านเพิ่มเติม <FaArrowRightLong />
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
+              );
           })}
       </Slider>
     </div>

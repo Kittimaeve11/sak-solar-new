@@ -30,11 +30,12 @@
 
 /* คำแนะนำ */
 .instructions {
-  margin: 0.5rem 0;
-  color: #0d0d0e;
+  margin: 1rem 0;
+  color: #264798;
 }
 
 .instructions1 {
+  margin-top: -0.5rem;
   margin-left: 3.5rem;
   margin-bottom: 0.5rem;
   color: #264798;
@@ -267,11 +268,31 @@
   color: #264798;
   text-align: center;
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 600;
   text-shadow: 0.02m 0 0 currentColor;
   margin-top: 10px;
   /* margin-bottom: 1rem; */
 }
+
+.systemType.with-lines {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #243865;
+}
+
+.systemType.with-lines::before,
+.systemType.with-lines::after {
+  content: "";
+  width: 25px;
+  /* ความยาวของเส้น */
+  height: 4px;
+  background-color: #E88534;
+  margin: 0 12px;
+  /* ระยะห่างระหว่างเส้นกับข้อความ */
+}
+
 
 /* สินค้า */
 .productListWrapper {
@@ -290,14 +311,16 @@
   position: relative;
   width: 300px;
   text-align: center;
+  border: 0.5px solid #e0e0e0;
   border-radius: 8px;
   box-shadow: 0 3px 16px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
   padding-bottom: 1rem;
   background-color: #fff;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer; /* ✅ เพิ่มบรรทัดนี้ */
+  cursor: pointer;
+  /* ✅ เพิ่มบรรทัดนี้ */
 }
 
 .productCard:hover {
@@ -311,7 +334,6 @@
   inset: 0;
   /* top: 0; right: 0; bottom: 0; left: 0; */
   background-color: rgba(0, 0, 0, 0.651);
-  /* เฟดมืด */
   color: #fff;
   font-weight: 600;
   font-size: 16px;
@@ -342,7 +364,7 @@
 
 .productTable {
   width: 100%;
-  padding: 0 25px;
+  padding: 0 15px;
   border-radius: 8px;
 }
 
@@ -353,7 +375,7 @@
 .productTable .product-info h3,
 .productTable .product-info p {
   text-align: left;
-  margin: 2rem 0;
+  margin: 0rem 0;
   /* ปรับ margin ให้เฉพาะบน-ล่าง จะได้ไม่ดันออกด้านข้าง */
 }
 
@@ -372,13 +394,6 @@
   font-size: 18px;
   color: #ff0000;
 }
-
-
-
-/* .productInfo p {
-  font-size: 15px;
-  margin: 0.25rem 0;
-} */
 
 
 .solarTitle {

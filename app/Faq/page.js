@@ -14,12 +14,22 @@ export default function FAQPage() {
   const answerRefs = useRef([]);
 
   useEffect(() => {
-    async function fetchServices() {
+    // เปลี่ยน title และ meta description
+    document.title = 'คำถามที่พบบ่อย | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
+    const metaDescription = document.querySelector("meta[name='description']");
+    if (metaDescription) {
+      metaDescription.setAttribute("faq", "คำถามที่พบบ่อย");
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'หน้าคำถามที่พบบ่อย';
+      document.head.appendChild(meta);
+    }
+    // ฟังก์ชัน fetch FAQs
+    const fetchFaqs = async () => {
       try {
         const res = await fetch(`${baseUrl}/api/FQAapi`, {
-          headers: {
-            'X-API-KEY': apiKey,
-          },
+          headers: { 'X-API-KEY': apiKey },
         });
         const data = await res.json();
         if (data.status && data.result) {
@@ -31,12 +41,9 @@ export default function FAQPage() {
         console.error('Failed to fetch FAQs:', error);
         setFaqs([]);
       }
-    }
+    };
 
-    fetchServices();
-  }, []);
-
-  useEffect(() => {
+    // ฟังก์ชันปรับความสูงคำตอบ
     const updateHeights = () => {
       answerRefs.current.forEach((el, i) => {
         if (!el) return;
@@ -52,10 +59,19 @@ export default function FAQPage() {
       });
     };
 
-    // รอ DOM render + dangerouslySetInnerHTML render เสร็จ
+    // เรียก fetch FAQs
+    fetchFaqs().finally(() => {
+      // รอ DOM render หลัง fetch เสร็จ
+      const timeout = setTimeout(() => {
+        requestAnimationFrame(updateHeights);
+      }, 30);
+      return () => clearTimeout(timeout);
+    });
+
+    // กรณี openIndex หรือ faqs เปลี่ยนโดยตรง ให้ update heights
     const timeout = setTimeout(() => {
       requestAnimationFrame(updateHeights);
-    }, 30); // เลือก delay ที่เหมาะสม
+    }, 30);
 
     return () => clearTimeout(timeout);
   }, [openIndex, faqs]);
@@ -64,17 +80,17 @@ export default function FAQPage() {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
-const cleanHtml = (str) => {
-  if (!str || typeof str !== 'string') return '';
-  return str
-    .replace(/^"|"$/g, '')              // ลบ " รอบนอก
-    .replace(/\\\//g, '/')              // แก้ \/ เป็น /
-    .replace(/\\"/g, '"')               // แก้ \" เป็น "
-    .replace(/&nbsp;/g, ' ')            // แก้ &nbsp; เป็น space
-    .replace(/\\n/g, '')                // ลบ \n
-    .replace(/ style="[^"]*"/g, '')     // ลบ inline style attribute ทั้งหมด
-    .trim();
-};
+  const cleanHtml = (str) => {
+    if (!str || typeof str !== 'string') return '';
+    return str
+      .replace(/^"|"$/g, '')              // ลบ " รอบนอก
+      .replace(/\\\//g, '/')              // แก้ \/ เป็น /
+      .replace(/\\"/g, '"')               // แก้ \" เป็น "
+      .replace(/&nbsp;/g, ' ')            // แก้ &nbsp; เป็น space
+      .replace(/\\n/g, '')                // ลบ \n
+      .replace(/ style="[^"]*"/g, '')     // ลบ inline style attribute ทั้งหมด
+      .trim();
+  };
 
 
   return (

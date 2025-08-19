@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import '../../styles/review.css';
-import { useLocale } from '../Context/LocaleContext';  // <-- import useLocale
+import { useLocale } from '../Context/LocaleContext';
 import Image from 'next/image';
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
@@ -44,11 +44,12 @@ function ThumbnailWithFallback({ videoId, alt }) {
 }
 
 export default function ReviewPage() {
-  const { locale } = useLocale();  // <-- ใช้ locale จาก context
+  const { locale } = useLocale();
   const [reviews, setReviews] = useState([]);
+  const [brander, setBrander] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchYoutube = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     if (!baseUrl || !apiKey) {
       console.error('Missing baseUrl or apiKey:', { baseUrl, apiKey });
       setLoading(false);
@@ -58,93 +59,153 @@ export default function ReviewPage() {
     setLoading(true);
 
     try {
-      const apiUrl = `${baseUrl}/api/Reviewapi`;
+      // ดึง Review กับ Brander พร้อมกัน
+      const [reviewsRes, branderRes] = await Promise.all([
+        fetch(`${baseUrl}/api/Reviewapi`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-API-KEY': apiKey,
+          },
+        }),
+        fetch(`${baseUrl}/api/branderIDapi/11`, {
+          method: 'GET',
+          headers: {
+            'X-API-KEY': apiKey,
+          },
+        }),
+      ]);
 
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-KEY': apiKey,
-        },
-      });
-
-      if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(`Error fetching videos: ${response.status} - ${errText}`);
+      if (!reviewsRes.ok) {
+        const errText = await reviewsRes.text();
+        throw new Error(`Error fetching videos: ${reviewsRes.status} - ${errText}`);
       }
 
-      const result = await response.json();
-      setReviews(result.result?.data || []);
+      if (!branderRes.ok) {
+        const errText = await branderRes.text();
+        throw new Error(`Error fetching brander: ${branderRes.status} - ${errText}`);
+      }
+
+      const reviewsData = await reviewsRes.json();
+      const branderData = await branderRes.json();
+
+      setReviews(reviewsData.result?.data || []);
+
+      // แปลง branderData.data ให้เป็น array (ถ้าเป็น object เดียว)
+      const branderArray = Array.isArray(branderData.data)
+        ? branderData.data
+        : branderData.data
+          ? [branderData.data]
+          : [];
+      setBrander(branderArray);
+
     } catch (error) {
-      console.error('Error fetching videos:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    fetchYoutube();
-  }, [fetchYoutube]);
+     // เปลี่ยน title และ meta description
+    document.title = 'รีวิวของเรา | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
+    const metaDescription = document.querySelector("meta[name='description']");
+    if (metaDescription) {
+      metaDescription.setAttribute("review", "รีวิวของเรา");
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'รีวิวของเรา';
+      document.head.appendChild(meta);
+    }
+    
+    fetchData();
+  }, [fetchData]);
 
   return (
-    <main className="layout-container">
-      <h1 className="headtitle">
-        {locale === 'en' ? 'Customer Reviews on Our Solar Installations' : 'รีวิวการติดตั้ง Solar จากลูกค้าของเรา'}
-      </h1>
+    <>
+      {/* รูปแบนเนอร์อยู่นอก main */}
+      {loading ? (
+        <div className="skeleton-banner"></div>
+      ) : (
+        brander.map((item) => (
+          <div className="banner-container fade-in" key={item.brander_ID}>
+            <picture>
+              <source
+                srcSet={`${baseUrl}/${item.brander_pictureMoblie}`}
+                media="(max-width: 768px)"
+              />
+              <Image
+                src={`${baseUrl}/${item.brander_picturePC}`}
+                alt={item.brander_name || 'Banner Image'}
+                width={1530}
+                height={800}
+                className="banner-image"
+                unoptimized
+              />
+            </picture>
+          </div>
+        ))
+      )}
 
-      <div className="video-grid">
-        {loading ? (
-          Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="skeleton-card skeleton fade-in">
-              <div className="skeleton-image skeleton"></div>
-              <div className="skeleton-title skeleton"></div>
-              <div className="skeleton-line skeleton"></div>
-            </div>
-          ))
-        ) : reviews.length === 0 ? (
-          <p>{locale === 'en' ? 'No video reviews available at the moment.' : 'ไม่มีรีวิววิดีโอในขณะนี้'}</p>
-        ) : (
-          reviews.map((review) => {
-            if (!review.vedio_link) return null;
-            const videoId = extractVideoId(review.vedio_link);
-            if (!videoId) return null;
+      <main className="layout-container">
+        <h1 className="headtitle">
+          {locale === 'en'
+            ? 'Customer Reviews on Our Solar Installations'
+            : 'รีวิวการติดตั้ง Solar จากลูกค้าของเรา'}
+        </h1>
 
-            const videoTitle =
-              locale === 'en'
-                ? review.nameEN_Vedio || review.nameTH_Vedio || 'No title'
-                : review.nameTH_Vedio || review.nameEN_Vedio || 'ไม่มีชื่อเรื่อง';
+        <div className="video-grid">
+          {loading ? (
+            Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="skeleton-card skeleton fade-in">
+                <div className="skeleton-image skeleton"></div>
+                <div className="skeleton-title skeleton"></div>
+                <div className="skeleton-line skeleton"></div>
+              </div>
+            ))
+          ) : reviews.length === 0 ? (
+            <p>{locale === 'en' ? 'No video reviews available at the moment.' : 'ไม่มีรีวิววิดีโอในขณะนี้'}</p>
+          ) : (
+            reviews.map((review) => {
+              if (!review.vedio_link) return null;
+              const videoId = extractVideoId(review.vedio_link);
+              if (!videoId) return null;
 
-            // const postLabel = locale === 'en' ? 'Posted on:' : 'โพสต์เมื่อ:';
-            const dateLocale = locale === 'en' ? 'en-US' : 'th-TH';
+              const videoTitle =
+                locale === 'en'
+                  ? review.nameEN_Vedio || review.nameTH_Vedio || 'No title'
+                  : review.nameTH_Vedio || review.nameEN_Vedio || 'ไม่มีชื่อเรื่อง';
 
-            return (
-              <Link
-                key={review.vedio_id}
-                href={review.vedio_link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="video-card fade-in"
-              >
-                <div className="thumbnail-placeholder">
-                  <ThumbnailWithFallback videoId={videoId} alt={videoTitle} />
-                </div>
-                <div className="info">
-                  <div className="title">{videoTitle}</div>
-                  <div className="date">
-                    {/* {postLabel} */}
-                    {' '}
-                    {new Date(review.vedio_creationdate).toLocaleDateString(dateLocale, {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
+              const dateLocale = locale === 'en' ? 'en-US' : 'th-TH';
+
+              return (
+                <Link
+                  key={review.vedio_id}
+                  href={review.vedio_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="video-card fade-in"
+                >
+                  <div className="thumbnail-placeholder">
+                    <ThumbnailWithFallback videoId={videoId} alt={videoTitle} />
                   </div>
-                </div>
-              </Link>
-            );
-          })
-        )}
-      </div>
-    </main>
+                  <div className="info">
+                    <div className="title">{videoTitle}</div>
+                    <div className="date">
+                      {new Date(review.vedio_creationdate).toLocaleDateString(dateLocale, {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })
+          )}
+        </div>
+      </main>
+    </>
   );
 }

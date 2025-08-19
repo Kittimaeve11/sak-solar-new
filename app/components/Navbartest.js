@@ -61,7 +61,7 @@ export default function Navbar() {
                         </a>
                         <div className="flex items-center gap-2">
                             <Link
-                                href="/"
+                                href="https://saksiam.com/home"
                                 className={`${styles.contact} ${isHomePage ? styles.active : ''} font-500`}
                             >
                                 {messages.backpage}

@@ -35,118 +35,118 @@ export default function ProductsByTypeBrandPage() {
     }
   };
 
-useEffect(() => {
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      // fetch categories & brands
-      let fetchedCategories = categories;
-      let fetchedBrands = brands;
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // fetch categories & brands
+        let fetchedCategories = categories;
+        let fetchedBrands = brands;
 
-      if (categories.length === 0) {
-        const resHeader = await fetch(`${baseUrl}/api/productHeaderapi`, {
-          headers: { 'X-API-KEY': apiKey },
-        });
-        const headerData = await resHeader.json();
-        if (headerData.status && Array.isArray(headerData.result)) {
-          fetchedCategories = headerData.result;
-          setCategories(fetchedCategories);
+        if (categories.length === 0) {
+          const resHeader = await fetch(`${baseUrl}/api/productHeaderapi`, {
+            headers: { 'X-API-KEY': apiKey },
+          });
+          const headerData = await resHeader.json();
+          if (headerData.status && Array.isArray(headerData.result)) {
+            fetchedCategories = headerData.result;
+            setCategories(fetchedCategories);
 
-          fetchedBrands = headerData.result.flatMap(cat => cat.Brand || []);
-          setBrands(fetchedBrands);
+            fetchedBrands = headerData.result.flatMap(cat => cat.Brand || []);
+            setBrands(fetchedBrands);
+          }
         }
-      }
 
-      // fetch products
-      if (products.length === 0) {
-        const resProducts = await fetch(`${baseUrl}/api/productpageapi`, {
-          headers: { 'X-API-KEY': apiKey },
-        });
-        const data = await resProducts.json();
-        if (data.status && Array.isArray(data.result?.data)) {
-          const formatted = data.result.data.map(p => ({
-            id: p.product_ID,
-            model: p.modelname,
-            solarpanel: p.solarpanel,
-            size: p.installationsize,
-            price: p.price,
-            isprice: p.isprice,
-            battery: p.battery,
-            mainImage: (() => {
-              try {
-                const gallery = JSON.parse(p.gallery || '[]');
-                return gallery[0] || '';
-              } catch {
-                return '';
-              }
-            })(),
-            categoryId: p.protypeID,
-            brandId: p.probrandID,
-            product_pin: p.product_pin || '0',
-            productpro_ispromotion: p.productpro_ispromotion || '0',
-            productpro_percent: p.productpro_percent || null,
-          }));
-          setProducts(formatted);
+        // fetch products
+        if (products.length === 0) {
+          const resProducts = await fetch(`${baseUrl}/api/productpageapi`, {
+            headers: { 'X-API-KEY': apiKey },
+          });
+          const data = await resProducts.json();
+          if (data.status && Array.isArray(data.result?.data)) {
+            const formatted = data.result.data.map(p => ({
+              id: p.product_ID,
+              model: p.modelname,
+              solarpanel: p.solarpanel,
+              size: p.installationsize,
+              price: p.price,
+              isprice: p.isprice,
+              battery: p.battery,
+              mainImage: (() => {
+                try {
+                  const gallery = JSON.parse(p.gallery || '[]');
+                  return gallery[0] || '';
+                } catch {
+                  return '';
+                }
+              })(),
+              categoryId: p.protypeID,
+              brandId: p.probrandID,
+              product_pin: p.product_pin || '0',
+              productpro_ispromotion: p.productpro_ispromotion || '0',
+              productpro_percent: p.productpro_percent || null,
+            }));
+            setProducts(formatted);
+          }
         }
-      }
 
-      // update filteredBrands ตาม selectedCategories
-      if (selectedCategories.length === 0) {
-        setFilteredBrands(fetchedBrands);
-      } else {
-        const filtered = fetchedCategories
-          .filter(cat => selectedCategories.includes(cat.producttypeID))
-          .flatMap(cat => cat.Brand || []);
-        setFilteredBrands(filtered);
+        // update filteredBrands ตาม selectedCategories
+        if (selectedCategories.length === 0) {
+          setFilteredBrands(fetchedBrands);
+        } else {
+          const filtered = fetchedCategories
+            .filter(cat => selectedCategories.includes(cat.producttypeID))
+            .flatMap(cat => cat.Brand || []);
+          setFilteredBrands(filtered);
 
-        setSelectedBrands(prev =>
-          prev.filter(b => filtered.some(fb => fb.productbrandID === b))
-        );
-      }
-
-      // dynamic title & meta
-      let title = 'บริการและผลิตภัณฑ์';
-      let description = 'บริการและผลิตภัณฑ์';
-
-      if (selectedCategories.length === 1) {
-        const cat = fetchedCategories.find(c => c.producttypeID === selectedCategories[0]);
-        if (cat) {
-          const catName = locale === 'en' ? cat.producttypenameEN : cat.producttypenameTH;
-          title += ` (${catName})`;
-          description += ` (${catName})`;
+          setSelectedBrands(prev =>
+            prev.filter(b => filtered.some(fb => fb.productbrandID === b))
+          );
         }
-      }
 
-      if (selectedBrands.length === 1) {
-        const brand = fetchedBrands.find(b => b.productbrandID === selectedBrands[0]);
-        if (brand) {
-          title += ` (${brand.productbrandname})`;
-          description += ` (${brand.productbrandname})`;
+        // dynamic title & meta
+        let title = 'บริการและผลิตภัณฑ์';
+        let description = 'บริการและผลิตภัณฑ์';
+
+        if (selectedCategories.length === 1) {
+          const cat = fetchedCategories.find(c => c.producttypeID === selectedCategories[0]);
+          if (cat) {
+            const catName = locale === 'en' ? cat.producttypenameEN : cat.producttypenameTH;
+            title += ` (${catName})`;
+            description += ` (${catName})`;
+          }
         }
+
+        if (selectedBrands.length === 1) {
+          const brand = fetchedBrands.find(b => b.productbrandID === selectedBrands[0]);
+          if (brand) {
+            title += ` (${brand.productbrandname})`;
+            description += ` (${brand.productbrandname})`;
+          }
+        }
+
+        title += ' | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
+        document.title = title;
+
+        const metaDescription = document.querySelector("meta[name='description']");
+        if (metaDescription) {
+          metaDescription.setAttribute('content', description);
+        } else {
+          const meta = document.createElement('meta');
+          meta.name = 'description';
+          meta.content = description;
+          document.head.appendChild(meta);
+        }
+
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
+    };
 
-      title += ' | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
-      document.title = title;
-
-      const metaDescription = document.querySelector("meta[name='description']");
-      if (metaDescription) {
-        metaDescription.setAttribute('content', description);
-      } else {
-        const meta = document.createElement('meta');
-        meta.name = 'description';
-        meta.content = description;
-        document.head.appendChild(meta);
-      }
-
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  fetchData();
-}, [selectedCategories.join(','), selectedBrands.join(','), locale]);
+    fetchData();
+  }, [selectedCategories.join(','), selectedBrands.join(','), locale]);
 
 
 
@@ -224,6 +224,21 @@ useEffect(() => {
             </div>
           </section>
         )}
+        <hr className="divider" />
+
+        {/* Reset Button */}
+        {(selectedCategories.length > 0 || selectedBrands.length > 0) && (
+          <button
+            className="buttonPrimaryorange"
+            style={{ display: 'block', marginLeft: 'auto', marginRight: '16px', marginTop: '16px' }}
+            onClick={() => {
+              setSelectedCategories([]);
+              setSelectedBrands([]);
+            }}
+          >
+            รีเซ็ตการกรองสินค้า
+          </button>
+        )}
       </aside>
 
       <section className="products-list">
@@ -231,43 +246,100 @@ useEffect(() => {
         {sortedItems.length === 0 ? (
           <p className="no-products">ไม่มีสินค้าในตอนนี้</p>
         ) : (
+
           <div className="products-grid">
-            {sortedItems.map(item => (
-              <Link
-                key={item.id}
-                href={`/products/${item.categoryId}/${item.brandId}/${item.id}`}
-                className="product-card"
-              >
-                {item.mainImage && (
-                  <div className="product-image-wrapper" style={{ position: 'relative' }}>
-                    <Image
-                      src={getImageUrl(item.mainImage)}
-                      alt={item.model || item.solarpanel}
-                      width={280}
-                      height={300}
-                      unoptimized
-                    />
-                    {item.productpro_ispromotion === '1' && item.productpro_percent && (
-                      <div className="product-promo-ribbon">- {item.productpro_percent}</div>
+            {sortedItems.map(item => {
+              // คำนวณราคาหลังหักส่วนลด
+              let finalPrice = null;
+              if (item.isprice === "1" && item.price) {
+                if (item.productpro_ispromotion === "1" && item.productpro_percent) {
+                  const discountPercent = parseFloat(item.productpro_percent) || 0;
+                  finalPrice = item.price - (item.price * discountPercent / 100);
+                } else {
+                  finalPrice = item.price;
+                }
+              }
+
+              return (
+                <Link
+                  key={item.id}
+                  href={`/products/${item.categoryId}/${item.brandId}/${item.id}`}
+                  className="product-card"
+                >
+                  {/* รูปสินค้า + ป้ายโปรโมชั่น */}
+                  {item.mainImage && (
+                    <div className="product-image-wrapper" style={{ position: 'relative' }}>
+                      <Image
+                        src={getImageUrl(item.mainImage)}
+                        alt={item.model || item.solarpanel}
+                        width={280}
+                        height={300}
+                        unoptimized
+                      />
+                      {item.productpro_ispromotion === "1" && item.productpro_percent && (
+                        <div className="product-promo-ribbon">
+                          -{item.productpro_percent}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* ข้อมูลสินค้า */}
+                  <div className="product-info">
+                    <h3 className="product-name">{item.model || item.solarpanel}</h3>
+                    {item.battery && (
+                      <h6 className="product-battery">รุ่นแบตเตอรี่ {item.battery} kWh</h6>
+                    )}
+
+                    {item.isprice === "0" && item.size && (
+                      <p  style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
+                        <MdOutlineElectricBolt size={25} color='#ffc300'/> {item.size}
+                      </p>
+                    )}
+
+                    {item.isprice === "1" && item.price && (
+                      <div style={{ position: 'relative', display: 'inline-block' }}>
+                        {item.productpro_ispromotion === "1" && item.productpro_percent ? (
+                          <>
+                            {/* ราคาจริงขีดฆ่า */}
+                            <span style={{
+                              marginTop: '0.5rem',
+                              fontSize: '14px',
+                              color: '#888',
+                              textDecoration: 'line-through',
+                              position: 'absolute',
+                              top: '-18px',
+                              right: '0'
+                            }}>
+                              {Number(item.price).toLocaleString()} บาท
+                            </span>
+                            {/* ราคาหลังหักส่วนลด */}
+                            <p style={{
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '2px',
+                              fontWeight: 600,
+                              fontSize: '20px',
+                            }}>
+                              <TbCurrencyBaht size={25} color='#4ca146ff'/> {Number(finalPrice).toLocaleString()} บาท
+                            </p>
+                          </>
+                        ) : (
+                          <p style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '2px',
+                            fontWeight: 600
+                          }}>
+                            <TbCurrencyBaht size={25} color='#4ca146ff'/> {Number(item.price).toLocaleString()} บาท
+                          </p>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
-                <div className="product-info">
-                  <h3 className="product-name">{item.model || item.solarpanel}</h3>
-                  {item.battery && <h6 className="product-battery">รุ่นแบตเตอรี่ {item.battery} kWh</h6>}
-                  {item.isprice === '0' && item.size && (
-                    <p className="product-size" style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
-                      <MdOutlineElectricBolt size={25} /> {item.size}
-                    </p>
-                  )}
-                  {item.isprice === '1' && item.price && (
-                    <p className="product-size" style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', fontWeight: 600 }}>
-                      <TbCurrencyBaht size={25} /> {Number(item.price).toLocaleString()} บาท
-                    </p>
-                  )}
-                </div>
-              </Link>
-            ))}
+                </Link>
+              );
+            })}
           </div>
         )}
       </section>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import '../../styles/about.css';
@@ -12,6 +12,7 @@ const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
 export default function AboutPage() {
   const { locale } = useLocale();
+  const pathname = usePathname();
 
   const [sections, setSections] = useState({
     history: null,
@@ -19,17 +20,13 @@ export default function AboutPage() {
     mission: [],
     teams: [],
   });
-
   const [loading, setLoading] = useState(true);
-  const [selectedMenu, setSelectedMenu] = useState('history'); // ค่าเริ่มต้น
+  const [selectedMenu, setSelectedMenu] = useState('history');
+  const [showTeams, setShowTeams] = useState(false);
 
-  const [pendingScrollId, setPendingScrollId] = useState(null);
+  const observerRef = useRef(null);
 
-  const pathname = usePathname();
-
-
-  const [fadeInActive, setFadeInActive] = useState(false);
-
+  // Fetch data
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -55,9 +52,7 @@ export default function AboutPage() {
           teams: teamsData.status && teamsData.result ? teamsData.result : [],
         });
       } catch (error) {
-        if (error.name !== 'AbortError') {
-          console.error('Error fetching data:', error);
-        }
+        if (error.name !== 'AbortError') console.error(error);
       } finally {
         setLoading(false);
       }
@@ -69,95 +64,20 @@ export default function AboutPage() {
 
   // Scroll to section
   const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (id === 'teams') setShowTeams(true);
+    else setShowTeams(false);
+
+    setSelectedMenu(id);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50); // รอ render DOM
   };
 
-
-  // Handle menu click: set active menu and scroll
   const handleMenuClick = (e, menu) => {
     e.preventDefault();
-    setSelectedMenu(menu);
-
-    // ตั้ง pendingScrollId ทุกเมนู
-    setPendingScrollId(menu);
+    scrollToSection(menu);
   };
-
-
-  // Track which section is in viewport and update selectedMenu
-  useEffect(() => {
-    if (selectedMenu === 'teams') return; // ถ้าเลือก teams อย่าเปลี่ยน active ตาม scroll
-
-    const sectionIds = ['history', 'vision', 'mission'];
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setSelectedMenu(entry.target.id);
-          }
-        });
-      },
-      {
-        rootMargin: '0% 0px -90% 0px', // กำหนดช่วง viewport ที่ต้องการ
-        threshold: 0,
-      }
-    );
-
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, [loading, selectedMenu]);
-
-  useEffect(() => {
-    if (pendingScrollId) {
-      setFadeInActive(false); // ซ่อนก่อน scroll
-
-      const el = document.getElementById(pendingScrollId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-
-        setTimeout(() => {
-          setFadeInActive(true); // ค่อยแสดงหลัง scroll
-          setPendingScrollId(null);
-        }, 500); // รอ scroll เสร็จก่อนค่อย fade-in
-      } else {
-        const retryScroll = setTimeout(() => {
-          const elRetry = document.getElementById(pendingScrollId);
-          if (elRetry) {
-            elRetry.scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => {
-              setFadeInActive(true);
-              setPendingScrollId(null);
-            }, 500);
-          }
-        }, 150);
-
-        return () => clearTimeout(retryScroll);
-      }
-    }
-  }, [pendingScrollId, loading]);
-
-  useEffect(() => {
-    // ตรวจสอบว่า URL มี hash หรือไม่
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash;
-      if (hash) {
-        const target = document.querySelector(hash);
-        if (target) {
-          // ใช้ setTimeout เพื่อรอให้ DOM โหลดเสร็จ (สำคัญมาก)
-          setTimeout(() => {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 100); // ลองปรับระยะเวลาให้เหมาะสม
-        }
-      }
-    }
-  }, [pathname]);
 
   const renderSection = (content) => (
     <div className="banner-container fade-in">
@@ -182,46 +102,21 @@ export default function AboutPage() {
       <aside className="about-sidebar">
         <h3 className="sidebar-header">{locale === 'th' ? 'เกี่ยวกับศักดิ์สยามโซลาร์' : 'About Saksiam Solar'}</h3>
         <ul className="sidebar-menu">
-          <li>
-            <Link
-              href="#history"
-className={`fade-in ${selectedMenu === 'history' && 'active'}`}
-              onClick={(e) => handleMenuClick(e, 'history')}
-              scroll={false}
-            >
-              {locale === 'th' ? 'ประวัติความเป็นมา' : 'History'}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#vision"
-              className={selectedMenu === 'vision' ? 'active' : ''}
-              onClick={(e) => handleMenuClick(e, 'vision')}
-              scroll={false}
-            >
-              {locale === 'th' ? 'วิสัยทัศน์' : 'Vision'}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="#mission"
-              className={selectedMenu === 'mission' ? 'active' : ''}
-              onClick={(e) => handleMenuClick(e, 'mission')}
-              scroll={false}
-            >
-              {locale === 'th' ? 'พันธกิจ' : 'Mission'}
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/about#teams" // <- เปลี่ยนตรงนี้ให้ถูกต้องตาม path ของหน้าเป้าหมาย
-              className={selectedMenu === 'teams' ? 'active' : ''}
-              onClick={(e) => handleMenuClick(e, 'teams')}
-              scroll={false} // ปิด scroll ของ Next.js เพื่อให้ใช้ scrollIntoView เอง
-            >
-              {locale === 'th' ? 'คณะกรรมการ' : 'Committee'}
-            </Link>
-          </li>
+          {['history', 'vision', 'mission', 'teams'].map((menu) => (
+            <li key={menu}>
+              <Link
+                href={`#${menu}`}
+                className={selectedMenu === menu ? 'active' : ''}
+                onClick={(e) => handleMenuClick(e, menu)}
+                scroll={false}
+              >
+                {locale === 'th'
+                  ? { history: 'ประวัติความเป็นมา', vision: 'วิสัยทัศน์', mission: 'พันธกิจ', teams: 'คณะกรรมการ' }[menu]
+                  : { history: 'History', vision: 'Vision', mission: 'Mission', teams: 'Committee' }[menu]
+                }
+              </Link>
+            </li>
+          ))}
         </ul>
       </aside>
 
@@ -229,78 +124,48 @@ className={`fade-in ${selectedMenu === 'history' && 'active'}`}
         {loading ? (
           <div className="skeleton-banner"></div>
         ) : (
-          <div>
-            {(selectedMenu === 'history' || selectedMenu === 'vision' || selectedMenu === 'mission') && (
-              <div>
-                <h2 id="history" className="about-title with-lines">{locale === 'th' ? 'ประวัติความเป็นมา' : 'History'}</h2>
-                {sections.history && renderSection(sections.history)}
+          <>
+            {/* 3 เนื้อหาแรก */}
+            <div className={`content-sections ${showTeams ? 'hidden-section' : ''}`}>
+              <h2 id="history" className="about-title with-lines">{locale === 'th' ? 'ประวัติความเป็นมา' : 'History'}</h2>
+              {sections.history && renderSection(sections.history)}
 
-                <h2 id="vision" className="about-title with-lines" style={{ marginTop: '30px' }}>{locale === 'th' ? 'วิสัยทัศน์' : 'Vision'}</h2>
-                {sections.vision && renderSection(sections.vision)}
+              <h2 id="vision" className="about-title with-lines">{locale === 'th' ? 'วิสัยทัศน์' : 'Vision'}</h2>
+              {sections.vision && renderSection(sections.vision)}
 
-                <h2 id="mission" className="about-title with-lines" style={{ marginTop: '30px', marginBottom: '20px' }}>{locale === 'th' ? 'พันธกิจ' : 'Mission'}</h2>
-                <ul className="mission-list">
-                  {sections.mission.map((item, index) => (
-                    <li key={item.mission_ID || `mission-${index}`} className="mission-item">
-                      {item.picture && (
-                        <Image src={`${baseUrl}/${item.picture}`} alt="พันธกิจ" width={90} height={90} className="mission-icon" />
-                      )}
-                      <span className="mission-text">{locale === 'th' ? item.titleTH : item.titleEN || item.titleTH}</span>
-                    </li>
-                  ))}
-                </ul>
+              <h2 id="mission" className="about-title with-lines">{locale === 'th' ? 'พันธกิจ' : 'Mission'}</h2>
+              <ul className="mission-list">
+                {sections.mission.map((item, index) => (
+                  <li key={item.mission_ID || `mission-${index}`} className="mission-item">
+                    {item.picture && <Image src={`${baseUrl}/${item.picture}`} alt="พันธกิจ" width={90} height={90} className="mission-icon" />}
+                    <span className="mission-text">{locale === 'th' ? item.titleTH : item.titleEN || item.titleTH}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* คณะกรรมการ */}
+            <div id="teams" className={`teams-section ${showTeams ? '' : 'hidden-section'}`}>
+              <h2 className="about-title with-lines">{locale === 'th' ? 'คณะกรรมการ' : 'Committee'}</h2>
+              <div className="teams-grid">
+                {sections.teams.map((member, idx) => (
+                  <div key={member.teamsID || idx} className={idx === 0 ? 'team-boss' : 'team-card'}>
+                    <Image
+                      src={`${baseUrl}${member.teams_picture}`}
+                      alt={locale === 'th' ? member.teams_nameTH : member.teams_nameEN}
+                      width={300}
+                      height={300}
+                      className="team-image"
+                    />
+                    <div className="team-info">
+                      <p className="team-name">{locale === 'th' ? member.teams_nameTH : member.teams_nameEN}</p>
+                      <p className="team-position">{locale === 'th' ? member.teams_positionTH : member.teams_positionEN}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            )}
-
-            {selectedMenu === 'teams' && (
-              <>
-                {/* หัวข้อคณะกรรมการอยู่นอก teams-grid */}
-                <h2
-                  id="teams"
-                  className="about-title with-lines scroll-target"
-                  style={{ marginTop: '0px', marginBottom: '20px' }}
-                >
-                  {locale === 'th' ? 'คณะกรรมการ' : 'Committee'}
-                </h2>
-
-                <div className="teams-grid">
-                  {/* Boss */}
-                  {sections.teams.length > 0 && (
-                    <div key={sections.teams[0].teamsID} className="team-boss">
-                      <Image
-                        src={`${baseUrl}${sections.teams[0].teams_picture}`}
-                        alt={locale === 'th' ? sections.teams[0].teams_nameTH : sections.teams[0].teams_nameEN}
-                        width={300}
-                        height={300}
-                        className="team-image"
-                      />
-                      <div className="team-info">
-                        <p className="team-name">{locale === 'th' ? sections.teams[0].teams_nameTH : sections.teams[0].teams_nameEN}</p>
-                        <p className="team-position">{locale === 'th' ? sections.teams[0].teams_positionTH : sections.teams[0].teams_positionEN}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* สมาชิกที่เหลือ */}
-                  {sections.teams.slice(1).map((member) => (
-                    <div key={member.teamsID} className="team-card">
-                      <Image
-                        src={`${baseUrl}${member.teams_picture}`}
-                        alt={locale === 'th' ? member.teams_nameTH : member.teams_nameEN}
-                        width={300}
-                        height={300}
-                        className="team-image"
-                      />
-                      <div className="team-info">
-                        <p className="team-name">{locale === 'th' ? member.teams_nameTH : member.teams_nameEN}</p>
-                        <p className="team-position">{locale === 'th' ? member.teams_positionTH : member.teams_positionEN}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+            </div>
+          </>
         )}
       </section>
     </main>

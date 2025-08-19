@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import styles from '../../styles/CookieBanner.module.css';
 import { FaRegWindowClose } from "react-icons/fa";
 const COOKIE_NAME = 'cookieConsentSettings';
+import { pageview } from '../lib/firebase';
 
 const defaultSettings = {
   necessary: true,
@@ -31,6 +32,21 @@ export default function CookieBanner() {
     setSettings(allAccepted);
     setShowBanner(false);
     setShowSettings(false);
+
+    // Trigger pageview
+    pageview(window.location.pathname + window.location.search);
+  };
+
+  const saveSettings = () => {
+    const toSave = { ...settings, necessary: true };
+    Cookies.set(COOKIE_NAME, JSON.stringify(toSave), { expires: 365 });
+    setSettings(toSave);
+    setShowBanner(false);
+    setShowSettings(false);
+
+    if (toSave.analytics) {
+      pageview(window.location.pathname + window.location.search);
+    }
   };
 
   const rejectAll = () => {
@@ -41,13 +57,6 @@ export default function CookieBanner() {
     setShowSettings(false);
   };
 
-  const saveSettings = () => {
-    const toSave = { ...settings, necessary: true };
-    Cookies.set(COOKIE_NAME, JSON.stringify(toSave), { expires: 365 });
-    setSettings(toSave);
-    setShowBanner(false);
-    setShowSettings(false);
-  };
 
   const openSettings = () => {
     setShowSettings(true);
@@ -106,7 +115,7 @@ export default function CookieBanner() {
 
   return (
     <>
-{showBanner && (
+      {showBanner && (
         <section className={styles.banner}>
           <div className={styles.content}>
             <h2 className={styles.title}>นโยบายการใช้คุกกี้</h2>
@@ -129,64 +138,64 @@ export default function CookieBanner() {
         </section>
       )}
 
-{showSettings && (
-  <div className={styles.modalOverlay}>
-    <div className={styles.modal} style={{ position: 'relative' }}>
-      {/* ปุ่มปิดมุมขวาบน */}
-      <button
-        onClick={() => setShowSettings(false)}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: 'transparent',
-          border: 'none',
-          fontSize: '24px',
-          fontWeight: 'bold',
-          cursor: 'pointer',
-          color: '#333',
-          lineHeight: 1,
-        }}
-        aria-label="ปิดหน้าต่าง"
-      >
-        <FaRegWindowClose />
-      </button>
+      {showSettings && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modal} style={{ position: 'relative' }}>
+            {/* ปุ่มปิดมุมขวาบน */}
+            <button
+              onClick={() => setShowSettings(false)}
+              style={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                background: 'transparent',
+                border: 'none',
+                fontSize: '24px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                color: '#333',
+                lineHeight: 1,
+              }}
+              aria-label="ปิดหน้าต่าง"
+            >
+              <FaRegWindowClose />
+            </button>
 
-      {/* เนื้อหา modal เดิมของคุณ */}
-      <h2 className={styles.title}>ประเภทของคุกกี้ที่บริษัทใช้</h2>
-      <p className={styles.description}>
-        บริษัทจะใช้คุกกี้เมื่อท่านได้เข้าเยี่ยมชมเว็บไซต์ของบริษัท โดยการใช้งานคุกกี้ของเราแบ่งออกตามลักษณะของการใช้งานได้ดังนี้
-      </p>
+            {/* เนื้อหา modal เดิมของคุณ */}
+            <h2 className={styles.title}>ประเภทของคุกกี้ที่บริษัทใช้</h2>
+            <p className={styles.description}>
+              บริษัทจะใช้คุกกี้เมื่อท่านได้เข้าเยี่ยมชมเว็บไซต์ของบริษัท โดยการใช้งานคุกกี้ของเราแบ่งออกตามลักษณะของการใช้งานได้ดังนี้
+            </p>
 
-      <div className={styles.cookieRow}>
-        <div className={styles.cookieLabel}>
-          คุกกี้ที่จำเป็น (Strictly Necessary Cookies)
+            <div className={styles.cookieRow}>
+              <div className={styles.cookieLabel}>
+                คุกกี้ที่จำเป็น (Strictly Necessary Cookies)
+              </div>
+              {renderSwitch('necessary')}
+            </div>
+
+            <div className={styles.cookieRow}>
+              <div className={styles.cookieLabel}>
+                คุกกี้เพื่อปรับเนื้อหาให้เข้ากับกลุ่มเป้าหมาย (Targeting Cookies)
+              </div>
+              {renderSwitch('marketing')}
+            </div>
+
+            <div className={styles.cookieRow}>
+              <div className={styles.cookieLabel}>
+                คุกกี้เพื่อช่วยในการใช้งาน (Functional Cookies)
+              </div>
+              {renderSwitch('analytics')}
+            </div>
+
+            <div className={styles.actions}>
+              <button className={styles.btnPrimary} onClick={acceptAll}>ยอมรับคุกกี้ทั้งหมด</button>
+              <button className={styles.btnSecondary} onClick={rejectAll}>ไม่ยอมรับคุกกี้ทั้งหมด</button>
+              <button className={styles.btnSecondary} onClick={saveSettings}>ยืนยันตัวเลือกของฉัน</button>
+            </div>
+          </div>
         </div>
-        {renderSwitch('necessary')}
-      </div>
-
-      <div className={styles.cookieRow}>
-        <div className={styles.cookieLabel}>
-          คุกกี้เพื่อปรับเนื้อหาให้เข้ากับกลุ่มเป้าหมาย (Targeting Cookies)
-        </div>
-        {renderSwitch('marketing')}
-      </div>
-
-      <div className={styles.cookieRow}>
-        <div className={styles.cookieLabel}>
-          คุกกี้เพื่อช่วยในการใช้งาน (Functional Cookies)
-        </div>
-        {renderSwitch('analytics')}
-      </div>
-
-      <div className={styles.actions}>
-        <button className={styles.btnPrimary} onClick={acceptAll}>ยอมรับคุกกี้ทั้งหมด</button>
-        <button className={styles.btnSecondary} onClick={rejectAll}>ไม่ยอมรับคุกกี้ทั้งหมด</button>
-        <button className={styles.btnSecondary} onClick={saveSettings}>ยืนยันตัวเลือกของฉัน</button>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </>
   );
 }

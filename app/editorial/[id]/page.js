@@ -5,10 +5,7 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import styles from "./EditorialDetailPage.module.css";
 import Link from "next/link";
-import {
-  MdOutlineKeyboardDoubleArrowRight,
-  MdKeyboardDoubleArrowRight,
-} from "react-icons/md";
+import { MdKeyboardDoubleArrowRight } from "react-icons/md";
 import Gallery from '../gallery';
 
 async function getEditorialById(id) {

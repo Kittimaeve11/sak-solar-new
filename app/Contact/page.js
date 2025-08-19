@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 
 
+
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
 const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
@@ -29,45 +30,52 @@ export default function Page() {
   const [brander, setBrander] = useState([]);
   console.log("Brander:", brander);
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        // ดึง contacts และ brander พร้อมกัน
-        const [contactsRes, branderRes, topicsRes] = await Promise.all([
-          fetch(`${baseUrl}/api/contactapi`, {
-            headers: { 'X-API-KEY': `${apiKey}` },
-          }),
-          fetch(`${baseUrl}/api/branderIDapi/8`, {
-            headers: { 'X-API-KEY': `${apiKey}` },
-          }),
-          fetch(`${baseUrl}/api/topicsapi`, {
-            headers: { 'X-API-KEY': `${apiKey}` },
-          }),
-        ]);
+useEffect(() => {
+  // เปลี่ยน title และ meta description
+  document.title = 'ติดต่อเรา | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
+  const metaDescription = document.querySelector("meta[name='description']");
+  if (metaDescription) {
+    metaDescription.setAttribute("content", "หน้าติดต่อเรา");
+  } else {
+    const meta = document.createElement('meta');
+    meta.name = 'description';
+    meta.content = 'หน้าติดต่อเรา';
+    document.head.appendChild(meta);
+  }
 
-        // แปลง response เป็น json พร้อมกัน
-        const [contactsData, branderData, topicsData] = await Promise.all([
-          contactsRes.json(),
-          branderRes.json(),
-          topicsRes.json(),
-        ]);
+  // ฟังก์ชัน async ดึงข้อมูลทั้งหมด
+  const fetchAllData = async () => {
+    try {
+      // ดึง contacts, brander และ topics พร้อมกัน
+      const [contactsRes, branderRes, topicsRes] = await Promise.all([
+        fetch(`${baseUrl}/api/contactapi`, { headers: { 'X-API-KEY': `${apiKey}` } }),
+        fetch(`${baseUrl}/api/branderIDapi/8`, { headers: { 'X-API-KEY': `${apiKey}` } }),
+        fetch(`${baseUrl}/api/topicsapi`, { headers: { 'X-API-KEY': `${apiKey}` } }),
+      ]);
 
-        setContacts(contactsData.result || []);
-        setBrander(branderData.data ? [branderData.data] : []);
-        if (topicsData.status && Array.isArray(topicsData.result)) {
-          setTopics(topicsData.result);
-        } else {
-          console.error("No topic data");
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
+      // แปลง response เป็น JSON
+      const [contactsData, branderData, topicsData] = await Promise.all([
+        contactsRes.json(),
+        branderRes.json(),
+        topicsRes.json(),
+      ]);
+
+      setContacts(contactsData.result || []);
+      setBrander(branderData.data ? [branderData.data] : []);
+      if (topicsData.status && Array.isArray(topicsData.result)) {
+        setTopics(topicsData.result);
+      } else {
+        console.error("No topic data");
       }
-    };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchAllData();
-  }, []);
+  fetchAllData();
+}, []);
 
 
   // useEffect(() => {
@@ -127,30 +135,39 @@ export default function Page() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSubmitting) return; // ✅ ป้องกันกดซ้ำ
+    if (isSubmitting) return; // ป้องกันกดซ้ำ
     if (!validateAll()) return;
 
     setIsSubmitting(true);
 
-    // ส่งอีเมล
+    const payload = {
+      topic: 1, // fixed value
+      fullname: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      message: formData.message, // ต้องสะกดให้ตรงกับ PHP
+    };
+
     try {
-      const res = await fetch('/api/send-email', {
+      const res = await fetch(`${baseUrl}/api/contactinqpageapi`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': apiKey
+        },
+        body: JSON.stringify(payload),
       });
 
-      if (!res.ok) throw new Error("ส่งอีเมลไม่สำเร็จ");
+      if (!res.ok) throw new Error("ส่งข้อมูลไม่สำเร็จ");
 
-      // ใช้ SweetAlert2 แทน toast.success
       await Swal.fire({
         icon: 'success',
         title: 'ส่งข้อมูลเรียบร้อยแล้ว',
         showConfirmButton: false,
         timer: 2000,
-
       });
 
+      // เคลียร์ฟอร์ม
       setFormData({ topic: "", name: "", phone: "", email: "", message: "" });
       setTouched({});
       setErrors({});
@@ -159,12 +176,12 @@ export default function Page() {
         icon: 'error',
         title: 'เกิดข้อผิดพลาดในการส่งข้อความ',
         text: err.message,
-
       });
     } finally {
       setIsSubmitting(false);
     }
   };
+
 
   // const getIcon = (id) => {
 
@@ -194,7 +211,9 @@ export default function Page() {
 
 
   return (
+
     <div>
+
       {/* ToastContainer ต้องมีใน JSX เพื่อแสดง toast */}
       {/* <ToastContainer
         position="top-center"

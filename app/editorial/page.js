@@ -17,22 +17,38 @@ export default function EditorialListPage() {
   const topRef = useRef(null);
 
   useEffect(() => {
-    fetch('/api/editorial')
-      .then((res) => res.json())
-      .then((data) => {
+    // เปลี่ยน title และ meta description
+    document.title = 'บทความ | บริษัท ศักดิ์สยาม โซลาร์ เอ็นเนอร์ยี่ จำกัด';
+    const metaDescription = document.querySelector("meta[name='description']");
+    if (metaDescription) {
+      metaDescription.setAttribute("editorial", "บทความ");
+    } else {
+      const meta = document.createElement('meta');
+      meta.name = 'description';
+      meta.content = 'บทความ';
+      document.head.appendChild(meta);
+    }
+    const fetchArticles = async () => {
+      try {
+        const res = await fetch('/api/editorial');
+        const data = await res.json();
         setArticles(data.editorial || []);
         setLoading(false);
-      });
-  }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      const timeout = setTimeout(() => {
-        setShouldAnimate(true);
-      }, 50);
-      return () => clearTimeout(timeout);
-    }
-  }, [loading]);
+        // รอเล็กน้อยก่อนเริ่ม animation
+        const timeout = setTimeout(() => {
+          setShouldAnimate(true);
+        }, 50);
+        return () => clearTimeout(timeout);
+      } catch (error) {
+        console.error('Failed to fetch editorial:', error);
+        setArticles([]);
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
 
   const handlePageChange = (page) => {
     if (page === currentPage) return;

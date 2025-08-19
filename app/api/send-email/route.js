@@ -1,83 +1,66 @@
+// /app/api/contact/route.js (Next.js App Router)
+// หรือ /pages/api/contact.js (Next.js Pages Router)
+
 import nodemailer from 'nodemailer';
 
-// OPTIONS handler รองรับ preflight request
-export async function OPTIONS() {
-  return new Response(null, {
-    status: 204,
-    headers: {
-      'Access-Control-Allow-Origin': '*', // เปลี่ยนเป็นโดเมน frontend คุณถ้าต้องการความปลอดภัย
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
-}
-
-// POST handler สำหรับส่งเมล
-export async function POST(req) {
-  const body = await req.json();
-  const { topic, name, phone, email, message } = body;
-
-  console.log("✅ EMAIL_PASS =", process.env.EMAIL_PASS ? "Exists" : "❌ Not Set");
-
-  if (!topic || !name || !phone || !message) {
-    return new Response(
-      JSON.stringify({ message: 'กรุณากรอกข้อมูลให้ครบถ้วน' }),
-      {
-        status: 400,
-        headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      }
-    );
-  }
-
+export async function POST(request) {
   try {
+    const data = await request.json();
+
+    // ตรวจสอบข้อมูลเบื้องต้น (คุณสามารถปรับแต่งตามต้องการ)
+    if (
+      !data.fullName ||
+      !data.phone ||
+      !data.product ||
+      !data.package ||
+      !data.usageTime ||
+      !data.contactTime
+    ) {
+      return new Response(
+        JSON.stringify({ error: 'ข้อมูลไม่ครบถ้วน กรุณากรอกข้อมูลให้ครบ' }),
+        { status: 400 }
+      );
+    }
+
+    // สร้าง transporter สำหรับ Gmail SMTP
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+      service: 'gmail',
       auth: {
-        user: 'sb.evesang@gmail.coื',
+        user: 'sb.evesang@gmail.com',
         pass: process.env.EMAIL_PASS,
       },
     });
 
+    // เตรียมเนื้อหาอีเมล
     const mailOptions = {
-      from: '"SAKSIAM SOLAR - Contact Form" <sb.evesang@gmail.com>',
-      to: 'sb.evesang@gmail.com',
-      subject: '📩 ข้อความใหม่จากแบบฟอร์มติดต่อ - SAKSIAM SOLAR',
+      from: `"Contact Form" <sb.evesang@gmail.com>`, // ผู้ส่ง
+      to: 'sb.evesang@gmail.com', // ผู้รับ (เปลี่ยนเป็นอีเมลที่จะรับข้อความ)
+      subject: `มีผู้ติดต่อสนใจโซลาร์เซลล์: ${data.fullName}`,
       html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-          <h2 style="color: #006699;">📨 รายละเอียดการติดต่อจากเว็บไซต์</h2>
-          <p><strong>หัวข้อ:</strong> ${topic}</p>
-          <p><strong>ชื่อผู้ติดต่อ:</strong> ${name}</p>
-          <p><strong>เบอร์โทรศัพท์:</strong> ${phone}</p>
-          ${email ? `<p><strong>อีเมล:</strong> <a href="mailto:${email}">${email}</a></p>` : ''}
-          <p><strong>ข้อความที่ส่งมา:</strong></p>
-          <div style="margin-left: 1em; padding: 0.5em; background-color: #f9f9f9; border-left: 4px solid #006699;">
-            ${message.replace(/\n/g, '<br/>')}
-          </div>
-          <br/>
-          <p style="font-size: 0.9em; color: #888;">-- ระบบอัตโนมัติจากเว็บไซต์ SAKSIAM SOLAR --</p>
-        </div>
+        <h3>รายละเอียดจากแบบฟอร์มติดต่อ</h3>
+        <p><strong>สินค้า/บริการที่สนใจ:</strong> ${data.product}</p>
+        <p><strong>แพ็คเกจที่ยอมรับได้:</strong> ${data.package}</p>
+        <p><strong>ช่วงเวลาที่ใช้ไฟ:</strong> ${data.usageTime}</p>
+        <p><strong>ชื่อ-นามสกุล:</strong> ${data.fullName}</p>
+        <p><strong>โทรศัพท์:</strong> ${data.phone}</p>
+        <p><strong>ที่อยู่:</strong> ${data.subDistrict || ''} ${data.district || ''} ${data.province || ''}</p>
+        <p><strong>ช่วงเวลาที่สะดวกให้ติดต่อกลับ:</strong> ${data.contactTime}</p>
+        <p><strong>ข้อความเพิ่มเติม:</strong> ${data.message || '(ไม่มีข้อความเพิ่มเติม)'}</p>
       `,
     };
 
+    // ส่งอีเมล
     await transporter.sendMail(mailOptions);
 
     return new Response(
       JSON.stringify({ message: 'ส่งอีเมลเรียบร้อยแล้ว' }),
-      {
-        status: 200,
-        headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      }
+      { status: 200 }
     );
   } catch (error) {
-    console.error("❌ ส่งอีเมลไม่สำเร็จ:", error);
+    console.error('Error sending email:', error);
     return new Response(
-      JSON.stringify({ message: 'เกิดข้อผิดพลาดภายในระบบ', error: error.message }),
-      {
-        status: 500,
-        headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-      }
+      JSON.stringify({ error: 'เกิดข้อผิดพลาดในการส่งอีเมล' }),
+      { status: 500 }
     );
   }
 }

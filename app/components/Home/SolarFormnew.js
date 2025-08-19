@@ -1,12 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './SolarFormnew.module.css';
-import { products } from '@/app/data/products';
-import { BsDash } from "react-icons/bs";
 import Image from 'next/image';
 import { MdOutlineElectricBolt } from 'react-icons/md';
 import html2canvas from 'html2canvas';
+import Link from 'next/link';
+
+
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
 const handlePrintScreenshot = () => {
   const element = document.querySelector(`.${styles.resultGrid}`);
@@ -17,52 +20,24 @@ const handlePrintScreenshot = () => {
 
   html2canvas(element, { scale: 2 }).then(canvas => {
     const imgData = canvas.toDataURL('image/png');
-
     const printWindow = window.open('', '_blank');
-  
-printWindow.document.write(`
-  <html>
-    <head>
-      <title>ปริ้นภาพผลลัพธ์</title>
-      <style>
-        @page { 
-          size: landscape;
-          margin: 0;
-        }
-        body {
-          margin: 0;
-          padding: 0;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-        }
-        h1 {
-          font-size: clamp(1.2rem, 5vw, 2rem);
-          font-weight: 600;
-          text-align: center;
-          margin-bottom: 0.5rem;
-          color: #F2780C;
-        }
-        img {
-          max-width: 90%;
-          max-height: 80%;
-          height: auto;
-          display: block;
-        }
-      </style>
-    </head>
-    <body>
-      <h1>ผลการคำนวณขนาดติดตั้ง</h1>
+
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>ปริ้นภาพผลลัพธ์</title>
+          <style>
+            @page { size: landscape; margin: 0; }
+            body { margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+            h1 { font-size: clamp(1.2rem, 5vw, 2rem); font-weight: 600; text-align: center; margin-bottom: 0.5rem; color: #F2780C; }
+            img { max-width: 90%; max-height: 80%; height: auto; display: block; }
+          </style>
         </head>
         <body>
+          <h1>ผลการคำนวณขนาดติดตั้ง</h1>
           <img src="${imgData}" />
           <script>
-            window.onload = function() {
-              window.print();
-              window.onafterprint = function() { window.close(); }
-            };
+            window.onload = function() { window.print(); window.onafterprint = function() { window.close(); }; };
           </script>
         </body>
       </html>
@@ -73,13 +48,11 @@ printWindow.document.write(`
   });
 };
 
-
 const calculateSolarSize = (electricityCost, dayUsage, installationCost = 0) => {
   const usageUnits = electricityCost / 5;
   const averageDailyUnits = usageUnits / 30;
   const dayUnits = averageDailyUnits * (dayUsage / 100);
   const nightUnits = averageDailyUnits - dayUnits;
-
   const C = usageUnits * (dayUsage / 100);
 
   const sizeTable = [
@@ -121,6 +94,7 @@ const calculateSolarSize = (electricityCost, dayUsage, installationCost = 0) => 
 };
 
 export default function SolarCalculatorForm() {
+
   const [formValues, setFormValues] = useState({
     electricityCost: '',
     systemType: '',
@@ -130,7 +104,30 @@ export default function SolarCalculatorForm() {
 
   const [errors, setErrors] = useState({});
   const [results, setResults] = useState(null);
-  const [attemptedRoofInput, setAttemptedRoofInput] = useState(false);
+  const [productsData, setProductsData] = useState([]);
+
+  // ดึงข้อมูลจาก API จริง
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${baseUrl}/api/productpageapi`, {
+          headers: {
+            'X-API-KEY': apiKey
+          }
+        });
+        const data = await res.json();
+        if (data.status) {
+          setProductsData(data.result.data);
+        } else {
+          console.error('API returned error:', data.message);
+        }
+      } catch (err) {
+        console.error('เกิดข้อผิดพลาดในการดึงข้อมูลสินค้า:', err);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const validate = () => {
     const newErrors = {};
@@ -175,31 +172,21 @@ export default function SolarCalculatorForm() {
     if (field === 'roofArea') {
       if (value === '' || /^\d*\.?\d*$/.test(value)) {
         const roofNum = parseFloat(value);
-
-        // เช็คว่าค่าที่พิมพ์เกินช่วงไหม
         let roofError = null;
-        let maxArea = formValues.systemType === 'single' ? 45 : 179;
-        let minArea = formValues.systemType === 'single' ? 9 : 45;
+        const maxArea = formValues.systemType === 'single' ? 45 : 179;
+        const minArea = formValues.systemType === 'single' ? 9 : 45;
 
         if (value !== '' && !isNaN(roofNum)) {
-          if (roofNum < minArea) {
-            roofError = `*พื้นที่สำหรับ ${formValues.systemType === 'single' ? '1 เฟส' : '3 เฟส'} ต้องไม่ต่ำกว่า ${minArea} ตารางเมตร.`;
-          } else if (roofNum > maxArea) {
-            roofError = `*พื้นที่สำหรับ ${formValues.systemType === 'single' ? '1 เฟส' : '3 เฟส'} ต้องไม่เกิน ${maxArea} ตารางเมตร.`;
-            // ไม่อัพเดตค่าถ้าเกินขีดจำกัด
-            return; // หยุดไม่ให้พิมพ์ค่าที่เกิน
-          }
+          if (roofNum < minArea) roofError = `*พื้นที่สำหรับ ${formValues.systemType === 'single' ? '1 เฟส' : '3 เฟส'} ต้องไม่ต่ำกว่า ${minArea} ตารางเมตร.`;
+          else if (roofNum > maxArea) return;
         }
 
         setErrors((prev) => ({ ...prev, roofArea: roofError }));
-      } else {
-        return; // ไม่อนุญาตพิมพ์อะไรที่ไม่ใช่ตัวเลขและจุด
-      }
+      } else return;
     }
 
     setFormValues((prev) => ({ ...prev, [field]: value }));
 
-    // Reset error เฉพาะ field นี้ ถ้าไม่มี error ใหม่
     setErrors((prevErrors) => {
       if (!prevErrors[field]) return prevErrors;
       const updatedErrors = { ...prevErrors };
@@ -208,10 +195,8 @@ export default function SolarCalculatorForm() {
     });
   };
 
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!validate()) return;
 
     const electricityCostNum = Number(formValues.electricityCost);
@@ -235,36 +220,33 @@ export default function SolarCalculatorForm() {
     setFormValues({ electricityCost: '', systemType: '', roofArea: '', dayUsage: 60 });
     setErrors({});
     setResults(null);
-    setAttemptedRoofInput(false);
   };
 
+  // แก้ getRecommendedItems ให้ใช้ API จริง
+  // ฟังก์ชันคำนวณสินค้าที่แนะนำ
   const getRecommendedItems = (systemType) => {
-    if (!systemType) return [];
+    if (!systemType || productsData.length === 0) return [];
 
-    // แปลงค่า systemType ให้ตรงกับ power_system ใน data
-    const powerSystemText = systemType === 'single' ? '1 เฟส' : '3 เฟส';
+    const phase = systemType === 'single' ? '1' : '3';
 
-    const solarCategory = products.find((cat) => cat.id === 'solar1'); // Solar Rooftop category
-    if (!solarCategory) return [];
+    // กรองสินค้าที่ตรงกับ systemType / phase
+    const filtered = productsData.filter(item =>
+      item.phase === phase && item.installationsize.includes('kW')
+    );
 
-    const matchedItems = [];
-
-    solarCategory.brands.forEach((brand) => {
-      brand.packages.forEach((pkg) => {
-        pkg.items.forEach((item) => {
-          if (item.power_system === powerSystemText) {
-            matchedItems.push({
-              brandName: brand.name,
-              packageName: pkg.name,
-              ...item,
-            });
-          }
-        });
-      });
+    // sort: promotion > pinned > อื่นๆ
+    filtered.sort((a, b) => {
+      const aPriority = (a.promotion ? 2 : 0) + (a.isPinned ? 1 : 0);
+      const bPriority = (b.promotion ? 2 : 0) + (b.isPinned ? 1 : 0);
+      return bPriority - aPriority;
     });
 
-    return matchedItems;
+    return filtered;
   };
+
+  // ประกาศตัวแปร recommendedItems หลังจากประกาศ getRecommendedItems
+  const recommendedItems = getRecommendedItems(formValues.systemType);
+
 
   return (
     <div className={styles.containersolar}>
@@ -360,8 +342,8 @@ export default function SolarCalculatorForm() {
                 placeholder={
                   formValues.systemType
                     ? formValues.systemType === 'single'
-                      ? 'กรอกพื้นที่หลังคา : 9-45 ตารางเมตร'
-                      : 'กรอกพื้นที่หลังคา : 45-179 ตารางเมตร'
+                      ? 'กรุณากรอกพื้นที่หลังคาในช่วง 9-45 ตารางเมตร'
+                      : 'กรุณากรอกพื้นที่หลังคาในช่วง 45-179 ตารางเมตร'
                     : 'กรุณาเลือกระบบไฟฟ้าก่อน**'
                 }
                 style={{
@@ -377,12 +359,12 @@ export default function SolarCalculatorForm() {
               )}
             </div>
 
-            {/* <h6 className={styles.instructions}>
-              หมายเหตุ : ระบบไฟ 1 เฟส จะต้องระบุพื้นที่หลังคาให้อยู่ในช่วง 9-45 ตารางเมตร
+            <h6 className={styles.instructions}>
+              <span style={{ color: 'red', fontWeight: '600' }}>หมายเหตุ : </span>  ระบบไฟ 1 เฟส จะต้องระบุพื้นที่หลังคาให้อยู่ในช่วง 9-45 ตารางเมตร
             </h6>
             <h6 className={styles.instructions1} style={{ marginLeft: '4rem' }}>
               ระบบไฟ 3 เฟส จะต้องระบุพื้นที่หลังคาให้อยู่ในช่วง 45-179 ตารางเมตร
-            </h6> */}
+            </h6>
 
             <div className={styles.buttonGroup}>
               <button type="submit" className="buttonSecondaryonebule">
@@ -441,59 +423,73 @@ export default function SolarCalculatorForm() {
 
               {/* แถวล่าง: แพ็กเกจ / รายละเอียดการใช้ไฟ */}
               <div className={styles.bottomGrid}>
+
+
                 <div className={styles.resultBoxL}>
                   <h4 className={styles.packageTitle}>แพ็กเกจที่เราแนะนำ</h4>
-                  <p className={styles.systemType}>
-                    ระบบไฟฟ้า {formValues.systemType === 'single' ? '1 เฟส' : '3 เฟส'}
+                  <p className={`${styles.systemType} ${styles['with-lines']}`}>                    ระบบไฟฟ้า {formValues.systemType === 'single' ? '1 เฟส' : '3 เฟส'}
                   </p>
 
 
                   <div className="productListWrapper">
 
                     <div className={styles.productList}>
-                      {getRecommendedItems(formValues.systemType)
-                        .slice(0, 2) // แสดงแค่ 2 รายการแรก
-                        .map((item) => (
-                          <div key={item.id} className={styles.productCard}>
-                            <Image
-                              src={item.mainImage}
-                              alt={item.packageName}
-                              width={320}
-                              height={250}
-                              className={styles.productImage}
-                            />
+                      {recommendedItems.slice(0, 2).map((item) => {
+                        const gallery = item.gallery ? JSON.parse(item.gallery) : [];
+                        const mainImage = gallery.length > 0
+                          ? `${baseUrl}/${gallery[0]}`  // ใช้ URL จริงจาก API
+                          : '/images/no-image.png';
+                        const name = item.modelname || item.product_num;
+                        const size = item.installationsize;
 
-                            <div className={styles.productTable}>
-                              <div className="product-info" style={{ textAlign: 'left' }}>
-                                <h3 style={{ margin: 0 }}>{item.inverter_model}</h3>
-                                {item.size && (
-                                  <p
-                                    style={{
-                                      display: 'inline-flex',
-                                      alignItems: 'center',
-                                      gap: '4px',
-                                      margin: 0,
-                                      fontWeight: 600,
-                                      color: 'red',
-                                    }}
-                                  >
-                                    <MdOutlineElectricBolt size={20} />
-                                    {item.size.toLocaleString()} kW
-                                  </p>
-                                )}
+                        return (
+                          <Link
+                            key={item.product_ID}
+                            href={`/products/${item.protypeID}/${item.probrandID}/${item.product_ID}`} 
+                            style={{ textDecoration: 'none' }}
+                            passHref
+                          >
+                            <div className={styles.productCard} style={{ cursor: 'pointer' }}>
+                              <Image
+                                src={mainImage}
+                                alt={name}
+                                width={320}
+                                height={320}
+                                className={styles.productImage}
+                              />
+
+                              <div className={styles.productTable}>
+                                <div className="product-info" style={{ textAlign: 'left' }}>
+                                  <h3 style={{ margin: 0 }}>{name}</h3>
+                                  {size && (
+                                    <p
+                                      style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        margin: 0,
+                                        fontWeight: 600,
+                                        color:'black'
+                                      }}
+                                    >
+                                      <MdOutlineElectricBolt size={20} color='#ffc300'/>
+                                      {size}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className={styles.cardOverlay}>
+                                ดูรายละเอียดสินค้า
                               </div>
                             </div>
-
-                            {/* 🔥 overlay ปิดทับที่โชว์เมื่อ hover */}
-                            <div className={styles.cardOverlay}>
-                              ดูรายละเอียดสินค้า
-                            </div>
-                          </div>
+                          </Link>
+                        );
+                      })}
 
 
-                          // </div>
-                        ))}
                     </div>
+
                   </div>
 
                 </div>
@@ -512,8 +508,11 @@ export default function SolarCalculatorForm() {
                       <span className={styles.costLabel}>ค่าไฟที่ลดต่อเดือน</span>
                     </div>
                     <span className={styles.costValue}>
-                      {results.savingsPerMonth?.toLocaleString() || 'XXX'} บาท
+                      {results.savingsPerMonth !== undefined
+                        ? Number(results.savingsPerMonth.toFixed(0)).toLocaleString()
+                        : 'XXX'} บาท
                     </span>
+
                   </div>
 
 

@@ -72,14 +72,7 @@
   border-radius: 8px;
 }
 
-.headersolar {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  font-weight: 400;
-  /* ใช้ Thin */
-  text-align: center;
-  color: #F2780C;
-}
+
 
 .containersolar {
   background-image: url('/images/solar-cellbackfrom.jpg');
