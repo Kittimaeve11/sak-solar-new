@@ -172,7 +172,7 @@
   100% { background-color: #e0e0e0; }
 }
 
-.skeleton-card {
+.skeleton-cardportfolio {
   display: flex;
   flex-direction: column;
   border-radius: 10px;
@@ -182,18 +182,18 @@
   padding-bottom: 16px;
 }
 
-.skeleton-image {
+.skeleton-imageportfolio {
   width: 100%;
   height: 180px;
 }
 
-.skeleton-title {
+.skeleton-titleportfolio {
   height: 20px;
   margin: 16px 16px 8px 16px;
   width: 70%;
 }
 
-.skeleton-line {
+.skeleton-lineportfolio {
   height: 16px;
   margin: 6px 16px;
   width: 90%;
@@ -202,7 +202,7 @@
 
 .fade-in {
   opacity: 0;
-  animation: fadeIn 0.2s ease-in forwards;
+  animation: fadeIn 0.8s ease-in forwards;
 }
 
 @keyframes fadeIn {
