@@ -78,8 +78,8 @@
 
 .content {
   padding-top: 0.2rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 0rem;
+  padding-right: 0rem;
   padding-bottom: 0.5rem;
   line-height: 1.8;
   font-size: 1.05rem;
@@ -162,7 +162,7 @@
   top: 155px; /* ปรับให้เท่ารูป */
   left: 53%;
   transform: translateX(600px);
-  width: 300px;
+  width: 250px;
   z-index: 10;
   /* transition: all 0.8s ease; */
 }
@@ -252,7 +252,7 @@
 }
 
 .tocItem button:hover {
-  color: #367AF5;
+  color: #ff5d06af;
 }
 
 .tocItem button.active {
