@@ -60,14 +60,12 @@ export default function SlidePortfolio() {
   );
 
   const SkeletonCard = () => (
-    <div className="slide-item fade-in">
-      <div className="skeleton-card">
-        <div className="skeleton skeleton-image"></div>
-        <div className="skeleton skeleton-title"></div>
-        <div className="skeleton skeleton-line"></div>
-        <div className="skeleton skeleton-line"></div>
-        <div className="skeleton skeleton-line"></div>
-        <div className="skeleton skeleton-line"></div>
+    <div className="slide-itemportfolio fade-in">
+      <div className="skeleton-cardportfolio">
+        <div className="skeleton skeleton-imageportfolio"></div>
+        <div className="skeleton skeleton-titleportfolio"></div>
+        <div className="skeleton skeleton-lineportfolio"></div>
+        <div className="skeleton skeleton-lineportfolio"></div>
       </div>
     </div>
   );
