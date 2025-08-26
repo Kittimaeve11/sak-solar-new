@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useRef, useEffect, useState } from "react";
 import Slider from "react-slick";
@@ -7,14 +7,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
-const banners = [
-  { src: "/images/Bannerhome-1.jpg", href: "https://example.com/link1" },
-  { src: "/images/Bannerhome-2.jpg", href: "https://example.com/link2" },
-  { src: "/images/Bannerhome-3.jpg", href: "https://example.com/link3" },
-  { src: "/images/Bannerhome-4.jpg", href: "https://example.com/link4" },
-  { src: "/images/Bannerhome-5.jpg", href: "https://example.com/link5" },
-  { src: "/images/Bannerhome-6.jpg", href: "https://example.com/link6" },
-];
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
 function PrevArrow({ style, onClick }) {
   return (
@@ -36,7 +30,7 @@ function PrevArrow({ style, onClick }) {
       }}
       onClick={onClick}
     >
-      <FaChevronLeft color="rgba(255, 255, 255, 0.6)" size={20} />
+      <FaChevronLeft color="rgba(255, 255, 255, 0.6)" size={25} />
     </div>
   );
 }
@@ -61,27 +55,51 @@ function NextArrow({ style, onClick }) {
       }}
       onClick={onClick}
     >
-      <FaChevronRight color="rgba(255, 255, 255, 0.6)" size={20} />
+      <FaChevronRight color="rgba(255, 255, 255, 0.6)" size={25} />
     </div>
   );
 }
 
 export default function BannerSlider() {
   const sliderRef = useRef(null);
-  const [initialSlide, setInitialSlide] = useState(null);
-  const [isReady, setIsReady] = useState(false);
-
-  // สถานะเก็บว่าเกิดการลากหรือไม่
+  const [banners, setBanners] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadedIndexes, setLoadedIndexes] = useState({});
+  const [initialSlide, setInitialSlide] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const isDragging = useRef(false);
 
+  // ตรวจสอบ mobile และดึง index เก่า
   useEffect(() => {
-    const saved = localStorage.getItem("bannerSlideIndex");
-    const index = saved !== null ? parseInt(saved) : 0;
-    setInitialSlide(index);
-    setIsReady(true);
+    if (typeof window === "undefined") return;
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    const savedIndex = localStorage.getItem("bannerSlideIndex");
+    if (savedIndex !== null) setInitialSlide(parseInt(savedIndex));
+
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  if (!isReady) return null;
+  // Fetch banners
+  useEffect(() => {
+    const fetchBanners = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(`${baseUrl}/api/branderhomeapi`, {
+          headers: { "X-API-KEY": apiKey },
+        });
+        const data = await res.json();
+        if (data.status && data.result) setBanners(data.result);
+      } catch (err) {
+        console.error("Error fetching banners:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBanners();
+  }, []);
 
   const settings = {
     dots: true,
@@ -92,40 +110,26 @@ export default function BannerSlider() {
     autoplay: true,
     autoplaySpeed: 3000,
     arrows: true,
-    rtl: false,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
-    initialSlide: initialSlide,
-    afterChange: (current) => {
-      localStorage.setItem("bannerSlideIndex", current);
-    },
-    beforeChange: () => {
-      // เริ่มลาก
-      isDragging.current = true;
-    },
-    onSwipe: () => {
-      // จบการลาก (swipe)
-      isDragging.current = true;
-    },
-    onEdge: () => {
-      // กรณีลากสุดขอบ
-      isDragging.current = false;
-    },
+    initialSlide,
+    afterChange: (current) => localStorage.setItem("bannerSlideIndex", current),
+    beforeChange: () => (isDragging.current = true),
+    onSwipe: () => (isDragging.current = true),
+    onEdge: () => (isDragging.current = false),
   };
 
   const handleClick = (e, href) => {
     if (isDragging.current) {
-      // ถ้าเกิดการลาก ให้ไม่เปิดลิงค์
-      isDragging.current = false; // reset สถานะ
+      isDragging.current = false;
       return;
     }
-
     const width = e.currentTarget.offsetWidth;
     const x = e.nativeEvent.offsetX;
     const percent = x / width;
 
     if (percent >= 0.1 && percent <= 0.9) {
-      window.open(href, "_blank");
+      if (href) window.open(href, "_blank");
     } else if (percent < 0.2) {
       sliderRef.current?.slickPrev();
     } else {
@@ -134,34 +138,103 @@ export default function BannerSlider() {
   };
 
   return (
-    <div className="w-full overflow-hidden" style={{ lineHeight: 0, fontSize: 0 }}>
-      <Slider ref={sliderRef} {...settings}>
-        {banners.map(({ src, href }, index) => (
-          <div key={index}>
-            <div
-              onClick={(e) => handleClick(e, href)}
-              style={{ cursor: "pointer", width: "100%" }}
-            >
-              <Image
-                src={src}
-                alt={`Banner ${index + 1}`}
-                width={3840}
-                height={1191}
-                style={{ width: "100%", height: "auto" }}
-                priority={index === initialSlide}
-                loading={index === initialSlide ? "eager" : "lazy"}
-                draggable={false} // ป้องกันลากรูปเอง
-              />
-            </div>
-          </div>
-        ))}
-      </Slider>
+    <div
+      className="w-full overflow-hidden relative"
+      style={{
+        lineHeight: 0,
+        fontSize: 0,
+        minHeight: isMobile ? "calc(100vw / 1.92)" : "calc(100vw / 3.38)", // กำหนดความสูงล่วงหน้า
+        marginTop: "-1rem",
+      }}
+    >
+      {loading ? (
+        <div className="skeleton-banner" />
+      ) : (
+        <Slider ref={sliderRef} {...settings}>
+          {banners.map((banner, index) => {
+            const imgSrc = isMobile
+              ? `${baseUrl}/${banner.brander_pictureMoblie}`
+              : `${baseUrl}/${banner.brander_picturePC}`;
+
+            const isLoaded = loadedIndexes[index];
+
+            return (
+              <div key={banner.brander_ID}>
+                <div
+                  className="banner-container"
+                  onClick={(e) => handleClick(e, banner.brander_link)}
+                >
+                  <Image
+                    src={imgSrc}
+                    alt={banner.brander_name}
+                    width={3840}
+                    height={1191}
+                    className={`banner-image ${isLoaded ? "fade-in" : "hidden"}`}
+                    priority={index === initialSlide}
+                    loading={index === initialSlide ? "eager" : "lazy"}
+                    draggable={false}
+                    unoptimized
+                    onLoadingComplete={() =>
+                      setLoadedIndexes((prev) => ({ ...prev, [index]: true }))
+                    }
+                  />
+                  {!isLoaded && <div className="skeleton-overlay" />}
+                </div>
+              </div>
+            );
+          })}
+        </Slider>
+      )}
 
       <style jsx>{`
+        .skeleton-banner {
+          width: 100%;
+          aspect-ratio: 3.22 / 1;
+          background-color: #e0e0e0;
+          border-radius: 4px;
+          animation: pulse 1.5s infinite ease-in-out;
+        }
+        @media (max-width: 768px) {
+          .skeleton-banner {
+            aspect-ratio: 1.92 / 1;
+          }
+        }
+
+        .banner-container {
+          position: relative;
+          width: 100%;
+        }
+        .banner-image {
+          width: 100%;
+          height: auto;
+          display: block;
+          opacity: 1;
+          transition: opacity 0.5s ease;
+        }
+        .banner-image.hidden {
+          opacity: 0;
+        }
+        .banner-image.fade-in {
+          opacity: 1;
+        }
+        .skeleton-overlay {
+          position: absolute;
+          inset: 0;
+          background: #e0e0e0;
+          animation: pulse 1.5s infinite ease-in-out;
+          z-index: 2;
+          border-radius: 4px;
+          transition: opacity 0.5s ease;
+        }
+
+        @keyframes pulse {
+          0% { opacity: 1; }
+          50% { opacity: 0.5; }
+          100% { opacity: 1; }
+        }
+
         :global(.slick-dots) {
           bottom: 15px;
-          opacity: 0;
-          animation: fadeInDots 0.1s forwards;
         }
         :global(.slick-dots li button) {
           width: 9px;
@@ -174,19 +247,12 @@ export default function BannerSlider() {
         }
         :global(.slick-dots li.slick-active button) {
           background: rgba(255, 255, 255, 0.89);
-          border-color: #dddddd;
         }
         :global(.slick-dots li button:hover) {
           background: rgba(255, 255, 255, 0.89);
-          border-color: rgba(187, 187, 187, 0.46);
         }
         :global(.slick-dots li button:before) {
           display: none;
-        }
-        @keyframes fadeInDots {
-          to {
-            opacity: 1;
-          }
         }
       `}</style>
     </div>
