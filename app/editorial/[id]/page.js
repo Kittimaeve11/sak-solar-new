@@ -1,218 +1,224 @@
 'use client';
-
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import styles from "./EditorialDetailPage.module.css";
 import Link from "next/link";
 import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import Gallery from '../gallery';
+import Gallery from "../gallery";
+import SlideEditorial from "@/app/components/Home/SlideEditorial";
 
-async function getEditorialById(id) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const res = await fetch(`${baseUrl}/api/editorial`, { cache: "no-store" });
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
+
+async function getEditorialById(editorialNum) {
+  const res = await fetch(`${baseUrl}/api/edittorIDpageapi/${editorialNum}`, {
+    headers: { "X-API-KEY": apiKey },
+    cache: "no-store",
+  });
   if (!res.ok) return null;
   const data = await res.json();
-  return data.editorial.find((item) => item.id === Number(id)) || null;
+  return data.result?.[0] || null;
 }
 
-function generateId(text, index) {
-  return (
-    text
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]/g, "") +
-    "-" +
-    index
-  );
+function parseHtmlString(str) {
+  if (!str || typeof str !== "string") return "";
+  return str
+    .replace(/^"+|"+$/g, "")
+    .replace(/\\\//g, "/")
+    .replace(/\\"/g, '"')
+    .replace(/\\n/g, "")
+    .replace(/&nbsp;/g, " ")
+    .trim();
 }
-
-function parseHeadings(content) {
-  if (!Array.isArray(content)) return [];
-  return content
-    .map((block, index) => ({ ...block, index }))
-    .filter((block) => /^h[1-2]$/.test(block.type)) // เฉพาะ h1, h2
-    .map((block) => ({
-      level: Number(block.type.replace("h", "")),
-      text: block.text,
-      id: generateId(block.text, block.index),
-      key: `${block.text}-${block.index}`,
-    }));
-}
-
-const HeadingTag = ({ type, id, text }) => {
-  const Tag = type;
-  return <Tag id={id}>{text}</Tag>;
-};
 
 export default function EditorialDetailPage() {
-  const params = useParams();
-  const id = params?.id;
+  const { id } = useParams();
   const [editorial, setEditorial] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [headings, setHeadings] = useState([]);
   const [activeId, setActiveId] = useState(null);
-
   const [isSticky, setIsSticky] = useState(false);
+  const observerRef = useRef(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const triggerY = 300; // scroll ถึงตำแหน่งนี้แล้วให้ลอย
-      setIsSticky(window.scrollY >= triggerY);
-    };
+  const getImageUrl = (path) => {
+    if (!path) return "/images/no-image.jpg";
+    return `${baseUrl}/${path.replace(/^"+|"+$/g, "").replace(/\\/g, "/")}`;
+  };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    if (id) getEditorialById(id).then(setEditorial);
-  }, [id]);
-
-  // คำนวณ headings จาก editorial.content
-  const headings = useMemo(() => {
-    if (!editorial) return [];
-    return parseHeadings(editorial.content);
-  }, [editorial]);
-
-  // Scroll spy: ตรวจจับ scroll position แล้วอัปเดต activeId
-  useEffect(() => {
-    function onScroll() {
-      const offset = 100;
-      let currentId = null;
-      for (const heading of headings) {
-        const el = document.getElementById(heading.id);
-        if (el) {
-          const top = el.getBoundingClientRect().top;
-          if (top < offset) {
-            currentId = heading.id;
-          }
-        }
-      }
-      if (currentId !== activeId) {
-        setActiveId(currentId);
-      }
+  const scrollToHeading = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const headerOffset = 80;
+      const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - headerOffset;
+      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
     }
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [headings, activeId]);
+  };
 
-  if (!editorial) return <div className={styles.notFound}>ไม่พบบทความ</div>;
+  useEffect(() => {
+    if (!id) return;
 
-  function scrollToHeading(id) {
-    setTimeout(() => {
-      const el = document.getElementById(id);
-      if (!el) {
-        console.warn("Element not found for id:", id);
+    let observer;
+    const handleSticky = () => setIsSticky(window.scrollY > 300);
+
+    const loadEditorial = async () => {
+      setLoading(true);
+      const res = await getEditorialById(id);
+      if (!res) {
+        setEditorial(null);
+        setLoading(false);
         return;
       }
-      const yOffset = -80; // ปรับ offset ถ้ามี header
-      const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }, 100);
-  }
+
+      const descriptionmainTH = parseHtmlString(res.descriptionmainTH);
+      const subEditoria = Array.isArray(res.subEditoria)
+        ? res.subEditoria.map((sub, index) => ({
+            ...sub,
+            id: `sub-${index}`,
+            subdescriptionTH: parseHtmlString(sub.subdescriptionTH),
+            subgallary: (() => {
+              try {
+                return sub.subgallary ? JSON.parse(sub.subgallary.replace(/^"+|"+$/g, "")) : [];
+              } catch {
+                return [];
+              }
+            })(),
+          }))
+        : [];
+
+      setEditorial({ ...res, descriptionmainTH, subEditoria });
+
+      const allHeadings = subEditoria.map((sub) => ({
+        id: sub.id,
+        text: sub.subtitiTH,
+        key: sub.id,
+      }));
+      setHeadings(allHeadings);
+
+      setLoading(false);
+
+      // IntersectionObserver สำหรับ TOC highlight
+      observer = new IntersectionObserver(
+        (entries) => {
+          const visibleEntries = entries.filter(e => e.isIntersecting);
+          if (visibleEntries.length) {
+            // เลือก section ที่ใกล้ top ของ viewport
+            const nearest = visibleEntries.reduce((prev, curr) => {
+              const prevTop = Math.abs(prev.boundingClientRect.top);
+              const currTop = Math.abs(curr.boundingClientRect.top);
+              return currTop < prevTop ? curr : prev;
+            });
+            setActiveId(nearest.target.id);
+          }
+        },
+        { root: null, rootMargin: "-80px 0px -20% 0px", threshold: [0, 0.1, 0.25, 0.5, 1] }
+      );
+
+      allHeadings.forEach(({ id }) => {
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    };
+
+    loadEditorial();
+    window.addEventListener("scroll", handleSticky);
+
+    return () => {
+      window.removeEventListener("scroll", handleSticky);
+      if (observer) {
+        headings.forEach(({ id }) => {
+          const el = document.getElementById(id);
+          if (el) observer.unobserve(el);
+        });
+      }
+    };
+  }, [id]);
+
+  if (loading) return <div className={styles.notFound}>Loading...</div>;
+  if (!editorial) return <div className={styles.notFound}>ไม่พบบทความ</div>;
 
   return (
     <main className={styles.wrapper}>
-      <div className={styles.contentBox}>
-        <article className={styles.article}>
-          <div className={styles.headerportfolio}>
-            <h1 className={styles.title}>{editorial.title}</h1>
-            <div className={styles.meta}>
-              <Link href="/" className={styles.link}>
-                หน้าหลัก <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
-              </Link>
-              <Link href="/editorial" className={styles.link}>
-                ย้อนกลับ <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
-              </Link>
-              {editorial.title}
+      <div className={styles.layout}>
+        <div className={styles.contentBox}>
+          <article className={styles.article}>
+            <div className={styles.headerportfolio}>
+              <h1 className={styles.title}>{editorial.titiemainTH}</h1>
+              <div className={styles.meta}>
+                <Link href="/" className={styles.link}>
+                  หน้าหลัก <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
+                </Link>
+                <Link href="/editorial" className={styles.link}>
+                  ย้อนกลับ <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
+                </Link>
+                <span className={styles.articleName}>{editorial.titiemainTH}</span>
+              </div>
             </div>
-          </div>
 
-          <time className={styles.date}>วันที่โพสต์ : {editorial.date}</time>
+            <time className={styles.date}>
+              วันที่โพสต์ :{" "}
+              {new Date(editorial.editoria_creacteAt).toLocaleDateString("th-TH", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </time>
 
-          {editorial.mainImage && (
-            <Image
-              src={editorial.mainImage}
-              alt={editorial.title}
-              width={800}
-              height={400}
-              className={styles.mainImage}
-              priority
-            />
-          )}
-
-          <section className={styles.content}>
-            {Array.isArray(editorial.content) ? (
-              editorial.content.map((block, index) => {
-                const id = /^h[1-6]$/.test(block.type)
-                  ? generateId(block.text, index)
-                  : null;
-                const key = `${block.type}-${index}-${id || index}`;
-
-                if (/^h[1-6]$/.test(block.type)) {
-                  const level = Number(block.type.replace("h", ""));
-                  const paddingLeft = `${(level - 1) * 1.5}rem`;
-                  return (
-                    <div
-                      key={key}
-                      className={`heading-block level-${level}`}
-                      style={{ paddingLeft }}
-                    >
-                      <HeadingTag type={block.type} id={id} text={block.text} />
-                    </div>
-                  );
-                }
-
-                if (block.type === "paragraph") {
-                  return (
-                    <div key={key} style={{ paddingLeft: "2rem" }}>
-                      <p>{block.text}</p>
-                    </div>
-                  );
-                }
-
-                return null;
-              })
-            ) : (
-              <p style={{ paddingLeft: "2rem" }}>{editorial.content}</p>
+            {editorial.gallarymain && (
+              <Image
+                src={getImageUrl(editorial.gallarymain)}
+                alt={editorial.titiemainTH}
+                width={800}
+                height={400}
+                className={styles.mainImage}
+                priority
+              />
             )}
-          </section>
 
-          {/* Gallery  */}
-          <h1> แกลเลอรี่</h1>
-          {editorial.gallery?.length > 1 && (
-            <Gallery images={editorial.gallery} />
-          )}
-        </article>      </div>
+            <section
+              className={styles.content}
+              dangerouslySetInnerHTML={{ __html: editorial.descriptionmainTH }}
+            />
 
-      {/* แสดง Sidebar เฉพาะเมื่อมีหัวข้อมากกว่า 1 ข้อ */}
-      {headings.length > 1 && (
-        <nav
-          className={`${styles.sidebar} ${isSticky ? styles.sticky : ""}`}
-          aria-label="สารบัญบทความ"
-        >
-          <h2 className={styles.tocTitle}>เนื้อหาบทความ</h2>
-          <ul className={styles.tocList}>
-            {headings.map(({ id, text, level, key }, i) => {
-              let linkClass = styles.tocLinkSection;
-              if (i === 0) linkClass = styles.tocLinkMain;
-              else if (level >= 3) linkClass = styles.tocLinkSub;
+            {editorial.subEditoria.map((sub) => (
+              <div key={sub.id} id={sub.id} className={styles.subArticle}>
+                <h2>{sub.subtitiTH}</h2>
+                <section dangerouslySetInnerHTML={{ __html: sub.subdescriptionTH }} />
+                {sub.subgallary.length > 0 && <Gallery images={sub.subgallary.map(getImageUrl)} />}
+              </div>
+            ))}
 
-              return (
+            {editorial.gallery?.length > 1 && (
+              <div className={styles.bottomGallery}>
+                <h1>แกลเลอรี่</h1>
+                <Gallery images={editorial.gallery.map(getImageUrl)} />
+              </div>
+            )}
+
+            <SlideEditorial />
+          </article>
+        </div>
+
+        {headings.length > 1 && (
+          <nav className={`${styles.sidebar} ${isSticky ? styles.sticky : ""}`} aria-label="สารบัญบทความ">
+            <h2 className={styles.tocTitle}>เนื้อหาบทความ</h2>
+            <ul className={styles.tocList}>
+              {headings.map(({ id, text, key }) => (
                 <li key={key} className={styles.tocItem}>
                   <button
                     type="button"
-                    className={`${linkClass} ${activeId === id ? styles.active : ""
-                      }`}
+                    className={`${styles.tocLinkSection} ${activeId === id ? styles.active : ""}`}
                     onClick={() => scrollToHeading(id)}
                   >
                     {text}
                   </button>
                 </li>
-              );
-            })}
-          </ul>
-        </nav>
-      )}
-      </main>
+              ))}
+            </ul>
+          </nav>
+        )}
+      </div>
+    </main>
   );
 }
