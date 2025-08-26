@@ -1,6 +1,6 @@
 .products-container {
   display: flex;
-  gap: 24px;
+  gap: 20px;
   padding: 7px;
   max-width: 1500px;
   margin: 0 auto;
@@ -27,7 +27,7 @@
 }
 
 .sidebar-header {
-  background-color: #ff6b00;
+  background-color: #E88534;
   color: white;
   padding: 5px;
   font-weight: bold;
@@ -58,12 +58,15 @@
 
 /* Hide default checkbox */
 .checkbox-item input[type="checkbox"] {
-  appearance: none;       /* ลบ style เดิมของ browser */
+  appearance: none;
+  /* ลบ style เดิมของ browser */
   -webkit-appearance: none;
   width: 18px;
   height: 18px;
-  border: 1px solid #ccc; /* กรอบ checkbox */
-  border-radius: 4px;     /* ปรับมุมถ้าอยากโค้ง */
+  border: 1px solid #ccc;
+  /* กรอบ checkbox */
+  border-radius: 4px;
+  /* ปรับมุมถ้าอยากโค้ง */
   position: relative;
   cursor: pointer;
   outline: none;
@@ -71,28 +74,27 @@
 
 /* เมื่อถูกติ๊ก */
 .checkbox-item input[type="checkbox"]:checked {
-  background-color: #367AF5; /* สีพื้นหลังของ checkbox */
-  border-color: #367AF5;     /* สีกรอบ */
+  background-color: #367AF5;
+  /* สีพื้นหลังของ checkbox */
+  border-color: #367AF5;
+  /* สีกรอบ */
 }
 
 /* สร้างเครื่องหมายติ๊ก */
 .checkbox-item input[type="checkbox"]:checked::after {
-  content: "✓";            
-  color: white;             /* สีเครื่องหมาย */
+  content: "✓";
+  color: white;
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* กึ่งกลาง */
+  transform: translate(-50%, -50%);
+  /* กึ่งกลาง */
   font-size: 14px;
 }
 
 
-/* .brand-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
 
+/*
 .brand-block {
   text-align: center;
   cursor: pointer;
@@ -164,16 +166,8 @@
   flex: 1;
 }
 
-/* .products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 5px;
-} */
 
 .product-card {
-  border-radius: 8px;
-  /* border: 10px solid #FFA500!important;; */
-  /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -185,6 +179,9 @@
   display: block;
   /* หรือ flex ตามต้องการ */
   height: auto;
+  border: 0.5px solid #e0e0e0;
+  border-radius: 8px;
+  width: 285px;
 
 }
 
@@ -195,13 +192,6 @@
 }
 
 
-
-.product-image-wrapper {
-  position: relative;
-  width: 100%;
-  height: auto;
-  /* square */
-}
 
 
 .product-info {
@@ -231,20 +221,8 @@
 .product-price {
   font-weight: 600;
   font-size: 18px;
-  color: #ff0000;
   margin: 0;
 }
-
-.product-size {
-  font-weight: 600 !important;
-  font-size: 18px;
-  color: #ff0000;
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-
 
 .meta {
   font-size: 13px;
@@ -257,15 +235,17 @@
   color: #555;
 }
 
+/* สำหรับโปโมชั่น */
 .product-promo-ribbon {
   position: absolute;
   top: 10px;
-  right: -35px;/* ปรับตามความยาวของแทป */
+  right: -35px;
+  /* ปรับตามความยาวของแทป */
   background: #ee2226;
-
   color: #fff;
   font-weight: 700;
-  padding: 5px 45px;/* ความสูง x ความยาวแทป */
+  padding: 5px 45px;
+  /* ความสูง x ความยาวแทป */
   text-align: center;
   transform: rotate(45deg);
   /* ทำให้เฉียง */
@@ -274,9 +254,10 @@
   font-size: 16px;
 }
 
+
 .products-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.2rem;
   grid-template-columns: repeat(1, 1fr);
 }
 
@@ -301,28 +282,14 @@
   }
 }
 
-/* ✅ Card Styling */
-.product-card {
-  border: 0.5px solid #e0e0e0;
-  border-radius: 6px;
-  overflow: hidden;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s ease;
-}
-
-/* .product-card:hover {
-  transform: scale(1.01);
-
-} */
 
 .product-image-wrapper {
   position: relative;
   width: 100%;
+  height: auto;
   aspect-ratio: 4 / 3;
   /* ลบ padding-top หรือ height ที่กำหนดใน inline style ถ้ามี */
-  margin-bottom: 8px;
+  margin-bottom: 1px;
   /* ลดช่องว่างระหว่างรูปกับข้อความ */
 }
 
@@ -345,17 +312,30 @@
 }
 
 .product-info p {
-  margin: 0;
+  margin: 0 0 4px 0;
   font-weight: 600;
   font-size: 18px;
-  color: #ff0000;
 }
 
-.product-info p {
-  margin: 0 0 4px 0;
-}
 
 .product-info .meta {
   font-size: 0.85rem;
   color: #777;
+}
+
+.buttonorangep {
+  font-weight: 400;
+  padding: 0.6rem 1.8rem;
+  background-color: #E88534;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin: 1rem 0.5rem;
+  /* ✅ เพิ่มระยะห่างซ้ายขวา */
+}
+
+.buttonorangep:hover {
+  background: #E55100;
 }
