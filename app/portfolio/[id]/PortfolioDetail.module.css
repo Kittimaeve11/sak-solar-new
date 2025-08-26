@@ -157,6 +157,7 @@
 
 .workStepTitle {
     display: flex;
+    flex-wrap: wrap; /* ให้หัวข้อยาวตัดบรรทัดใหม่ */
     align-items: center;
     font-weight: 600;
     color: #243865;
@@ -166,7 +167,10 @@
 .workStepDesc {
     color: #505052;
     font-size: 16px;
+    white-space: normal; /* ตัดบรรทัดอัตโนมัติ */
+    word-wrap: break-word;
 }
+
 
 .arrowIcon {
     display: inline-flex;
