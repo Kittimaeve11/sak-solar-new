@@ -95,3 +95,108 @@
 
 }
 
+.faq-answer ol {
+  padding-left: 2rem;       /* ระยะเลขกับข้อความเท่ากัน */
+  margin: 0;
+  list-style-position: inside; /* เลขอยู่ชิดข้อความ */
+}
+
+.faq-answer li {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.faq-answer li p {
+  display: inline; /* ถ้ามี <p> อยู่ข้างใน li */
+  margin: 0;
+  padding: 0;
+}
+
+.faq-answer li span, 
+.faq-answer li strong {
+  display: inline; /* tag inline อื่น ๆ อยู่ในบรรทัดเดียวกับเลข */
+}
+
+/* Skeleton loading effect */
+.skeleton {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { background-color: #e0e0e0; }
+  50% { background-color: #f0f0f0; }
+  100% { background-color: #e0e0e0; }
+}
+
+/* FAQ Skeleton Card */
+.faq-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 10px;
+  padding:  20px;
+}
+
+.faq-skeleton-question {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 12px;
+  border-radius: 4px;
+}
+
+.faq-skeleton-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.banner-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3.22 / 1;
+  /* คุมอัตราส่วน */
+  min-height: 300px;
+  /* fallback กัน layout shift */
+  overflow: hidden;
+}
+
+.banner-image {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: opacity 0.6s ease-in-out;
+}
+
+
+/* Banner Skeleton */
+.skeleton-banner {
+  width: 100%;
+  aspect-ratio: 3.22 / 1;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Fade-in animation */
+.fade-in {
+  opacity: 0;
+  animation: fadeIn 0.8s ease-in forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .skeleton-banner {
+    aspect-ratio: 1.9 / 1;
+  }
+}
