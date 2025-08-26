@@ -56,7 +56,7 @@ const cleanQuotes = (text) => {
 
 return (
   <main className="layout-container">
-    <h1 className="headtitle">
+    <h1 className="headtitle" style={{marginBottom:'-1rem'}}>
       {policy.policy_nameTH}
       {policy.policy_nameEN && ` (${policy.policy_nameEN})`}
     </h1>
