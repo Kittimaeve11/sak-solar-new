@@ -1,276 +1,229 @@
 'use client';
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './PortfolioDetail.module.css';
-import { products } from '@/app/data/products';
 import { MdOutlineKeyboardDoubleArrowRight, MdKeyboardDoubleArrowRight } from 'react-icons/md';
 import { BsCalendarCheck } from 'react-icons/bs';
 import { FaSolarPanel } from 'react-icons/fa';
 import Gallery from '../gallery';
-function findMatchingProduct(project) {
-  const { productType, size, panelCount } = project || {};
-  if (!productType) return null;
+import { useLocale } from '@/app/Context/LocaleContext';
 
-  const productGroup = products.find((p) => {
-    if (typeof p.name === 'string') {
-      return p.name === productType;
-    }
-    if (typeof p.name === 'object') {
-      return p.name.th === productType || p.name.en === productType;
-    }
-    return false;
-  });
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL_API;
+const apiKey = process.env.NEXT_PUBLIC_AUTHORIZATION_KEY_API;
 
-  if (!productGroup) return null;
-
-  for (const brand of productGroup.brands) {
-    if (brand.packages) {
-      for (const pkg of brand.packages) {
-        for (const item of pkg.items) {
-          if (item.size === size && item.panel_count === panelCount) {
-            return {
-              brand: brand.name,
-              brandImage: brand.brandImage,
-              packageName: pkg.name,
-              item,
-              productSlug: productGroup.slug,
-            };
-          }
-        }
-      }
-    }
-
-    if (brand.items) {
-      for (const item of brand.items) {
-        if (item.size === size || (Array.isArray(item.size) && item.size.includes(size))) {
-          return {
-            brand: brand.name,
-            brandImage: brand.brandImage,
-            packageName: null,
-            item,
-            productSlug: productGroup.slug,
-          };
-        }
-      }
-    }
-  }
-
-  return null;
-}
-
-export default function PortfolioDetailPage(props) {
-  const params = React.use(props.params);
+export default function PortfolioDetailPage({ params: paramsPromise }) {
+  const params = React.use(paramsPromise);
   const { id } = params;
 
+  const { locale } = useLocale(); // 'th' หรือ 'en'
+
   const [project, setProject] = useState(null);
-  const [workSteps, setWorkSteps] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [matchedProduct, setMatchedProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lightboxIndex, setLightboxIndex] = useState(null);
-  const [zoom, setZoom] = useState(false);
-  const [fullscreen, setFullscreen] = useState(false);
-  const [showThumbs, setShowThumbs] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchProject() {
       setLoading(true);
       try {
-        const [portfolioRes, stepsRes] = await Promise.all([
-          fetch('/api/portfolio'),
-          fetch('/api/work-steps'),
-        ]);
-        if (!portfolioRes.ok || !stepsRes.ok) {
-          throw new Error('Failed to fetch API');
+        const res = await fetch(`${baseUrl}/api/portfolioIDpageapi/${id}`, {
+          headers: { 'X-API-KEY': apiKey },
+        });
+        const data = await res.json();
+
+        if (data.status && data.result) {
+          const item = data.result;
+
+          let gallery = [];
+          try {
+            gallery = item.portfolio_gallery ? JSON.parse(item.portfolio_gallery) : [];
+          } catch { gallery = []; }
+
+          let workSteps = [];
+          try {
+            workSteps = item.workssteps_description ? JSON.parse(item.workssteps_description) : [];
+          } catch { workSteps = []; }
+
+          setProject({
+            id: item.portfolio_id,
+            portfolioNum: item.portfolio_num,
+            titleTH: item.adddressTH,
+            titleEN: item.adddressEN,
+            size: item.installationsize,
+            productTypeTH: item.TypeProduct_nameTH,
+            productTypeEN: item.TypeProduct_nameEN || item.TypeProduct_nameTH,
+            panelCount: item.panelsolarcout,
+            postDate: item.portfolio_datainstall,
+            gallery: gallery.map((img) => `${baseUrl}/${img}`),
+            workSteps,
+            product_ID: item.product_ID,
+          });
+        } else {
+          setProject(null);
         }
-
-        const portfolioData = await portfolioRes.json();
-        const projectData = portfolioData.projects.find((p) => p.id === Number(id));
-        const workStepData = await stepsRes.json();
-
-        setProject(projectData || null);
-        setWorkSteps(workStepData.workSteps || []);
-      } catch (error) {
-        console.error('Error loading data:', error);
+      } catch (err) {
+        console.error('Error fetching project detail:', err);
         setProject(null);
-        setWorkSteps([]);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchData();
+    fetchProject();
   }, [id]);
 
-  // ปิด scroll หน้าเวลามี lightbox เปิด
+  // ดึงข้อมูลสินค้าทั้งหมด
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const res = await fetch(`${baseUrl}/api/productpageapi`, {
+          headers: { 'X-API-KEY': apiKey },
+        });
+        const data = await res.json();
+        if (data.status && data.result.data) {
+          const mapped = data.result.data.map((p) => ({
+            item: {
+              ...p,
+              mainImage: p.gallery ? JSON.parse(p.gallery)[0] : null,
+              model: p.modelname,
+              size: p.installationsize,
+              panel_type: p.solarpanel,
+              panel_count: p.panelsolarcout,
+              area: p.roofarea,
+              inverter_model: p.inverter || '-',
+              power_system: p.phase || '-',
+              battery: p.battery || '-',
+            },
+            type: p.protypeID === '1' ? 'SolarRooftop' : 'SolarAir',
+          }));
+          setProducts(mapped);
+        }
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      }
+    }
+    fetchProducts();
+  }, []);
+
+  // หา product ที่ตรงกับ project.product_ID
+  useEffect(() => {
+    if (project && products.length > 0) {
+      const matched = products.find(p => p.item.product_ID === project.product_ID);
+      setMatchedProduct(matched || null);
+    }
+  }, [project, products]);
+
+  // ปิด scroll หน้าเวลามี lightbox
   useEffect(() => {
     document.body.style.overflow = lightboxIndex !== null ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [lightboxIndex]);
 
-  const matchedProduct = useMemo(() => {
-    if (!project) return null;
-    return findMatchingProduct(project);
-  }, [project]);
+  if (loading) return <p style={{ textAlign: 'center', marginTop: 50 }}>Loading...</p>;
+  if (!project) return <p style={{ textAlign: 'center', marginTop: 50 }}>Project not found</p>;
 
-  const productSlug =
-    matchedProduct?.productSlug ||
-    products.find((p) => {
-      if (typeof p.name === 'string') return p.name === project?.productType;
-      if (typeof p.name === 'object') return p.name.th === project?.productType || p.name.en === project?.productType;
-      return false;
-    })?.slug || '';
+  const t = {
+    detail: locale === 'th' ? 'รายละเอียด' : 'Details',
+    workSteps: locale === 'th' ? 'ขั้นตอนการดำเนินงาน' : 'Work Steps',
+    gallery: locale === 'th' ? 'แกลเลอรี่รูปภาพ' : 'Gallery',
+    productDetail: locale === 'th' ? 'รายละเอียดผลิตภัณฑ์' : 'Product Details',
+    contactTitle: locale === 'th' ? 'สนใจเพิ่มเติมติดต่อ' : 'Contact Us',
+    contactSubtitle: locale === 'th' ? 'ติดต่อเราเพื่อรับคำปรึกษาและเสนอราคา' : 'Reach out for consultation and quotation',
+    backHome: locale === 'th' ? 'หน้าหลัก' : 'Home',
+    backPortfolio: locale === 'th' ? 'ย้อนกลับ' : 'Back to Portfolio',
+    noWorkSteps: locale === 'th' ? 'ไม่พบข้อมูลขั้นตอน' : 'No work steps available',
+    contactButton: locale === 'th' ? 'สอบถามรายละเอียด' : 'Request Info',
+  };
 
-  const isSolarAir = project?.productType === 'Solar Air';
-
-  if (loading) {
-    return (
-      <main className={styles.container}>
-        {/* Skeleton Loading */}
-        <div className={`${styles.skeletonBanner} ${styles.skeleton}`} />
-        <div className={styles.grid}>
-          <div className={styles.leftColumn}>
-            <div className={styles.skeletonCard}>
-              <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-            </div>
-            <div className={styles.skeletonCard}>
-              <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-            </div>
-            <div className={styles.skeletonCard}>
-              <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <div className={`${styles.skeleton} ${styles.skeletonLine}`} style={{ width: '30%' }} />
-                <div className={`${styles.skeleton} ${styles.skeletonLine}`} style={{ width: '30%' }} />
-                <div className={`${styles.skeleton} ${styles.skeletonLine}`} style={{ width: '30%' }} />
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.rightColumn}>
-            <div className={styles.skeletonCard}>
-              <div className={`${styles.skeletonTitle} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-            </div>
-            <div className={styles.skeletonCard}>
-              <div className={`${styles.skeletonTitle} ${styles.skeleton}`} style={{ width: '80%' }} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-              <div className={`${styles.skeletonLine} ${styles.skeleton}`} />
-            </div>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  if (!project) {
-    return <div>ไม่พบข้อมูล</div>;
-  }
+  const isSolarAir = matchedProduct?.type === 'SolarAir';
 
   return (
     <main className={`${styles.container} ${styles.fadeIn}`}>
+      {/* Header */}
       <div className={styles.headerportfolio}>
-        <h2 className={styles.titleportfolio}>{project.title}</h2>
+        <h2 className={styles.titleportfolio}>{locale === 'th' ? project.titleTH : project.titleEN}</h2>
         <div className={styles.meta}>
           <Link href="/" className={styles.backLink}>
-            หน้าหลัก <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
+            {t.backHome} <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
           </Link>
           <Link href="/portfolio" className={styles.backLink}>
-            ย้อนกลับ <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
+            {t.backPortfolio} <MdKeyboardDoubleArrowRight style={{ fontSize: 19 }} />
           </Link>
           <span className={styles.iconText}>
-            <FaSolarPanel /> <span style={{ marginLeft: 2 }}>{project.productType}</span>
+            <FaSolarPanel />{' '}
+            <span style={{ marginLeft: 2 }}>
+              {locale === 'th' ? project.productTypeTH : project.productTypeEN}
+            </span>
           </span>
           <span className={styles.iconText}>
-            <BsCalendarCheck /> <span style={{ marginLeft: 2 }}>{project.postDate}</span>
+            <BsCalendarCheck />{' '}
+            <span style={{ marginLeft: 2 }}>
+              {new Date(project.postDate).toLocaleDateString(
+                locale === 'th' ? 'th-TH' : 'en-US',
+                { year: 'numeric', month: 'long', day: 'numeric' }
+              )}
+            </span>
           </span>
         </div>
       </div>
 
+      {/* Cover Image */}
       <div className={styles.coverWrapper}>
         <div className={styles.coverImageContainer}>
-          <Image src={project.coverImage} alt={project.title} fill className={styles.coverImage} />
+          <Image
+            src={project.gallery[0] || '/images/placeholder.png'}
+            alt={locale === 'th' ? project.titleTH : project.titleEN}
+            fill
+            className={styles.coverImage}
+          />
         </div>
       </div>
 
       <div className={styles.grid}>
         <div className={styles.leftColumn}>
+          {/* รายละเอียด */}
           <div className={styles.section}>
-            <h2 className={styles.topicportfolio}>รายละเอียด</h2>
-            <h5 className={styles.Detailsportfolio}>{project.content}</h5>
+            <h2 className={styles.topicportfolio}>{t.detail}</h2>
+            <h5 className={styles.Detailsportfolio}>
+              {locale === 'th' ? project.titleTH : project.titleEN}
+            </h5>
           </div>
 
+          {/* ขั้นตอนการดำเนินงาน */}
           <div className={styles.section}>
-            <h2 className={styles.topicportfolio}>ขั้นตอนการดำเนินงาน</h2>
-            {workSteps.length > 0 ? (
+            <h2 className={styles.topicportfolio}>{t.workSteps}</h2>
+            {project.workSteps.length > 0 ? (
               <ul className={styles.workSteps}>
-                {workSteps.map((step, index) => (
+                {project.workSteps.map((step, index) => (
                   <li key={index} className={styles.workStepItem}>
                     <Image src="/icons/correct1.png" alt="correct icon" width={40} height={40} />
                     <div>
                       <div className={styles.workStepTitle}>
-                        <span>{step.step}</span>
+                        <span>{locale === 'th' ? step.stapnameTH : step.stapnameEN}</span>
                         <span className={styles.arrowIcon}>
                           <MdOutlineKeyboardDoubleArrowRight />
                         </span>
-                        <span>{step.duration}</span>
+                        <span>{locale === 'th' ? step.durationTH : step.durationEN}</span>
                       </div>
-                      <div className={styles.workStepDesc}>{step.description}</div>
+                      <div className={styles.workStepDesc}>
+                        {locale === 'th' ? step.descriptionTH : step.descriptionEN}
+                      </div>
                     </div>
                   </li>
                 ))}
               </ul>
             ) : (
-              <p>ไม่พบข้อมูลขั้นตอน</p>
+              <p>{t.noWorkSteps}</p>
             )}
           </div>
 
-          <div className={styles.section}>
-            {project.gallery?.length > 0 && (
-              <>
-                <h2 className={styles.topicportfolio}>แกลเลอรี่รูปภาพ</h2>
-                {/* <div className={styles.galleryGrid}>
-                  {project.gallery.slice(0, 3).map((img, i) => {
-                    const isLast = i === 2 && project.gallery.length > 3;
-                    return (
-                      <div
-                        key={i}
-                        className={styles.galleryImageWrapper}
-                        onClick={() => setLightboxIndex(i)}
-                      >
-                        <Image
-                          src={img}
-                          alt={`gallery-${i}`}
-                          fill
-                          className={styles.galleryImage}
-                          priority={i === 0}
-                        />
-                        {isLast && (
-                          <div className={styles.overlay}>
-                            <div>
-                              ดูเพิ่มเติม
-                              <br />
-                              {project.gallery.length - 3} ภาพ
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div> */}
-              </>
-            )}
-            {project.gallery?.length > 1 && (
+          {/* แกลเลอรี่ */}
+          {project.gallery.length > 0 && (
+            <div className={styles.section}>
+              <h2 className={styles.topicportfolio}>{t.gallery}</h2>
               <Gallery
                 img2={project.gallery[1]}
                 img3={project.gallery[2]}
@@ -281,38 +234,26 @@ export default function PortfolioDetailPage(props) {
                 img8={project.gallery[7]}
                 img9={project.gallery[8]}
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
 
         <div className={styles.rightColumn}>
+          {/* แสดงข้อมูล product */}
           <div className={styles.section}>
-            <h2 className={styles.topicportfolio}>รายละเอียดผลิตภัณฑ์</h2>
+            <h2 className={styles.topicportfolio}>{t.productDetail}</h2>
             {!matchedProduct ? (
               <p>ไม่พบข้อมูลผลิตภัณฑ์ที่ตรงกับโปรเจกต์นี้</p>
             ) : (
               <>
                 {matchedProduct.item.mainImage && (
-                  <div
-                    style={{
-                      marginBottom: 12,
-                      display: 'flex',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <div
-                      style={{
-                        borderRadius: '8px',
-                        overflow: 'hidden',
-                        width: 230,
-                        height: 250,
-                      }}
-                    >
+                  <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ borderRadius: '6px', overflow: 'hidden', width: 300, height: 300 ,marginBottom:16}}>
                       <Image
-                        src={matchedProduct.item.mainImage}
+                        src={`${baseUrl}/${matchedProduct.item.mainImage}`}
                         alt="Main product image"
-                        width={230}
-                        height={250}
+                        width={300}
+                        height={300}
                         style={{ objectFit: 'cover' }}
                       />
                     </div>
@@ -335,17 +276,11 @@ export default function PortfolioDetailPage(props) {
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.labelsds}>จำนวนแผงโซลาร์</span>
-                      <span className={styles.valuesds}>{matchedProduct.item.panel_count || ''} แผง </span>
+                      <span className={styles.valuesds}>{matchedProduct.item.panel_count || ''} แผง</span>
                     </div>
-                    {/* <div className={styles.detailRow}>
-                      <span className={styles.labelsd}>ราคา</span>
-                      <span className={styles.valuesd}>
-                        {matchedProduct.item.price ? matchedProduct.item.price.toLocaleString() + ' บาท' : '-'}
-                      </span>
-                    </div> */}
                     <div className={styles.detailRow}>
                       <span className={styles.labelsd}>พื้นที่ติดตั้ง</span>
-                      <span className={styles.valuesd}>{matchedProduct.item.area || '-'}</span>
+                      <span className={styles.valuesd}>{matchedProduct.item.area || '-' } ตารางเมตร</span>
                     </div>
                   </>
                 ) : (
@@ -360,22 +295,16 @@ export default function PortfolioDetailPage(props) {
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.labelsd}>ระบบไฟฟ้า</span>
-                      <span className={styles.valuesd}>{matchedProduct.item.power_system || '-'}</span>
+                      <span className={styles.valuesd}>{matchedProduct.item.power_system || '-'} เฟส </span>
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.labelsds}>จำนวนแผงโซลาร์</span>
-                      <span className={styles.valuesds}>{matchedProduct.item.panel_count || ''} แผง </span>
+                      <span className={styles.valuesds}>{matchedProduct.item.panel_count || ''} แผง</span>
                     </div>
                     <div className={styles.detailRow}>
                       <span className={styles.labelsds}>ประเภทแผง</span>
                       <span className={styles.valuesds}>{matchedProduct.item.panel_type || '-'}</span>
                     </div>
-                    {/* <div className={styles.detailRow}>
-                      <span className={styles.labelsd}>ราคา</span>
-                      <span className={styles.valuesd}>
-                        {matchedProduct.item.price ? matchedProduct.item.price.toLocaleString() + ' บาท' : '-'}
-                      </span>
-                    </div> */}
                     {matchedProduct.item.battery && matchedProduct.item.battery !== '-' && (
                       <div className={styles.detailRow}>
                         <span className={styles.labelsds}>แบตเตอรี่</span>
@@ -384,7 +313,7 @@ export default function PortfolioDetailPage(props) {
                     )}
                     <div className={styles.detailRow}>
                       <span className={styles.labelsd}>พื้นที่ติดตั้ง</span>
-                      <span className={styles.valuesd}>{matchedProduct.item.area || '-'}</span>
+                      <span className={styles.valuesd}>{matchedProduct.item.area || '-'} ตารางเมตร </span>
                     </div>
                   </>
                 )}
@@ -392,11 +321,12 @@ export default function PortfolioDetailPage(props) {
             )}
           </div>
 
+          {/* Contact */}
           <div className={styles.contactBox}>
-            <h3>สนใจเพิ่มเติมติดต่อ</h3>
-            <h5>ติดต่อเราเพื่อรับคำปรึกษาและเสนอราคา</h5>
-            <Link href={`/?product=${productSlug}#contact`}>
-              <button className={styles.contactButton}>สอบถามรายละเอียด</button>
+            <h3>{t.contactTitle}</h3>
+            <h5>{t.contactSubtitle}</h5>
+            <Link href={`/?product=`}>
+              <button className={styles.contactButton}>{t.contactButton}</button>
             </Link>
           </div>
         </div>
