@@ -75,6 +75,12 @@ body {
   overflow-x: hidden;
 }
 
+html {
+  margin: 0;
+  padding: 0;
+}
+
+
 /* แทปใต้ Banner */
 .headline {
   background-color: #0D3973;
@@ -116,6 +122,10 @@ h6 {
   font-size: 14px;
   color: #243865;
 
+}
+
+.no-margin {
+  margin-top: -1rem !important;
 }
 
 .container {
