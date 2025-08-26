@@ -72,12 +72,31 @@ const nextConfig = {
         port: '8080',
         pathname: '/Misstion/**',
       },
-                 {
+      {
         protocol: 'http',
         hostname: 'localhost',
         port: '8080',
         pathname: '/Teams/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8080',
+        pathname: '/branderhomeapi/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8080',
+        pathname: '/edittormainpageapi/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8080',
+        pathname: '/Gallery/**',
+      },
+
     ],
   },
 };
