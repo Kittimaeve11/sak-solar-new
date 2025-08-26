@@ -120,7 +120,7 @@ export default function HomePage() {
     <>
       <BannerSlider />
 
-      <h5 className="headline">
+      <h5 className="headline" style={{marginTop:'-0.5px'}}>
         ติดตั้งโซลาร์เซลล์กับทีมช่างที่ได้มารฐาน <br />
         และได้รับการรับรองจากการไฟฟ้า (PEA)
       </h5>
