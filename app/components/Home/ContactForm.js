@@ -451,7 +451,7 @@ export default function ContactForm({
           </div>
 
           {/* Slider Captcha */}
-          <div style={{ margin: '1.5rem 0' }}>
+          {/* <div style={{ margin: '1.5rem 0' }}>
             <SliderCaptcha
               request={async () => {
                 // ✅ ภาพพื้นหลังและชิ้นส่วนจิ๊กซอว์สุ่ม
@@ -471,7 +471,7 @@ export default function ContactForm({
             />
 
           </div>
-
+ */}
           {/*  ปุ่มส่ง */}
           <div className={styles.row} style={{ display: 'flex', justifyContent: 'center' }}>
             <button type="submit" className="buttonSecondaryoneorange">
